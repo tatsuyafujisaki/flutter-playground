@@ -4,9 +4,11 @@ import 'dart:developer' as developer;
 class _Person {
   _Person(this.name, this.age);
 
-  _Person.fromJson(Map<String, dynamic> json)
-    : name = json['name'] as String,
-      age = json['age'] as int;
+  factory _Person.fromJson(Map<String, dynamic> json) => switch (json) {
+    {'name': final String name, 'age': final int age} => _Person(name, age),
+    _ => throw FormatException('Invalid person JSON: $json'),
+  };
+
   final String name;
   final int age;
 
