@@ -136,17 +136,13 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Google Maps')),
     body: SafeArea(
-      child: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(35.6812, 139.7671), // 東京駅の座標（デフォルト）
-              zoom: 14.4746,
-            ),
-            onMapCreated: _controller.complete,
-            markers: _markers,
-          ),
-        ],
+      child: GoogleMap(
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(35.6812, 139.7671), // 東京駅の座標（デフォルト）
+          zoom: 14.4746,
+        ),
+        onMapCreated: _controller.complete,
+        markers: _markers,
       ),
     ),
   );
