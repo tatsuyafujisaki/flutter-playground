@@ -7,6 +7,6 @@ analyzer:
     - "lib/firebase_options_dev.dart"
     - "lib/firebase_options_prod.dart"
     - "lib/l10n/app_localizations*.dart"
-    - build/**
-    - android/**
-    - ios/**
+
+plugins:
+  riverpod_lint: any
