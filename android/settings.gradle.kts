@@ -21,7 +21,7 @@ pluginManagement {
 }
 
 plugins {
-    id("com.android.application") version "8.13.2" apply false
+    id("com.android.application") version "9.5.1" apply false
     id("com.google.firebase.crashlytics") version "+" apply false
     id("com.google.gms.google-services") version "+" apply false
     id("dev.flutter.flutter-plugin-loader") version "+"

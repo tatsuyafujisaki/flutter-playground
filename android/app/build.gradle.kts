@@ -34,7 +34,7 @@ fun getDartDefine(key: String): String? {
 
 android {
     namespace = "com.tatsuyafujisaki.flutterplayground"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
     // https://developer.android.com/build/jdks#toolchain
     // https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
