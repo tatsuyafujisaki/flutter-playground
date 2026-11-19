@@ -13,7 +13,7 @@ void main() => runApp(
 );
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) {

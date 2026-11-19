@@ -17,5 +17,5 @@ Future<Position> getPosition() async {
     throw Exception('Location permission is denied.');
   }
 
-  return Geolocator.getCurrentPosition();
+  return await Geolocator.getCurrentPosition();
 }

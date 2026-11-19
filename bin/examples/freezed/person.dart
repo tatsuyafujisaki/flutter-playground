@@ -11,14 +11,14 @@ part 'person.g.dart';
 @freezed
 sealed class Person with _$Person {
   /// Creates a [Person].
-  const factory Person({
+  const factory({
     required String name,
     required int age,
     @DateTimeConverter() DateTime? lastUpdated,
   }) = _Person;
 
   /// Creates a [Person] from a JSON map.
-  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 }
 
 void main() {

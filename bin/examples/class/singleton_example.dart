@@ -2,14 +2,14 @@ import 'dart:developer' as developer;
 
 /// https://stackoverflow.com/a/12649574/10867055
 class _MySingleton {
-  factory _MySingleton() {
+  factory() {
     if (!initialized) {
       initialized = true;
       developer.log('Perform some initialization.');
     }
     return _singleton;
   }
-  _MySingleton._();
+  new _();
   static final _singleton = _MySingleton._();
   static bool initialized = false;
   final DateTime initializedAt = .now();

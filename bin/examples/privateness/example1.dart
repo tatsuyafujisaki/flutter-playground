@@ -22,7 +22,7 @@ class MyPublic {
   }
 }
 
-class _MyPrivate {}
+class _MyPrivate;
 
 void main() {
   // Top-level private variables are only accessible from within the same file.

@@ -10,7 +10,7 @@ AuthRepository authRepository(Ref ref) => AuthRepository(FirebaseAuth.instance);
 /// A repository that wraps [FirebaseAuth] operations.
 class AuthRepository {
   /// Creates an [AuthRepository] with the given [FirebaseAuth] instance.
-  const AuthRepository(this._auth);
+  const new(this._auth);
 
   final FirebaseAuth _auth;
 

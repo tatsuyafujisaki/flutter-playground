@@ -10,10 +10,10 @@ part 'album.g.dart';
 @freezed
 abstract class Album with _$Album {
   /// Creates an [Album].
-  const factory Album({int? userId, int? id, String? title}) = _Album;
+  const factory({int? userId, int? id, String? title}) = _Album;
 
   /// Creates an [Album] from a JSON map.
-  factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
 }
 
 void main() {

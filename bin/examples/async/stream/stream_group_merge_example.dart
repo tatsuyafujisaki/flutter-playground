@@ -14,8 +14,6 @@ void main() {
     (count) => ['🐶', '🐱', '🦊'][count],
   ).take(3);
 
-  StreamGroup.merge<String>([
-    stream1,
-    stream2,
-  ]).listen((event) => developer.log('onData: $event'));
+  StreamGroup.merge<String>([stream1, stream2])
+      .listen((event) => developer.log('onData: $event'));
 }

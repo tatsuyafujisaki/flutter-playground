@@ -10,7 +10,7 @@ import 'package:material_ui/material_ui.dart';
 Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) {

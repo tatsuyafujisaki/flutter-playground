@@ -9,9 +9,9 @@ part 'person.g.dart';
 // @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @JsonSerializable(explicitToJson: true)
 class _Person {
-  _Person({required this.firstName, required this.lastName});
+  new({required this.firstName, required this.lastName});
 
-  factory _Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
   final String? firstName;
   final String lastName;
 

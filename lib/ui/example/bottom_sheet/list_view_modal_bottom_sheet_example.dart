@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -23,7 +23,7 @@ class _MyStatelessWidget extends StatelessWidget {
 }
 
 class _BottomSheetContent extends StatelessWidget {
-  _BottomSheetContent();
+  new();
 
   final List<int> indices = List<int>.generate(100, (index) => index).toList();
 

@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 class _MyAsyncConstructorClass {
-  _MyAsyncConstructorClass._(this.data);
+  new _(this.data);
 
   static Future<_MyAsyncConstructorClass> create(String emoji) async {
     final data = await Future<String>.value(emoji);

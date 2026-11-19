@@ -7,7 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 /// A screen that displays web content using a [WebViewWidget].
 class WebViewScreen extends StatefulWidget {
   /// Creates a [WebViewScreen] that loads [url].
-  const WebViewScreen({
+  const new({
     required this.url,
     required this.onBackPressed,
     super.key,

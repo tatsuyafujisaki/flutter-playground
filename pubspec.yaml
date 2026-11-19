@@ -18,7 +18,6 @@ dependencies:
   firebase_ui_firestore: any # by firebase_ui_firestore and Flutter Favorite
   flutter:
     sdk: flutter
-  flutter_launcher_icons: any
   flutter_local_notifications: any # Flutter Favorite
   flutter_localizations:
     sdk: flutter

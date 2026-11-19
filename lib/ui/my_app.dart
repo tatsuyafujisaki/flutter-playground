@@ -16,7 +16,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 /// The root widget of the application.
 class MyApp extends ConsumerStatefulWidget {
   /// Creates a [MyApp].
-  const MyApp({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();

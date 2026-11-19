@@ -26,9 +26,10 @@ T _parseObject<T>(
 List<T> _parseArray<T>(
   String json,
   T Function(Map<String, dynamic> json) toElement,
-) => List<Map<String, dynamic>>.from(
-  jsonDecode(json) as Iterable<dynamic>,
-).map(toElement).toList();
+) =>
+    List<Map<String, dynamic>>.from(jsonDecode(json) as Iterable<dynamic>)
+        .map(toElement)
+        .toList();
 
 void main() {
   developer.log(jsonDecodeToMap('{"a": 1}').toString());

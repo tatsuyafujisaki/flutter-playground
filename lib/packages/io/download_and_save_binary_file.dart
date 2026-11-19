@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 void main() => runApp(const ProviderScope(child: _MyStatelessWidget()));
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) {
@@ -26,5 +26,5 @@ class _MyStatelessWidget extends StatelessWidget {
 /// Downloads binary data from [url] and saves it to external storage.
 Future<String?> downloadAndSaveBinaryFile(String url) async {
   final bytes = await downloadBinaryFile(url);
-  return saveBinaryFileToExternalStorageDirectory(bytes, p.basename(url));
+  return await saveBinaryFileToExternalStorageDirectory(bytes, p.basename(url));
 }

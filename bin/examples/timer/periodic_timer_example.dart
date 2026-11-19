@@ -4,7 +4,7 @@ import 'dart:developer' as developer;
 /// A periodic timer that can be restarted and canceled.
 class PeriodicRestartableTimer {
   /// Creates and starts a [PeriodicRestartableTimer].
-  PeriodicRestartableTimer(this.duration, this.callback) {
+  new(this.duration, this.callback) {
     _timer = _createTimer();
   }
 

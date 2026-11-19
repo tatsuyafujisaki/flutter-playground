@@ -6,7 +6,7 @@ enum Language {
   /// Japanese.
   japanese(code: 'ja');
 
-  const Language({required this.code});
+  new({required this.code});
 
   /// The ISO 639-1 language code.
   final String code;

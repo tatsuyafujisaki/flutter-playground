@@ -13,10 +13,10 @@ enum Fruit {
   /// An orange.
   orange('🍊');
 
-  const Fruit(this.emoji);
+  new(this.emoji);
 
   /// Returns the [Fruit] matching [emoji], or [unknown] if none matches.
-  factory Fruit.of(String emoji) =>
+  factory of(String emoji) =>
       values.firstWhereOrNull((value) => value.emoji == emoji) ?? unknown;
 
   /// The emoji representing this fruit.

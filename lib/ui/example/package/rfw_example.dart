@@ -12,7 +12,7 @@ void main() {
 }
 
 class _RfwExample extends StatefulWidget {
-  const _RfwExample();
+  const new();
 
   @override
   State<_RfwExample> createState() => _RfwExampleState();

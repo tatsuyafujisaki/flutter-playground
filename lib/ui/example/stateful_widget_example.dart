@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 Widget preview() => const _MyStatefulWidget();
 
 class _MyStatefulWidget extends StatefulWidget {
-  const _MyStatefulWidget();
+  const new();
 
   @override
   State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();

@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 void main() => runApp(const ProviderScope(child: _MyStatelessWidget()));
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) {
@@ -26,5 +26,8 @@ class _MyStatelessWidget extends StatelessWidget {
 Future<String?> _downloadAndSaveTextFile(String url) async {
   final uri = Uri.parse(url);
   final bytes = await downloadTextFile(uri);
-  return saveTextFileToExternalStorageDirectory(bytes, p.basename(uri.path));
+  return await saveTextFileToExternalStorageDirectory(
+    bytes,
+    p.basename(uri.path),
+  );
 }

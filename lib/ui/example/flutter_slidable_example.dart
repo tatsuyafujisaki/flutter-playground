@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatefulWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   State<_MyStatelessWidget> createState() => _MyStatelessWidgetState();
@@ -75,7 +75,7 @@ Slidable _slidable<T>({
 );
 
 class _MyData {
-  _MyData({required this.id, required this.text});
+  new({required this.id, required this.text});
 
   int id;
   String text;

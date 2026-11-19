@@ -8,7 +8,7 @@ void main() {
 }
 
 class _Person {
-  _Person({required this.name, required this.age});
+  new({required this.name, required this.age});
   final String name;
   final int age;
 

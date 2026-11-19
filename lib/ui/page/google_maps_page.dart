@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// A page that displays Google Maps with the user's location and nearby cafes.
 class GoogleMapsPage extends ConsumerStatefulWidget {
   /// Creates a [GoogleMapsPage].
-  const GoogleMapsPage({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<GoogleMapsPage> createState() => _GoogleMapsPageState();

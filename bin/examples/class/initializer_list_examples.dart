@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 class _Person {
-  _Person({
+  new({
     required this.firstName,
     required String middleName,
     required this.lastName,

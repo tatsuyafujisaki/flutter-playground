@@ -23,7 +23,7 @@ Future<bool> get isPhotoGranted async {
       Platform.isAndroid &&
       (await DeviceInfoPlugin().androidInfo).version.sdkInt <= 32;
 
-  return isGranted(
+  return await isGranted(
     await shouldUseStorage() ? Permission.storage : Permission.photos,
   );
 }

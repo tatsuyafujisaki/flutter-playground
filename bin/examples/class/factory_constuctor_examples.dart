@@ -1,15 +1,15 @@
 import 'dart:developer' as developer;
 
 class _Person1 {
-  _Person1(this.name, this.age);
-  factory _Person1.fromJson(Map<String, dynamic> map) =>
+  new(this.name, this.age);
+  factory fromJson(Map<String, dynamic> map) =>
       _Person1(map['name'] as String, map['age'] as int);
   final String name;
   final int age;
 }
 
 class _Person2 {
-  _Person2(Map<String, dynamic> map)
+  new(Map<String, dynamic> map)
     : name = map['name'] as String,
       age = map['age'] as int;
   final String name;

@@ -3,27 +3,24 @@ import 'dart:developer' as developer;
 /// https://dart.dev/language/constructors
 class _MyClass {
   // Generative constructor
-  _MyClass(this.sushi, [DateTime? dateTime]) : myDateTime = dateTime ?? .now();
+  new(this.sushi, [DateTime? dateTime]) : myDateTime = dateTime ?? .now();
 
   // Named constructor
-  _MyClass.myNamedConstructor1(this.sushi, [DateTime? dateTime])
+  new myNamedConstructor1(this.sushi, [DateTime? dateTime])
     : myDateTime = dateTime ?? .now();
 
   // Named constructor
-  _MyClass.myNamedConstructor2(String fish, String rice, [DateTime? dateTime])
+  new myNamedConstructor2(String fish, String rice, [DateTime? dateTime])
     : sushi = fish + rice,
       myDateTime = dateTime ?? .now();
 
   // Redirecting constructor 1
-  _MyClass.myRedirectingConstructor1(String sushi, [DateTime? dateTime])
+  new myRedirectingConstructor1(String sushi, [DateTime? dateTime])
     : this(sushi, dateTime ?? .now());
 
   // Redirecting constructor 2
-  _MyClass.myRedirectingConstructor2(
-    String fish,
-    String rice, [
-    DateTime? dateTime,
-  ]) : this(fish + rice, dateTime ?? .now());
+  new myRedirectingConstructor2(String fish, String rice, [DateTime? dateTime])
+    : this(fish + rice, dateTime ?? .now());
 
   final String sushi;
   final DateTime myDateTime;

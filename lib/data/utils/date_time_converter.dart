@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 /// A JSON converter for [DateTime] values formatted as `yyyy-MM-dd HH:mm:ss`.
 class DateTimeConverter {
   /// Creates a [DateTimeConverter].
-  const DateTimeConverter();
+  const new();
   static final _format = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   /// Parses [json] into a [DateTime], or returns `null` if parsing fails.

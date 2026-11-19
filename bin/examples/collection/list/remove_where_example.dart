@@ -9,7 +9,7 @@ part 'remove_where_example.freezed.dart';
 @freezed
 sealed class Fruit with _$Fruit {
   /// Creates a [Fruit].
-  const factory Fruit({required String emoji}) = _Fruit;
+  const factory({required String emoji}) = _Fruit;
 }
 
 void main() {

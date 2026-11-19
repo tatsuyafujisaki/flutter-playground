@@ -6,7 +6,7 @@ void main() =>
     runApp(const ProviderScope(child: MaterialApp(home: _MyStatelessWidget())));
 
 class _MyStatelessWidget extends StatelessWidget {
-  const _MyStatelessWidget();
+  const new();
 
   @override
   Widget build(BuildContext context) {
