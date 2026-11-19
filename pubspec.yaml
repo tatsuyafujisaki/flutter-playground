@@ -9,6 +9,7 @@ dependencies:
   async: any # by dart.dev
   collection: any # by dart.dev
   device_info_plus: any # Flutter Favorite
+  dio: any
   firebase_ai: any
   firebase_analytics: any # by firebase.google.com
   firebase_auth: any # by firebase.google.com and Flutter Favorite
@@ -28,7 +29,6 @@ dependencies:
   geolocator: any # Flutter Favorite
   glob: any # by tools.dart.dev
   google_maps_flutter: any # by flutter.dev
-  http: any # by dart.dev
   image_picker: any # by flutter.dev
   intl: any # by dart.dev and Flutter Favorite
   json_annotation: any # by google.dev

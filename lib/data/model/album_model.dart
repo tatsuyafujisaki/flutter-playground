@@ -1,54 +1,77 @@
-import 'dart:convert';
 import 'dart:developer' as developer;
-import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_playground/data/model/album.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
-const _baseUrl = 'jsonplaceholder.typicode.com';
+const _baseUrl = 'https://jsonplaceholder.typicode.com';
 
 /// A client for performing CRUD operations on albums.
 class AlbumModel {
+  /// Creates an [AlbumModel] with an optional [Dio] client.
+  new({Dio? dio}) : _dio = dio ?? Dio(BaseOptions(baseUrl: _baseUrl));
+
+  final Dio _dio;
+
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<List<Album>> getAlbums() async {
-    final uri = Uri.https(_baseUrl, 'albums');
-    final response = await http.get(uri);
-    if (_isSuccessful(response.statusCode)) {
-      return (jsonDecode(response.body) as List<dynamic>)
-          .map((map) => Album.fromJson(map as Map<String, dynamic>))
-          .toList();
+    try {
+      final response = await _dio.get<List<dynamic>>('/albums');
+      final data = response.data;
+      if (data != null) {
+        return data
+            .map((map) => Album.fromJson(map as Map<String, dynamic>))
+            .toList();
+      }
+      _log(response);
+      throw Exception('Failed to get albums.');
+    } on DioException catch (error) {
+      final response = error.response;
+      if (response != null) {
+        _log(response);
+      }
+      throw Exception('Failed to get albums.');
     }
-    _log(response);
-    throw Exception('Failed to get albums.');
   }
 
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<Album> getAlbum({required int id}) async {
-    final uri = Uri.https(_baseUrl, 'albums/$id');
-    final response = await http.get(uri);
-    if (_isSuccessful(response.statusCode)) {
-      return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    try {
+      final response = await _dio.get<Map<String, dynamic>>('/albums/$id');
+      final data = response.data;
+      if (data != null) {
+        return Album.fromJson(data);
+      }
+      _log(response);
+      throw Exception('Failed to get an album.');
+    } on DioException catch (error) {
+      final response = error.response;
+      if (response != null) {
+        _log(response);
+      }
+      throw Exception('Failed to get an album.');
     }
-    _log(response);
-    throw Exception('Failed to get an album.');
   }
 
   /// https://docs.flutter.dev/cookbook/networking/send-data#convert-the-http-response-to-an-album
   Future<Album> postAlbum({required Map<String, dynamic> body}) async {
-    final uri = Uri.https(_baseUrl, 'albums');
-    final response = await http.post(
-      uri,
-      headers: <String, String>{
-        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-      },
-      body: jsonEncode(body),
-    );
-    if (_isSuccessful(response.statusCode)) {
-      return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/albums',
+        data: body,
+      );
+      final data = response.data;
+      if (data != null) {
+        return Album.fromJson(data);
+      }
+      _log(response);
+      throw Exception('Failed to post an album.');
+    } on DioException catch (error) {
+      final response = error.response;
+      if (response != null) {
+        _log(response);
+      }
+      throw Exception('Failed to post an album.');
     }
-    _log(response);
-    throw Exception('Failed to post an album.');
   }
 
   /// https://docs.flutter.dev/cookbook/networking/update-data#2-updating-data-over-the-internet-using-the-http-package
@@ -56,44 +79,45 @@ class AlbumModel {
     required int id,
     required Map<String, dynamic> body,
   }) async {
-    final uri = Uri.https(_baseUrl, 'albums/$id');
-    final response = await http.put(
-      uri,
-      headers: <String, String>{
-        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-      },
-      body: jsonEncode(body),
-    );
-    if (_isSuccessful(response.statusCode)) {
-      return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    try {
+      final response = await _dio.put<Map<String, dynamic>>(
+        '/albums/$id',
+        data: body,
+      );
+      final data = response.data;
+      if (data != null) {
+        return Album.fromJson(data);
+      }
+      _log(response);
+      throw Exception('Failed to update an album.');
+    } on DioException catch (error) {
+      final response = error.response;
+      if (response != null) {
+        _log(response);
+      }
+      throw Exception('Failed to update an album.');
     }
-    _log(response);
-    throw Exception('Failed to update an album.');
   }
 
   /// https://docs.flutter.dev/cookbook/networking/delete-data#2-delete-data-on-the-server
   Future<void> deleteAlbum({required int id}) async {
-    final uri = Uri.https(_baseUrl, 'albums/$id');
-    final response = await http.delete(
-      uri,
-      headers: <String, String>{
-        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-      },
-    );
-    if (!_isSuccessful(response.statusCode)) {
-      _log(response);
+    try {
+      await _dio.delete<void>('/albums/$id');
+    } on DioException catch (error) {
+      final response = error.response;
+      if (response != null) {
+        _log(response);
+      }
       throw Exception('Failed to delete an album.');
     }
   }
 
-  bool _isSuccessful(int statusCode) => 200 <= statusCode && statusCode <= 299;
-
-  void _log(Response response) {
-    developer.log('👀response.request: ${response.request}');
+  void _log(Response<dynamic> response) {
+    developer.log('👀response.requestOptions: ${response.requestOptions}');
     developer.log('👀response.statusCode: ${response.statusCode}');
-    developer.log('👀response.reasonPhrase: ${response.reasonPhrase}');
+    developer.log('👀response.statusMessage: ${response.statusMessage}');
     developer.log('👀response.headers: ${response.headers}');
-    developer.log('👀response.body: ${response.body}');
+    developer.log('👀response.data: ${response.data}');
   }
 }
 

@@ -1,17 +1,23 @@
 // CLI example script that prints output to stdout.
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:xml/xml.dart';
 
 Future<void> main() async {
-  final url = Uri.parse('https://news.google.com/rss');
+  final dio = Dio();
 
   try {
-    final response = await http.get(url);
+    final response = await dio.get<String>(
+      'https://news.google.com/rss',
+      options: Options(
+        responseType: ResponseType.plain,
+        validateStatus: (_) => true,
+      ),
+    );
 
-    if (response.statusCode == 200) {
-      final document = XmlDocument.parse(response.body);
+    if (response.statusCode == 200 && response.data != null) {
+      final document = XmlDocument.parse(response.data!);
 
       final title = document.findAllElements('title').first.innerText;
       stdout
@@ -40,5 +46,7 @@ Future<void> main() async {
     stderr
       ..writeln(error)
       ..writeln(stackTrace);
+  } finally {
+    dio.close();
   }
 }

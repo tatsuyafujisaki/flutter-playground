@@ -1,30 +1,47 @@
 import 'dart:typed_data';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 /// Downloads binary data from [url] and returns the response bytes.
-Future<Uint8List> downloadBinaryFile(String url) async {
-  bool isSuccessful(int statusCode) => 200 <= statusCode && statusCode <= 299;
-
-  final uri = Uri.parse(url);
-  final response = await http.get(uri);
-  if (isSuccessful(response.statusCode)) {
-    return response.bodyBytes;
+Future<Uint8List> downloadBinaryFile(String url, {Dio? dio}) async {
+  final client = dio ?? Dio();
+  try {
+    final response = await client.get<List<int>>(
+      url,
+      options: Options(responseType: ResponseType.bytes),
+    );
+    final data = response.data;
+    if (data != null) {
+      return Uint8List.fromList(data);
+    }
+    throw Exception(
+      '''Status code: ${response.statusCode}\nStatus message: ${response.statusMessage}\nURL: $url''',
+    );
+  } finally {
+    if (dio == null) {
+      client.close();
+    }
   }
-  throw Exception(
-    '''Status code: ${response.statusCode}\nReason phrase: ${response.reasonPhrase}\nURL: $url''',
-  );
 }
 
 /// Downloads text content from [uri] and returns the response body.
-Future<String> downloadTextFile(Uri uri) async {
-  bool isSuccessful(int statusCode) => 200 <= statusCode && statusCode <= 299;
-
-  final response = await http.get(uri);
-  if (isSuccessful(response.statusCode)) {
-    return response.body;
+Future<String> downloadTextFile(Uri uri, {Dio? dio}) async {
+  final client = dio ?? Dio();
+  try {
+    final response = await client.getUri<String>(
+      uri,
+      options: Options(responseType: ResponseType.plain),
+    );
+    final data = response.data;
+    if (data != null) {
+      return data;
+    }
+    throw Exception(
+      '''Status code: ${response.statusCode}\nStatus message: ${response.statusMessage}\nURL: $uri''',
+    );
+  } finally {
+    if (dio == null) {
+      client.close();
+    }
   }
-  throw Exception(
-    '''Status code: ${response.statusCode}\nReason phrase: ${response.reasonPhrase}\nURL: $uri''',
-  );
 }
