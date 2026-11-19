@@ -34,8 +34,8 @@ class YoutubePage extends ConsumerWidget {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body: asyncVideos.when(
-        data: (videos) => SingleChildScrollView(
+      body: switch (asyncVideos) {
+        AsyncData(value: final videos) => SingleChildScrollView(
           child: Column(
             children: [
               for (var i = 0; i < videos.length; i += 2)
@@ -54,27 +54,27 @@ class YoutubePage extends ConsumerWidget {
             ],
           ),
         ),
-        error: (err, stack) => Center(
+        AsyncError(:final error) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error: $err', textAlign: TextAlign.center),
+              Text('Error: $error', textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(popularVideosProvider),
+                onPressed: () => ref.invalidate(popularVideosProvider),
                 child: const Text('Try Again'),
               ),
             ],
           ),
         ),
-        loading: () => const Center(
+        AsyncLoading() => const Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
           ),
         ),
-      ),
+      },
     );
   }
 
