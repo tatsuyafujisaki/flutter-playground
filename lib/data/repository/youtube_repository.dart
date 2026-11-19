@@ -68,4 +68,10 @@ class _ApiKeyClient extends http.BaseClient {
 
     return _inner.send(newRequest);
   }
+
+  @override
+  void close() {
+    _inner.close();
+    super.close();
+  }
 }

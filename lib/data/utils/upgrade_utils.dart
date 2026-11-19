@@ -27,7 +27,7 @@ Future<void> showForceUpdateDialogIfNeeded(
     }
 
     final storeUrl = await _storeUrl;
-    if (storeUrl == null) {
+    if (storeUrl == null || !navigatorState.mounted) {
       return;
     }
 
@@ -57,7 +57,7 @@ Future<bool> _shouldForceUpdate(String minVersionString) async {
 Future<String?> get _storeUrl async {
   if (Platform.isIOS) {
     // Replace with your actual App Store ID
-    const appStoreId = 'id544007664';
+    const appStoreId = '544007664';
     return 'https://apps.apple.com/app/id$appStoreId';
   }
   if (Platform.isAndroid) {

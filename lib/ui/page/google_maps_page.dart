@@ -31,6 +31,9 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   Future<void> _getCurrentLocation() async {
     try {
       final position = await getPosition();
+      if (!mounted) {
+        return;
+      }
 
       final cameraPosition = CameraPosition(
         target: LatLng(position.latitude, position.longitude),
@@ -51,9 +54,15 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       });
 
       final controller = await _controller.future;
+      if (!mounted) {
+        return;
+      }
       await controller.animateCamera(
         CameraUpdate.newCameraPosition(cameraPosition),
       );
+      if (!mounted) {
+        return;
+      }
 
       developer.log(
         'Current location: ${position.latitude}, ${position.longitude}',
@@ -118,6 +127,9 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
           .whereType<Marker>()
           .toSet();
 
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _markers.addAll(cafeMarkers);
       });
