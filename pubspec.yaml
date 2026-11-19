@@ -41,7 +41,6 @@ dependencies:
   rfw: any # by flutter.dev
   riverpod_annotation: any
   shared_preferences: any # by flutter.dev and Flutter Favorite
-  stack_trace: any # by tools.dart.dev
   url_launcher: any # by flutter.dev and Fluter Favorite
   video_player: any # by flutter.dev and Flutter Favorite
   webview_flutter: any # flutter.dev

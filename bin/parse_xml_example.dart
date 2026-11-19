@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:stack_trace/stack_trace.dart';
 import 'package:xml/xml.dart';
 
 Future<void> main() async {
@@ -40,6 +39,6 @@ Future<void> main() async {
   } on Exception catch (error, stackTrace) {
     stderr
       ..writeln(error)
-      ..writeln(Trace.from(stackTrace).terse);
+      ..writeln(stackTrace);
   }
 }
