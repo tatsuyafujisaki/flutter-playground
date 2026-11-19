@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_playground/data/enum/language.dart';
@@ -11,12 +9,12 @@ extension BuildContextExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 
   /// The height of the current media query in logical pixels.
-  double get screenHeight => MediaQuery.of(this).size.height;
+  double get screenHeight => MediaQuery.sizeOf(this).height;
 
   /// The width of the current media query in logical pixels.
-  double get screenWidth => MediaQuery.of(this).size.width;
+  double get screenWidth => MediaQuery.sizeOf(this).width;
 
-  /// Returns whether the platform locale matches [language].
+  /// Returns whether the current locale matches [language].
   bool isCurrentLocale(Language language) =>
-      PlatformDispatcher.instance.locale.languageCode == language.code;
+      Localizations.localeOf(this).languageCode == language.code;
 }
