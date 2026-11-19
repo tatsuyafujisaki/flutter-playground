@@ -1,15 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_playground/data/repository/auth_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../data/repository/auth_repository.dart';
 
 part 'auth_view_model.g.dart';
 
+/// A Riverpod notifier that manages Firebase authentication state.
 @riverpod
 class AuthViewModel extends _$AuthViewModel {
   @override
   UserCredential? build() => null;
 
+  /// Signs in anonymously if no user is currently authenticated.
   Future<void> signInAnonymously() async {
     final authRepository = ref.read(authRepositoryProvider);
     if (authRepository.currentUser == null) {

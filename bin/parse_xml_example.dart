@@ -1,9 +1,11 @@
-// ignore_for_file: avoid_print
+// CLI example script that prints output to stdout.
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:stack_trace/stack_trace.dart';
 import 'package:xml/xml.dart';
 
-void main() async {
+Future<void> main() async {
   final url = Uri.parse('https://news.google.com/rss');
 
   try {
@@ -13,8 +15,9 @@ void main() async {
       final document = XmlDocument.parse(response.body);
 
       final title = document.findAllElements('title').first.innerText;
-      print('\nFeed Title: $title');
-      print('--- Recent News ---');
+      stdout
+        ..writeln('\nFeed Title: $title')
+        ..writeln('--- Recent News ---');
 
       final items = document.findAllElements('item');
 
@@ -23,16 +26,20 @@ void main() async {
         final pubDate = item.findElements('pubDate').first.innerText;
         final link = item.findElements('link').first.innerText;
 
-        print('Title: $itemTitle');
-        print('Date:  $pubDate');
-        print('Link:  $link');
-        print('---');
+        stdout
+          ..writeln('Title: $itemTitle')
+          ..writeln('Date:  $pubDate')
+          ..writeln('Link:  $link')
+          ..writeln('---');
       }
     } else {
-      print('Failed to fetch RSS feed. Status code: ${response.statusCode}');
+      stderr.writeln(
+        'Failed to fetch RSS feed. Status code: ${response.statusCode}',
+      );
     }
   } on Exception catch (error, stackTrace) {
-    print(error);
-    print(Trace.from(stackTrace).terse);
+    stderr
+      ..writeln(error)
+      ..writeln(Trace.from(stackTrace).terse);
   }
 }

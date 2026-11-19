@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 
+/// Returns the current device [Position] after checking location permissions.
 Future<Position> getPosition() async {
   final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!locationServiceEnabled) {

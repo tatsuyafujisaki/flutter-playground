@@ -12,6 +12,7 @@ Stream<String> _createStream() => Stream<String>.periodic(
   (count) => '$count!',
 ).take(3);
 
+/// Demonstrates consuming a stream using [Stream.listen].
 Future<void> showListenExample() async {
   developer.log('👀Starts consuming a stream.');
   final subscription = _createStream().listen(
@@ -28,6 +29,7 @@ Future<void> showListenExample() async {
   await subscription.cancel();
 }
 
+/// Demonstrates consuming a stream using an `await for` loop.
 Future<void> showAwaitForExample() async {
   developer.log('👀Starts consuming a stream.');
   // Unlike listen(), "await for" waits until the stream is done.

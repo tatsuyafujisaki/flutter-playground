@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
+/// Whether the device can resolve a host over the network.
 Future<bool> get isOnline async {
   try {
     final internetAddresses = await InternetAddress.lookup('example.com');
@@ -13,6 +14,7 @@ Future<bool> get isOnline async {
   }
 }
 
+/// Checks whether [url] responds with a 2xx HTTP status code.
 Future<bool> isUrlAccessible(String url) async {
   try {
     final uri = Uri.tryParse(url);

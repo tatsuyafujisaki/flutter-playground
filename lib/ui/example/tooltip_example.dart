@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews [Tooltip] widgets displayed programmatically.
 @Preview()
 Widget preview() => _MyStatelessWidget();
 

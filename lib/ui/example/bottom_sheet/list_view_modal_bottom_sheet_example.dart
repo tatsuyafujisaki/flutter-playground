@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews a modal bottom sheet containing a [ListView].
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 
@@ -24,7 +25,7 @@ class _MyStatelessWidget extends StatelessWidget {
 class _BottomSheetContent extends StatelessWidget {
   _BottomSheetContent();
 
-  final indices = List<int>.generate(100, (index) => index).toList();
+  final List<int> indices = List<int>.generate(100, (index) => index).toList();
 
   @override
   Widget build(BuildContext context) => ListView(

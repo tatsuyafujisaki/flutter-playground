@@ -1,11 +1,14 @@
-// ignore_for_file: avoid_print
+// CLI example script that prints output to stdout.
+import 'dart:io';
+
 import 'package:stack_trace/stack_trace.dart';
 
 void main() {
   try {
     throw Exception('💀');
   } on Exception catch (error, stackTrace) {
-    print(error);
-    print(Trace.from(stackTrace).terse);
+    stderr
+      ..writeln(error)
+      ..writeln(Trace.from(stackTrace).terse);
   }
 }

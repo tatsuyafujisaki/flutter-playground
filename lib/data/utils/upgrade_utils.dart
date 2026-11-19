@@ -37,6 +37,7 @@ Future<void> showForceUpdateDialogIfNeeded(
   }
 }
 
+/// Parses [version] into a [Version], or returns `null` if parsing fails.
 Version? tryParse(String version) {
   try {
     return Version.parse(version);

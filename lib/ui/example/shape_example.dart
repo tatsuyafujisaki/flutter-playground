@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews an [OutlinedButton] with a rounded rectangular shape.
 @Preview()
 Widget ovalOutlinedButtonExample() => OutlinedButton(
   onPressed: () {},

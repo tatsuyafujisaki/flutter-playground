@@ -2,9 +2,10 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_playground/packages/permission_handler_example.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../packages/permission_handler_example.dart';
 
+/// Previews selecting multiple images with [ImagePicker].
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 

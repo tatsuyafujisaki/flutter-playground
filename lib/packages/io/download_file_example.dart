@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
+/// Downloads binary data from [url] and returns the response bytes.
 Future<Uint8List> downloadBinaryFile(String url) async {
   bool isSuccessful(int statusCode) => 200 <= statusCode && statusCode <= 299;
 
@@ -14,6 +15,7 @@ Future<Uint8List> downloadBinaryFile(String url) async {
   );
 }
 
+/// Downloads text content from [uri] and returns the response body.
 Future<String> downloadTextFile(Uri uri) async {
   bool isSuccessful(int statusCode) => 200 <= statusCode && statusCode <= 299;
 

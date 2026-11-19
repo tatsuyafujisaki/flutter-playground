@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews widgets aligned to the left and right in a [Row].
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 

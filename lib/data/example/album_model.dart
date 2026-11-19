@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:io';
 
+import 'package:flutter_playground/data/example/album.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-import 'album.dart';
-
 const _baseUrl = 'jsonplaceholder.typicode.com';
 
+/// A client for performing CRUD operations on albums.
 class AlbumModel {
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<List<Album>> getAlbums() async {

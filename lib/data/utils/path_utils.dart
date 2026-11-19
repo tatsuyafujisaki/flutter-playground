@@ -6,6 +6,7 @@ import 'dart:io';
 // https://pub.dev/packages/path
 import 'package:path/path.dart' as p;
 
+/// Returns whether a file exists at [path].
 bool exists(String path) {
   try {
     return File(path).existsSync();
@@ -15,11 +16,13 @@ bool exists(String path) {
   }
 }
 
+/// Replaces the file extension of [path] with [extension].
 String replaceExtension(String path, String extension) => p.setExtension(
   path,
   extension.isEmpty || extension.startsWith('.') ? extension : '.$extension',
 );
 
+/// Deletes the file at [path] if it exists.
 void deleteIfExists(String path) {
   final file = File(path);
   try {

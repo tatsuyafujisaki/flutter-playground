@@ -3,13 +3,14 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
-import '../../packages/io/download_file_example.dart';
+import 'package:flutter_playground/packages/io/download_file_example.dart';
 
+/// Previews an [Image.memory] widget displaying downloaded binary image bytes.
 @Preview()
 Widget preview() => _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
-  final imageBytes = downloadBinaryFile(
+  final Future<Uint8List> imageBytes = downloadBinaryFile(
     'https://media1.tenor.com/m/NVP2kRD7CHsAAAAC',
   );
 

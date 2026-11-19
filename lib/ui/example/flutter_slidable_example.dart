@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+/// Previews a [Slidable] list example with swipe-to-delete actions.
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 
@@ -13,7 +14,7 @@ class _MyStatelessWidget extends StatefulWidget {
 }
 
 class _MyStatelessWidgetState extends State<_MyStatelessWidget> {
-  final _list = List<_MyData>.generate(
+  final List<_MyData> _list = List<_MyData>.generate(
     20,
     (index) => _MyData(id: index, text: index.toString()),
   ).toList();

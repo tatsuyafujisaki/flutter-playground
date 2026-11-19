@@ -5,8 +5,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'remove_where_example.freezed.dart';
 
+/// A fruit represented by an emoji.
 @freezed
 sealed class Fruit with _$Fruit {
+  /// Creates a [Fruit].
   const factory Fruit({required String emoji}) = _Fruit;
 }
 

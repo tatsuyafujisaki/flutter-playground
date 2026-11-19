@@ -6,9 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'youtube_repository.g.dart';
 
+/// Provides the singleton [YoutubeRepository] instance.
 @Riverpod(keepAlive: true)
 YoutubeRepository youtubeRepository(Ref ref) => YoutubeRepository();
 
+/// A repository for fetching videos from the YouTube Data API.
 class YoutubeRepository {
   static const _apiKey = String.fromEnvironment('YOUTUBE_API_KEY');
 
@@ -17,6 +19,7 @@ class YoutubeRepository {
     return (countryCode != null && countryCode.isNotEmpty) ? countryCode : 'US';
   }
 
+  /// Fetches the most popular videos for the device's current region.
   Future<List<Video>> fetchPopularVideos() async {
     final client = _ApiKeyClient(_apiKey);
     final youtube = YouTubeApi(client);

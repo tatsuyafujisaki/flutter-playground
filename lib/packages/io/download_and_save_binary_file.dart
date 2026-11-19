@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/packages/io/download_file_example.dart';
+import 'package:flutter_playground/packages/io/save_file_example.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-
-import 'download_file_example.dart';
-import 'save_file_example.dart';
 
 void main() => runApp(const ProviderScope(child: _MyStatelessWidget()));
 
@@ -24,6 +23,7 @@ class _MyStatelessWidget extends StatelessWidget {
   }
 }
 
+/// Downloads binary data from [url] and saves it to external storage.
 Future<String?> downloadAndSaveBinaryFile(String url) async {
   final bytes = await downloadBinaryFile(url);
   return saveBinaryFileToExternalStorageDirectory(bytes, p.basename(url));

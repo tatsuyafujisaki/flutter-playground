@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 
+/// Creates a [FutureBuilder] for a void [future] with fallback widgets.
 FutureBuilder<void> createVoidFutureBuilder({
   required Widget Function() onData,
   Future<void>? future,

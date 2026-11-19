@@ -1,9 +1,11 @@
 import 'dart:developer' as developer;
+
+import 'package:flutter_playground/data/repository/places_repository.dart';
+import 'package:flutter_playground/data/utils/geolocator_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../repository/places_repository.dart';
-import 'geolocator_utils.dart';
 
+/// Logs nearby coffee chains using the current position and [container].
 Future<void> logNearbyCoffeeChains(ProviderContainer container) async {
   try {
     developer.log('Checking nearby coffee chains...');

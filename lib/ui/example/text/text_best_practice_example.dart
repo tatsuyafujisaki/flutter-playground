@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews recommended [Text] overflow and line-clamping configurations.
 @Preview()
 Widget preview() => _MyStatelessWidget();
 
@@ -10,7 +11,7 @@ Widget preview() => _MyStatelessWidget();
 ///   infinite.
 /// - If [TextOverflow.ellipsis] is set, the default [Text.maxLines] is 1.
 class _MyStatelessWidget extends StatelessWidget {
-  final data = '⭐' * 100;
+  final String data = '⭐' * 100;
 
   @override
   Widget build(BuildContext context) => Column(

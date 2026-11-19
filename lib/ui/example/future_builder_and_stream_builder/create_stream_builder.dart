@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 
+/// Creates a [StreamBuilder] that handles data, error, and loading states.
 StreamBuilder<T> createStreamBuilder<T>({
   required Widget Function(T) onData,
   Stream<T>? stream,

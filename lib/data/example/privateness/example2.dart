@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'example1.dart';
+import 'package:flutter_playground/data/example/privateness/example1.dart';
 
 void main() {
   // Top-level private variables are only accessible from within the same file.

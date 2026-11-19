@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews a [DraggableScrollableSheet] example.
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 

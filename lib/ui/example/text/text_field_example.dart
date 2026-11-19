@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews [TextField] widgets with different border configurations.
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 

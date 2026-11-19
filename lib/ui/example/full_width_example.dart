@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews full-width [Text] layout examples.
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 

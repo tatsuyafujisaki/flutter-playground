@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
+/// Previews a [MenuAnchor] with selectable menu items.
 @Preview()
 Widget preview() => _MyStatefulWidget();
 
@@ -10,7 +11,7 @@ class _MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
-  var isMenuOpen = false;
+  bool isMenuOpen = false;
 
   @override
   Widget build(BuildContext context) => MenuAnchor(

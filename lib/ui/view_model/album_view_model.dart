@@ -2,8 +2,8 @@ import 'dart:collection';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
-import '../../data/example/album.dart';
-import '../../data/example/album_model.dart';
+import 'package:flutter_playground/data/example/album.dart';
+import 'package:flutter_playground/data/example/album_model.dart';
 
 /// https://docs.flutter.dev/get-started/fwe/state-management#defining-the-viewmodel
 /// https://docs.flutter.dev/data-and-backend/state-mgmt/simple
@@ -11,11 +11,16 @@ class AlbumViewModel extends ChangeNotifier {
   final _albumModel = AlbumModel();
 
   var _albums = <Album>[];
+
+  /// The unmodifiable list of fetched albums.
   UnmodifiableListView<Album> get albums => UnmodifiableListView(_albums);
 
   late Album _album;
+
+  /// The most recently fetched or created album.
   Album get album => _album;
 
+  /// Fetches all albums and notifies listeners.
   Future<void> fetchAlbums() async {
     try {
       _albums = await _albumModel.getAlbums();
@@ -25,6 +30,7 @@ class AlbumViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fetches the album with the given [id] and notifies listeners.
   Future<void> fetchAlbum({required int id}) async {
     try {
       _album = await _albumModel.getAlbum(id: id);
@@ -34,6 +40,7 @@ class AlbumViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Creates an album from [body] and notifies listeners.
   Future<void> postAlbum({required Map<String, dynamic> body}) async {
     try {
       _album = await _albumModel.postAlbum(body: body);
@@ -43,6 +50,7 @@ class AlbumViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes the album with the given [id] and notifies listeners.
   Future<void> deleteAlbum({required int id}) async {
     try {
       await _albumModel.deleteAlbum(id: id);

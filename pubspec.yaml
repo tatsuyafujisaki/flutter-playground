@@ -49,13 +49,13 @@ dependencies:
   xml: any
 dev_dependencies:
   build_runner: any # by tools.dart.dev
-  flutter_lints: any # by flutter.dev
   flutter_test:
     sdk: flutter
   freezed: any # Flutter Favorite
   json_serializable: any # Flutter Favorite
   riverpod_generator: any
   riverpod_lint: any
+  very_good_analysis: any # Flutter Favorite
 flutter:
   default-flavor: dev
   generate: true # https://docs.flutter.dev/ui/internationalization#adding-your-own-localized-messages

@@ -6,9 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'places_repository.g.dart';
 
+/// Provides the singleton [PlacesRepository] instance.
 @Riverpod(keepAlive: true)
 PlacesRepository placesRepository(Ref ref) => PlacesRepository();
 
+/// A repository for fetching nearby places.
 class PlacesRepository {
   static const _apiKey = String.fromEnvironment('GOOGLE_MAPS_PLATFORM_API_KEY');
 
@@ -49,6 +51,7 @@ class PlacesRepository {
   //   return _allowedCafeChains.any((chain) => displayName.contains(chain));
   // }
 
+  /// Fetches nearby coffee shops around [latLng].
   Future<List<Map<String, dynamic>>> fetchNearbyCoffeeShops(
     LatLng latLng,
   ) async {

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/data/repository/youtube_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/youtube/v3.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/repository/youtube_repository.dart';
-
 part 'youtube_page.g.dart';
 
+/// Fetches popular YouTube videos from [youtubeRepositoryProvider].
 @riverpod
 Future<List<Video>> popularVideos(Ref ref) {
   final repository = ref.watch(youtubeRepositoryProvider);
   return repository.fetchPopularVideos();
 }
 
+/// A page that displays trending YouTube videos in a two-column grid.
 class YoutubePage extends ConsumerWidget {
+  /// Creates a [YoutubePage].
   const YoutubePage({super.key});
 
   @override

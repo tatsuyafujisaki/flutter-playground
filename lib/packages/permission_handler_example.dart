@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 Future<bool> isGranted<T extends Permission>(T permission) =>
     permission.onPermanentlyDeniedCallback(openAppSettings).request().isGranted;
 
+/// Whether photo or storage permission is granted for the current platform.
 Future<bool> get isPhotoGranted async {
   /// > Devices running Android 12 (API level 32) or lower:
   ///   use Permissions.storage.

@@ -3,7 +3,9 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+/// A screen that displays web content using a [WebViewWidget].
 class WebViewScreen extends StatefulWidget {
+  /// Creates a [WebViewScreen] that loads [url].
   const WebViewScreen({
     required this.url,
     required this.onBackPressed,
@@ -11,8 +13,13 @@ class WebViewScreen extends StatefulWidget {
     this.cookie,
   });
 
+  /// The initial URL to load in the web view.
   final String url;
+
+  /// The callback invoked when the back button is pressed.
   final VoidCallback onBackPressed;
+
+  /// An optional cookie to set before loading [url].
   final WebViewCookie? cookie;
 
   @override
@@ -22,10 +29,10 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   late final WebViewController controller;
   final WebViewCookieManager cookieManager = .new();
-  var title = '';
-  var loadingPercentage = 0;
-  var canGoBack = false;
-  var canGoForward = false;
+  String title = '';
+  int loadingPercentage = 0;
+  bool canGoBack = false;
+  bool canGoForward = false;
 
   @override
   void initState() {

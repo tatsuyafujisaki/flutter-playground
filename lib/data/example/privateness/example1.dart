@@ -1,16 +1,22 @@
 import 'dart:developer' as developer;
 
 const _myTopPrivateLevelVariable = '_myTopPrivateLevelVariable';
+
+/// A top-level public variable.
 const myTopLevelPublicVariable = 'myTopLevelPublicVariable';
 
+/// A public class demonstrating public and private members.
 class MyPublic {
   final _myPrivateVariable = '_myPrivateVariable';
+
+  /// A public instance variable.
   final myPublicVariable = 'myPublicVariable';
 
   void _myPrivateMethod() {
     developer.log('_myPrivateMethod');
   }
 
+  /// Logs a message from this public method.
   void myPublicMethod() {
     developer.log('myPublicMethod');
   }

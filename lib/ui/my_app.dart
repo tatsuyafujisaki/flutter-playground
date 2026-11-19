@@ -3,17 +3,19 @@ import 'dart:developer' as developer;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/data/utils/upgrade_utils.dart';
+import 'package:flutter_playground/l10n/app_localizations.dart';
+import 'package:flutter_playground/ui/page/google_maps_page.dart';
+import 'package:flutter_playground/ui/provider/my_app_lifecycle_state.dart';
+import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/utils/upgrade_utils.dart';
-import '../l10n/app_localizations.dart';
-import 'page/google_maps_page.dart';
-import 'provider/my_app_lifecycle_state.dart';
-import 'view_model/auth_view_model.dart';
-
+/// The global navigator key used by [MyApp].
 final navigatorKey = GlobalKey<NavigatorState>();
 
+/// The root widget of the application.
 class MyApp extends ConsumerStatefulWidget {
+  /// Creates a [MyApp].
   const MyApp({super.key});
 
   @override

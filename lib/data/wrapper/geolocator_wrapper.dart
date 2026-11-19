@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
+/// Singleton wrapper around [Geolocator] for location permissions and updates.
 class GeolocatorWrapper {
+  /// Returns the singleton [GeolocatorWrapper] instance.
   factory GeolocatorWrapper() => _instance;
   GeolocatorWrapper._internal() {
     _controller = StreamController();
@@ -52,9 +54,11 @@ class GeolocatorWrapper {
     return true;
   }
 
+  /// The current device [Position], or `null` if location access is denied.
   Future<Position?> get currentPosition async =>
       await _isAllowed ? Geolocator.getCurrentPosition() : null;
 
+  /// A stream of device [Position] updates.
   Future<Stream<Position>?> get positionStream async {
     if (!_controller.hasListener && await _isAllowed) {
       await _controller.addStream(
@@ -64,6 +68,7 @@ class GeolocatorWrapper {
     return _controller.stream;
   }
 
+  /// Logs the current device position once for demonstration.
   void demoOneShot() {
     Future<void>.delayed(
       .zero,
@@ -71,6 +76,7 @@ class GeolocatorWrapper {
     );
   }
 
+  /// Subscribes to [positionStream] and logs each update for demonstration.
   void demoListen() {
     Future<void>.delayed(
       .zero,

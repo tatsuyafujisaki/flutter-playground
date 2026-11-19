@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+/// Extension methods for handling and logging [Stream] events.
 extension StreamExtension<T> on Stream<T> {
+  /// Intercepts data, error, and done events without altering the stream.
   Stream<T> handle({
     void Function(T)? handleData,
     void Function(Object, StackTrace)? handleError,
@@ -23,6 +25,7 @@ extension StreamExtension<T> on Stream<T> {
     ),
   );
 
+  /// Logs data, error, and done events emitted by this stream.
   Stream<T> log() => transform<T>(
     StreamTransformer<T, T>.fromHandlers(
       handleData: (data, sink) {

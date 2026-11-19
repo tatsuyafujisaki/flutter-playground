@@ -1,8 +1,9 @@
 import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'directories.dart';
+import 'package:flutter_playground/packages/io/directories.dart';
 
+/// Writes [bytes] to [filename] in external storage and returns the path.
 Future<String?> saveBinaryFileToExternalStorageDirectory(
   List<int> bytes, [
   String filename = 'deleteme',
@@ -15,6 +16,7 @@ Future<String?> saveBinaryFileToExternalStorageDirectory(
   return _getDeviceFileExplorerFriendlyExternalStorageDirectory(path);
 }
 
+/// Writes [contents] to [filename] in external storage and returns the path.
 Future<String?> saveTextFileToExternalStorageDirectory(
   String contents, [
   String filename = 'deleteme.txt',
@@ -27,6 +29,7 @@ Future<String?> saveTextFileToExternalStorageDirectory(
   return _getDeviceFileExplorerFriendlyExternalStorageDirectory(path);
 }
 
+/// Logs an `adb pull` command to retrieve the file saved at [path].
 void showHowtoPullSavedFile(String path) =>
     developer.log('👉 adb pull $path ~/Desktop');
 
