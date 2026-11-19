@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Creates a [StreamBuilder] that handles data, error, and loading states.
 StreamBuilder<T> createStreamBuilder<T>({

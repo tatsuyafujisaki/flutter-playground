@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// A screen that displays web content using a [WebViewWidget].

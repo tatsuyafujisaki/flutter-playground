@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_playground/data/repository/places_repository.dart';
 import 'package:flutter_playground/data/utils/geolocator_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A page that displays Google Maps with the user's location and nearby cafes.

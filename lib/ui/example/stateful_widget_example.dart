@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/ui/view_model/album_view_model.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Previews a [StatefulWidget] that displays albums from [AlbumViewModel].
 @Preview()

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_playground/data/repository/youtube_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/youtube/v3.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 

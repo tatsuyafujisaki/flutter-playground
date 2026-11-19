@@ -1,9 +1,9 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/packages/permission_handler_example.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Previews selecting multiple images with [ImagePicker].
 @Preview()

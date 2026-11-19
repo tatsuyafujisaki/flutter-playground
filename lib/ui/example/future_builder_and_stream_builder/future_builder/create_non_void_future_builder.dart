@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Creates a [FutureBuilder] for a non-void [future] with fallback widgets.
 FutureBuilder<T> createNonVoidFutureBuilder<T>({

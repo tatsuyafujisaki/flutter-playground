@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Convenience comparison and date helpers for [DateTime].
 extension DateTimeExtension on DateTime {

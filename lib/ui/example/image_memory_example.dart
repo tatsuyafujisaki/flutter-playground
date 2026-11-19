@@ -1,9 +1,9 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/packages/io/download_file_example.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Previews an [Image.memory] widget displaying downloaded binary image bytes.
 @Preview()

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Previews recommended [Text] overflow and line-clamping configurations.
 @Preview()
