@@ -7,14 +7,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'person.freezed.dart';
 part 'person.g.dart';
 
+/// A person with a name, age, and optional last-updated timestamp.
 @freezed
 sealed class Person with _$Person {
+  /// Creates a [Person].
   const factory Person({
     required String name,
     required int age,
     @DateTimeConverter() DateTime? lastUpdated,
   }) = _Person;
 
+  /// Creates a [Person] from a JSON map.
   factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
 }
 

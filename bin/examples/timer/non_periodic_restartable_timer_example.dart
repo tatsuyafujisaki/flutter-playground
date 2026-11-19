@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:async/async.dart';
 
+/// Creates and starts a one-second [RestartableTimer] that invokes [callback].
 RestartableTimer createAndStartNonPeriodicRestartableTimer([
   void Function()? callback,
 ]) => RestartableTimer(const Duration(seconds: 1), () => callback?.call());

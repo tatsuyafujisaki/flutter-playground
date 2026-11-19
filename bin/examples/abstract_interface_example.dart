@@ -1,7 +1,11 @@
 import 'dart:developer' as developer;
 
+/// Constants representing fruit emojis.
 abstract interface class Fruit {
+  /// The apple emoji.
   static const apple = '🍎';
+
+  /// The orange emoji.
   static const orange = '🍊';
 }
 

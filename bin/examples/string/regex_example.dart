@@ -4,6 +4,7 @@ final _urlPattern = RegExp(
   caseSensitive: false,
 );
 
+/// Extracts all URLs found in [input].
 Iterable<String> getUrls(String input) {
   if (input.isEmpty) {
     return [];
@@ -12,7 +13,7 @@ Iterable<String> getUrls(String input) {
   return _urlPattern.allMatches(input).map((match) => match.group(0)).nonNulls;
 }
 
-// Text from the original poster
+/// Sample input text containing URLs for regex matching.
 const input = '''
 window.urlVideo = 'https://node34.vidstreamcdn.com/hls/5d59908aea5aa101a054dec2a1cd3aff/5d59908aea5aa101a054dec2a1cd3aff.playlist.m3u8';
 var playerInstance = jwplayer("myVideo");

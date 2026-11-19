@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'package:flutter_playground/data/example/album.dart';
+import 'package:flutter_playground/data/model/album.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
