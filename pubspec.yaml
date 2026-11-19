@@ -38,7 +38,6 @@ dependencies:
   path_provider: any # by path_provider and Flutter Favorite
   permission_handler: any
   pub_semver: any # by tools.dart.dev
-  rfw: any # by flutter.dev
   riverpod_annotation: any
   shared_preferences: any # by flutter.dev and Flutter Favorite
   url_launcher: any # by flutter.dev and Fluter Favorite
@@ -58,5 +57,3 @@ flutter:
   default-flavor: dev
   generate: true # https://docs.flutter.dev/ui/internationalization#adding-your-own-localized-messages
   uses-material-design: true
-  assets:
-    - assets/input.rfw
