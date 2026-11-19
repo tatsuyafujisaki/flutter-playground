@@ -26,7 +26,6 @@ plugins {
     id("com.google.gms.google-services") version "+" apply false
     id("dev.flutter.flutter-plugin-loader") version "+"
     id("org.gradle.toolchains.foojay-resolver-convention") version "+"
-    id("org.jetbrains.kotlin.android") version "+" apply false
 }
 
 include(":app")

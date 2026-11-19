@@ -65,11 +65,9 @@ android {
         create("dev") {
             dimension = "app"
             applicationIdSuffix = ".dev"
-            resValue("string", "app_name", "Flutter Playground Dev")
         }
         create("prod") {
             dimension = "app"
-            resValue("string", "app_name", "Flutter Playground")
         }
     }
 
