@@ -87,6 +87,6 @@ class MySet extends _$MySet {
 
   /// Removes [s] from the set.
   void remove(String s) {
-    state.remove(s);
+    state = {...state}..remove(s);
   }
 }
