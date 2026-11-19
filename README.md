@@ -1,10 +1,5 @@
 # Preparation
 
-## Update AGENTS.md
-
-Download the Flutter and Dart rules template for your editor from
-https://docs.flutter.dev/ai/ai-rules.
-
 ## Create `.gitignore`
 
 1. Follow the instructions in
