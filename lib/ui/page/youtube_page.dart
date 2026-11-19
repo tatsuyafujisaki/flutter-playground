@@ -35,24 +35,13 @@ class YoutubePage extends ConsumerWidget {
         foregroundColor: Colors.black,
       ),
       body: switch (asyncVideos) {
-        AsyncData(value: final videos) => SingleChildScrollView(
-          child: Column(
-            children: [
-              for (var i = 0; i < videos.length; i += 2)
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(child: _buildVideoCard(videos[i])),
-                      if (i + 1 < videos.length)
-                        Expanded(child: _buildVideoCard(videos[i + 1]))
-                      else
-                        const Expanded(child: SizedBox.shrink()),
-                    ],
-                  ),
-                ),
-            ],
+        AsyncData(value: final videos) => GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.8,
           ),
+          itemCount: videos.length,
+          itemBuilder: (context, index) => _buildVideoCard(videos[index]),
         ),
         AsyncError(:final error) => Center(
           child: Column(
