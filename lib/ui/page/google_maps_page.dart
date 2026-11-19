@@ -20,7 +20,6 @@ class GoogleMapsPage extends ConsumerStatefulWidget {
 class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   final _controller = Completer<GoogleMapController>();
 
-  CameraPosition? _currentPosition;
   final Set<Marker> _markers = {};
 
   @override
@@ -39,7 +38,6 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
 
       setState(() {
-        _currentPosition = cameraPosition;
         _markers.add(
           Marker(
             markerId: const MarkerId('current_location'),
@@ -141,18 +139,11 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       child: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition:
-                _currentPosition ??
-                const CameraPosition(
-                  target: LatLng(35.6812, 139.7671), // 東京駅の座標（デフォルト）
-                  zoom: 14.4746,
-                ),
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(35.6812, 139.7671), // 東京駅の座標（デフォルト）
+              zoom: 14.4746,
+            ),
             onMapCreated: _controller.complete,
-            onCameraMove: (position) {
-              setState(() {
-                _currentPosition = position;
-              });
-            },
             markers: _markers,
           ),
         ],
