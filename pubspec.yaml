@@ -41,6 +41,7 @@ dependencies:
   pub_semver: any # by tools.dart.dev
   riverpod_annotation: any
   shared_preferences: any # by flutter.dev and Flutter Favorite
+  upgrader: any
   url_launcher: any # by flutter.dev and Fluter Favorite
   video_player: any # by flutter.dev and Flutter Favorite
   webview_flutter: any # flutter.dev
