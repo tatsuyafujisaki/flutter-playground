@@ -6,6 +6,7 @@ environment:
 # > The version constraint is optional but recommended. If no version constraint is given, any is assumed.
 # https://dart.dev/tools/pub/dependencies#hosted-packages
 dependencies:
+  agora_rtc_engine: any
   async: any # by dart.dev
   collection: any # by dart.dev
   device_info_plus: any # Flutter Favorite

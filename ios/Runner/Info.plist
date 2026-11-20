@@ -52,6 +52,11 @@
 		<!-- https://pub.dev/packages/geolocator#usage -->
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>
+		<!-- https://pub.dev/packages/agora_rtc_engine -->
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs access to the camera for video calls.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This app needs access to the microphone for audio and video calls.</string>
 		<!-- Environment Variables from dart_defines.json -->
 		<key>GOOGLE_MAPS_PLATFORM_API_KEY</key>
 		<string>$(GOOGLE_MAPS_PLATFORM_API_KEY)</string>
