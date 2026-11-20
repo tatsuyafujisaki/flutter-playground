@@ -1,71 +1,56 @@
-import agoraToken from "agora-token";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
+import { AccessToken } from "livekit-server-sdk";
 
-const { RtcRole, RtcTokenBuilder } = agoraToken;
-
-const agoraAppId = defineSecret("AGORA_APP_ID");
-const agoraAppCertificate = defineSecret("AGORA_APP_CERTIFICATE");
+const livekitUrl = defineSecret("LIVEKIT_URL");
+const livekitApiKey = defineSecret("LIVEKIT_API_KEY");
+const livekitApiSecret = defineSecret("LIVEKIT_API_SECRET");
 
 const TOKEN_EXPIRATION_SECONDS = 3600;
-const CHANNEL_NAME_REGEX = /^[a-zA-Z0-9 !#$%&()+\-:;<=.>?@[\]^_{}|~,]{1,64}$/;
+const ROOM_NAME_REGEX = /^[a-zA-Z0-9._-]{1,128}$/;
 
-interface GenerateAgoraTokenRequest {
-  channelName?: unknown;
-  uid?: unknown;
+interface GenerateLiveKitTokenRequest {
+  roomName?: unknown;
   role?: unknown;
 }
 
-interface GenerateAgoraTokenResponse {
-  appId: string;
-  channelName: string;
+interface GenerateLiveKitTokenResponse {
+  url: string;
+  roomName: string;
   token: string;
-  uid: number;
+  identity: string;
   expiresAt: number;
 }
 
-export const generateAgoraToken = onCall<
-  GenerateAgoraTokenRequest,
-  GenerateAgoraTokenResponse
+export const generateLiveKitToken = onCall<
+  GenerateLiveKitTokenRequest,
+  Promise<GenerateLiveKitTokenResponse>
 >(
   {
     region: "asia-northeast1",
-    secrets: [agoraAppId, agoraAppCertificate],
+    secrets: [livekitUrl, livekitApiKey, livekitApiSecret],
   },
-  (request) => {
+  async (request) => {
     if (!request.auth) {
       throw new HttpsError(
         "unauthenticated",
-        "Authentication is required to generate an Agora token.",
+        "Authentication is required to generate a LiveKit token.",
       );
     }
 
-    const rawChannelName = request.data?.channelName;
-    if (typeof rawChannelName !== "string") {
+    const rawRoomName = request.data?.roomName;
+    if (typeof rawRoomName !== "string") {
       throw new HttpsError(
         "invalid-argument",
-        "channelName must be a non-empty string.",
+        "roomName must be a non-empty string.",
       );
     }
 
-    const channelName = rawChannelName.trim();
-    if (!CHANNEL_NAME_REGEX.test(channelName)) {
+    const roomName = rawRoomName.trim();
+    if (!ROOM_NAME_REGEX.test(roomName)) {
       throw new HttpsError(
         "invalid-argument",
-        "channelName must be 1-64 valid Agora channel characters.",
-      );
-    }
-
-    const rawUid = request.data?.uid ?? 0;
-    if (
-      typeof rawUid !== "number" ||
-      !Number.isInteger(rawUid) ||
-      rawUid < 0 ||
-      rawUid > 0xffffffff
-    ) {
-      throw new HttpsError(
-        "invalid-argument",
-        "uid must be an integer between 0 and 4294967295.",
+        "roomName must be 1-128 characters using letters, numbers, '.', '_', or '-'.",
       );
     }
 
@@ -77,36 +62,38 @@ export const generateAgoraToken = onCall<
       );
     }
 
-    const appId = agoraAppId.value().trim();
-    const appCertificate = agoraAppCertificate.value().trim();
-    if (!appId || !appCertificate) {
+    const url = livekitUrl.value().trim();
+    const apiKey = livekitApiKey.value().trim();
+    const apiSecret = livekitApiSecret.value().trim();
+    if (!url || !apiKey || !apiSecret) {
       throw new HttpsError(
         "failed-precondition",
-        "AGORA_APP_ID and AGORA_APP_CERTIFICATE secrets must be configured.",
+        "LIVEKIT_URL, LIVEKIT_API_KEY, and LIVEKIT_API_SECRET secrets must be configured.",
       );
     }
 
-    const role =
-      rawRole === "subscriber" ? RtcRole.SUBSCRIBER : RtcRole.PUBLISHER;
+    const identity = request.auth.uid;
+    const accessToken = new AccessToken(apiKey, apiSecret, {
+      identity,
+      ttl: TOKEN_EXPIRATION_SECONDS,
+    });
+    accessToken.addGrant({
+      roomJoin: true,
+      room: roomName,
+      canPublish: rawRole !== "subscriber",
+      canSubscribe: true,
+      canPublishData: true,
+    });
 
-    const token = RtcTokenBuilder.buildTokenWithUid(
-      appId,
-      appCertificate,
-      channelName,
-      rawUid,
-      role,
-      TOKEN_EXPIRATION_SECONDS,
-      TOKEN_EXPIRATION_SECONDS,
-    );
-
+    const token = await accessToken.toJwt();
     const expiresAt =
       Math.floor(Date.now() / 1000) + TOKEN_EXPIRATION_SECONDS;
 
     return {
-      appId,
-      channelName,
+      url,
+      roomName,
       token,
-      uid: rawUid,
+      identity,
       expiresAt,
     };
   },

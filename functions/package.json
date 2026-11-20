@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "agora-token": "latest",
-    "firebase-functions": "latest"
+    "firebase-functions": "latest",
+    "livekit-server-sdk": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",

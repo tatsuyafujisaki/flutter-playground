@@ -1,5 +1,5 @@
-import 'package:flutter_playground/ui/page/agora_rtc_page.dart';
 import 'package:flutter_playground/ui/page/google_maps_page.dart';
+import 'package:flutter_playground/ui/page/livekit_room_page.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The initial page shown on app launch, which links to demo pages.
@@ -22,9 +22,9 @@ class HomePage extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const AgoraRtcPage()),
+              MaterialPageRoute<void>(builder: (_) => const LiveKitRoomPage()),
             ),
-            child: const Text('Agora RTC'),
+            child: const Text('LiveKit'),
           ),
         ],
       ),

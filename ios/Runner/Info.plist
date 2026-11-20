@@ -73,7 +73,7 @@
 		<!-- https://pub.dev/packages/geolocator#usage -->
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>
-		<!-- https://pub.dev/packages/agora_rtc_engine -->
+		<!-- https://pub.dev/packages/livekit_client -->
 		<key>NSCameraUsageDescription</key>
 		<string>This app needs access to the camera for video calls.</string>
 		<key>NSMicrophoneUsageDescription</key>
