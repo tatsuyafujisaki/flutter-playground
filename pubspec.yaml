@@ -8,6 +8,7 @@ environment:
 dependencies:
   agora_rtc_engine: any
   async: any # by dart.dev
+  cloud_functions: any
   collection: any # by dart.dev
   device_info_plus: any # Flutter Favorite
   dio: any

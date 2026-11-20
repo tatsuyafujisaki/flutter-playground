@@ -2,30 +2,31 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_playground/data/repository/agora_token_repository.dart';
+import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// A demo page for real-time audio and video calling using `agora_rtc_engine`.
-class AgoraRtcPage extends StatefulWidget {
+/// A demo page for real-time audio and video calling using `agora_rtc_engine`
+/// with token authentication backed by Cloud Functions for Firebase.
+class AgoraRtcPage extends ConsumerStatefulWidget {
   /// Creates an [AgoraRtcPage].
   const new({super.key});
 
   @override
-  State<AgoraRtcPage> createState() => _AgoraRtcPageState();
+  ConsumerState<AgoraRtcPage> createState() => _AgoraRtcPageState();
 }
 
-class _AgoraRtcPageState extends State<AgoraRtcPage> {
-  static const _defaultAppId = String.fromEnvironment('AGORA_APP_ID');
-  static const _defaultToken = String.fromEnvironment('AGORA_TOKEN');
+class _AgoraRtcPageState extends ConsumerState<AgoraRtcPage> {
   static const _defaultChannelName = String.fromEnvironment(
     'AGORA_CHANNEL_NAME',
     defaultValue: 'test',
   );
 
-  late final TextEditingController _appIdController;
   late final TextEditingController _channelController;
-  late final TextEditingController _tokenController;
 
   RtcEngine? _engine;
   RtcEngineEventHandler? _eventHandler;
@@ -34,6 +35,7 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
   bool _isJoined = false;
   bool _isAudioMuted = false;
   bool _isVideoMuted = false;
+  bool _isRenewingToken = false;
   int? _localUid;
   final Set<int> _remoteUids = {};
   String? _statusMessage;
@@ -41,17 +43,13 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
   @override
   void initState() {
     super.initState();
-    _appIdController = TextEditingController(text: _defaultAppId);
     _channelController = TextEditingController(text: _defaultChannelName);
-    _tokenController = TextEditingController(text: _defaultToken);
   }
 
   @override
   void dispose() {
     unawaited(_releaseEngine());
-    _appIdController.dispose();
     _channelController.dispose();
-    _tokenController.dispose();
     super.dispose();
   }
 
@@ -65,15 +63,46 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
     return cameraGranted && micGranted;
   }
 
-  Future<void> _joinChannel() async {
-    final appId = _appIdController.text.trim();
-    final channelId = _channelController.text.trim();
-    final token = _tokenController.text.trim();
-
-    if (appId.isEmpty) {
-      setState(() => _statusMessage = 'Please enter an Agora App ID.');
+  Future<void> _renewToken(RtcConnection connection) async {
+    if (_isRenewingToken) {
       return;
     }
+    final engine = _engine;
+    final channelId = connection.channelId ?? _channelController.text.trim();
+    if (engine == null || channelId.isEmpty) {
+      return;
+    }
+
+    _isRenewingToken = true;
+    try {
+      await ref.read(authViewModelProvider.notifier).signInAnonymously();
+      final response = await ref
+          .read(agoraTokenRepositoryProvider)
+          .fetchToken(
+            channelName: channelId,
+            uid: connection.localUid ?? _localUid ?? 0,
+          );
+      await engine.renewToken(response.token);
+      developer.log('Renewed Agora token for channel $channelId');
+    } on Exception catch (error, stackTrace) {
+      developer.log(
+        'Failed to renew Agora token',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _statusMessage = 'Failed to renew token: $error';
+      });
+    } finally {
+      _isRenewingToken = false;
+    }
+  }
+
+  Future<void> _joinChannel() async {
+    final channelId = _channelController.text.trim();
     if (channelId.isEmpty) {
       setState(() => _statusMessage = 'Please enter a channel name.');
       return;
@@ -98,12 +127,17 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
         return;
       }
 
+      await ref.read(authViewModelProvider.notifier).signInAnonymously();
+      final tokenResponse = await ref
+          .read(agoraTokenRepositoryProvider)
+          .fetchToken(channelName: channelId);
+
       await _releaseEngine();
 
       final engine = createAgoraRtcEngine();
       await engine.initialize(
         RtcEngineContext(
-          appId: appId,
+          appId: tokenResponse.appId,
           channelProfile: ChannelProfileType.channelProfileCommunication,
         ),
       );
@@ -150,6 +184,14 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
             _remoteUids.clear();
           });
         },
+        onTokenPrivilegeWillExpire: (connection, token) {
+          developer.log('Agora token privilege will expire; renewing...');
+          unawaited(_renewToken(connection));
+        },
+        onRequestToken: (connection) {
+          developer.log('Agora token expired; requesting a new token...');
+          unawaited(_renewToken(connection));
+        },
         onError: (err, msg) {
           developer.log('Agora error: $err ($msg)');
           if (!mounted) {
@@ -171,9 +213,9 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
       await engine.enableVideo();
       await engine.startPreview();
       await engine.joinChannel(
-        token: token,
-        channelId: channelId,
-        uid: 0,
+        token: tokenResponse.token,
+        channelId: tokenResponse.channelName,
+        uid: tokenResponse.uid,
         options: const ChannelMediaOptions(
           clientRoleType: ClientRoleType.clientRoleBroadcaster,
           channelProfile: ChannelProfileType.channelProfileCommunication,
@@ -183,6 +225,23 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
           publishMicrophoneTrack: true,
         ),
       );
+    } on FirebaseFunctionsException catch (error, stackTrace) {
+      developer.log(
+        'Failed to fetch Agora token',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      await _releaseEngine();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _isJoining = false;
+        _isJoined = false;
+        _statusMessage =
+            'Failed to fetch token (${error.code}): '
+            '${error.message ?? 'Unknown error'}';
+      });
     } on Exception catch (error, stackTrace) {
       developer.log(
         'Failed to join Agora channel',
@@ -276,29 +335,11 @@ class _AgoraRtcPageState extends State<AgoraRtcPage> {
       spacing: 16,
       children: [
         TextField(
-          controller: _appIdController,
-          enabled: !_isJoining,
-          decoration: const InputDecoration(
-            labelText: 'App ID',
-            hintText: 'Enter your Agora App ID',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        TextField(
           controller: _channelController,
           enabled: !_isJoining,
           decoration: const InputDecoration(
             labelText: 'Channel Name',
             hintText: 'e.g. test',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        TextField(
-          controller: _tokenController,
-          enabled: !_isJoining,
-          decoration: const InputDecoration(
-            labelText: 'Token (optional)',
-            hintText: 'Leave empty if testing without token auth',
             border: OutlineInputBorder(),
           ),
         ),

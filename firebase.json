@@ -1,4 +1,12 @@
 {
+  "functions": [
+    {
+      "source": "functions",
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" exec -- tsc --project \"$RESOURCE_DIR\""
+      ]
+    }
+  ],
   "flutter": {
     "platforms": {
       "android": {
