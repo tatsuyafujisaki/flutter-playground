@@ -3,9 +3,13 @@
     "agora-token": "latest",
     "firebase-functions": "latest"
   },
-  "engines": {
-    "node": "24"
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
   },
-  "main": "src/index.ts",
+  "engines": {
+    "node": "26"
+  },
+  "main": "lib/index.js",
   "private": true
 }

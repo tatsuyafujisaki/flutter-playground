@@ -1,6 +1,9 @@
 {
   "functions": [
     {
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" exec -- tsc -p \"$RESOURCE_DIR\""
+      ],
       "source": "functions"
     }
   ],

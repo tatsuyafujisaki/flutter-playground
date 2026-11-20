@@ -377,6 +377,7 @@ lib/l10n/untranslated.txt
 .fvm/
 
 # Firebase
+functions/lib/
 lib/firebase_options*.dart
 
 # API keys

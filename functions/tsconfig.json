@@ -7,7 +7,6 @@
     "exactOptionalPropertyTypes": true,
     "isolatedModules": true,
     "module": "nodenext",
-    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
@@ -15,10 +14,12 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "outDir": "lib",
+    "rootDir": "src",
+    "skipLibCheck": true,
     "types": [
       "node"
-    ],
-    "verbatimModuleSyntax": true
+    ]
   },
   "include": [
     "src"
