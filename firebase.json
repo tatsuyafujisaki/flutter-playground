@@ -1,10 +1,7 @@
 {
   "functions": [
     {
-      "source": "functions",
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" exec -- tsc --project \"$RESOURCE_DIR\""
-      ]
+      "source": "functions"
     }
   ],
   "flutter": {

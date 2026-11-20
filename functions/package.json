@@ -1,14 +1,11 @@
 {
-  "private": true,
-  "main": "lib/index.js",
   "dependencies": {
     "agora-token": "latest",
     "firebase-functions": "latest"
   },
-  "devDependencies": {
-    "typescript": "latest"
-  },
   "engines": {
     "node": "24"
-  }
+  },
+  "main": "src/index.ts",
+  "private": true
 }

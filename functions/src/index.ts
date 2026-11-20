@@ -1,6 +1,8 @@
-import { RtcRole, RtcTokenBuilder } from "agora-token";
+import agoraToken from "agora-token";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
+
+const { RtcRole, RtcTokenBuilder } = agoraToken;
 
 const agoraAppId = defineSecret("AGORA_APP_ID");
 const agoraAppCertificate = defineSecret("AGORA_APP_CERTIFICATE");
