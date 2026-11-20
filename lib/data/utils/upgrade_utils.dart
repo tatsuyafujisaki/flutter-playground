@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -74,25 +75,25 @@ Future<void> _showUpgradeDialog(
 ) => showDialog<void>(
   context: navigatorState.context,
   barrierDismissible: false,
-  builder: (context) => PopScope(
-    canPop: false,
-    child: AlertDialog(
-      title: const Text('Update Required'),
-      content: const Text(
-        'A new version of the app is available. '
-        'Please update to the latest version to continue using the app.',
+  builder: (context) {
+    final l10n = context.l10n;
+    return PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Text(l10n.forceUpdateDialogTitle),
+        content: Text(l10n.forceUpdateDialogBody),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              final uri = Uri.parse(storeUrl);
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              }
+            },
+            child: Text(l10n.forceUpdateDialogUpdateButton),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () async {
-            final uri = Uri.parse(storeUrl);
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
-            }
-          },
-          child: const Text('Update'),
-        ),
-      ],
-    ),
-  ),
+    );
+  },
 );

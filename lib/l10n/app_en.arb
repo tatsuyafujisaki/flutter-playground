@@ -48,5 +48,17 @@
   "coachMarkBody2": "Coach mark body 2",
   "@coachMarkBody2": {
     "description": "..."
+  },
+  "forceUpdateDialogTitle": "Update Required",
+  "@forceUpdateDialogTitle": {
+    "description": "Title of the force update dialog"
+  },
+  "forceUpdateDialogBody": "A new version of the app is available. Please update to the latest version to continue using the app.",
+  "@forceUpdateDialogBody": {
+    "description": "Body text of the force update dialog"
+  },
+  "forceUpdateDialogUpdateButton": "Update",
+  "@forceUpdateDialogUpdateButton": {
+    "description": "Button label to open the app store from the force update dialog"
   }
 }

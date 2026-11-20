@@ -48,5 +48,17 @@
   "coachMarkBody2": "コーチマーク2の本文",
   "@coachMarkBody2": {
     "description": "..."
+  },
+  "forceUpdateDialogTitle": "アップデートが必要です",
+  "@forceUpdateDialogTitle": {
+    "description": "Title of the force update dialog"
+  },
+  "forceUpdateDialogBody": "アプリの新しいバージョンが利用可能です。引き続きご利用いただくには、最新バージョンにアップデートしてください。",
+  "@forceUpdateDialogBody": {
+    "description": "Body text of the force update dialog"
+  },
+  "forceUpdateDialogUpdateButton": "アップデート",
+  "@forceUpdateDialogUpdateButton": {
+    "description": "Button label to open the app store from the force update dialog"
   }
 }
