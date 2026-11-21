@@ -27,7 +27,7 @@ extension StreamExtension<T> on Stream<T> {
 
   /// Logs data, error, and done events emitted by this stream.
   Stream<T> log() => transform<T>(
-    StreamTransformer<T, T>.fromHandlers(
+    .fromHandlers(
       handleData: (data, sink) {
         developer.log('👀handleData: $data');
         sink.add(data);

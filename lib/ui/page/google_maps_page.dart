@@ -109,10 +109,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
                     ? () async {
                         final uri = Uri.parse(websiteUri);
                         if (await canLaunchUrl(uri)) {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
+                          await launchUrl(uri, mode: .externalApplication);
                         } else {
                           developer.log('Could not launch $websiteUri');
                         }

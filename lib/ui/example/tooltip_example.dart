@@ -3,9 +3,11 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews [Tooltip] widgets displayed programmatically.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
+  const new();
+
   @override
   Widget build(BuildContext context) {
     final key = GlobalKey<TooltipState>();
@@ -16,7 +18,7 @@ class _MyStatelessWidget extends StatelessWidget {
 
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: .center,
         children: [
           Tooltip(
             key: key,

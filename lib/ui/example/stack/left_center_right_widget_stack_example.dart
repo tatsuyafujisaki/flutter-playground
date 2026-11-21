@@ -11,7 +11,7 @@ class _MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     home: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: <Widget>[
         _leftCenterRightWidgetStack(
           leftWidget: const FlutterLogo(),

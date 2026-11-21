@@ -10,6 +10,8 @@ void main() => runApp(
 );
 
 class _MyStatelessWidget extends StatelessWidget {
+  new();
+
   final countStream = Stream<String>.periodic(
     const Duration(seconds: 1),
     (count) => '$count!',

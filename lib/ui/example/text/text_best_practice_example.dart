@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews recommended [Text] overflow and line-clamping configurations.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatelessWidget();
 
 /// Note of the Text widget:
 /// - The [Text.softWrap] is true.
@@ -11,22 +11,24 @@ Widget preview() => _MyStatelessWidget();
 ///   infinite.
 /// - If [TextOverflow.ellipsis] is set, the default [Text.maxLines] is 1.
 class _MyStatelessWidget extends StatelessWidget {
-  final String data = '⭐' * 100;
+  const new();
+
+  static final String _data = '⭐' * 100;
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    mainAxisAlignment: .spaceEvenly,
     children: <Widget>[
       const Text('''↓Use the following if you want to display all the text.'''),
-      Text(data),
+      Text(_data),
       const Text(
         '''↓Use the following if you want to ellipsize text on a single line.''',
       ),
-      Text(data, overflow: TextOverflow.ellipsis),
+      Text(_data, overflow: .ellipsis),
       const Text(
         '''↓Use the following if you want to ellipsize text on `maxLines` lines.''',
       ),
-      Text(data, overflow: TextOverflow.ellipsis, maxLines: 2),
+      Text(_data, overflow: .ellipsis, maxLines: 2),
     ],
   );
 }

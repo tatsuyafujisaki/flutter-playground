@@ -3,9 +3,11 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a [MenuAnchor] with selectable menu items.
 @Preview()
-Widget preview() => _MyStatefulWidget();
+Widget preview() => const _MyStatefulWidget();
 
 class _MyStatefulWidget extends StatefulWidget {
+  const new();
+
   @override
   State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }

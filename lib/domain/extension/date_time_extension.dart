@@ -12,5 +12,5 @@ extension DateTimeExtension on DateTime {
   DateTime get dateOnly => DateTime(year, month, day);
 
   /// Whether this [DateTime] falls on the current calendar day.
-  bool get isToday => DateUtils.isSameDay(this, DateTime.now());
+  bool get isToday => DateUtils.isSameDay(this, .now());
 }

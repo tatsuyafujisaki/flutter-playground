@@ -10,19 +10,17 @@ class _MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    mainAxisAlignment: .spaceEvenly,
     children: [
       _createRectangleTextField(),
-      _createRectangleTextField(InputBorder.none),
-      _createRoundedTextField(BorderSide.none),
+      _createRectangleTextField(.none),
+      _createRoundedTextField(.none),
       // The border width is 0,
       // but the border style is NOT "BorderStyle.none".
       _createRoundedTextField(const BorderSide(width: 0)),
       // The border style is "BorderStyle.none",
       // but the border width is NOT 0.
-      _createRoundedTextField(
-        const BorderSide(width: 100, style: BorderStyle.none),
-      ),
+      _createRoundedTextField(const BorderSide(width: 100, style: .none)),
     ],
   );
 }
@@ -44,7 +42,7 @@ TextField _createRoundedTextField(BorderSide borderSide) => TextField(
     filled: true,
     fillColor: Colors.yellow,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: .circular(40),
       borderSide: borderSide,
     ),
   ),

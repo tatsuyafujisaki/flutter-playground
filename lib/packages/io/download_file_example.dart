@@ -8,7 +8,7 @@ Future<Uint8List> downloadBinaryFile(String url, {Dio? dio}) async {
   try {
     final response = await client.get<List<int>>(
       url,
-      options: Options(responseType: ResponseType.bytes),
+      options: Options(responseType: .bytes),
     );
     final data = response.data;
     if (data != null) {
@@ -30,7 +30,7 @@ Future<String> downloadTextFile(Uri uri, {Dio? dio}) async {
   try {
     final response = await client.getUri<String>(
       uri,
-      options: Options(responseType: ResponseType.plain),
+      options: Options(responseType: .plain),
     );
     final data = response.data;
     if (data != null) {

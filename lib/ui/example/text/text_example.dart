@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews [Text] wrapping, truncation, and ellipsis behavior.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatelessWidget();
 
 /// Note of the Text widget:
 /// - The [Text.softWrap] is true.
@@ -11,34 +11,36 @@ Widget preview() => _MyStatelessWidget();
 ///   infinite.
 /// - If [TextOverflow.ellipsis] is set, the default [Text.maxLines] is 1.
 class _MyStatelessWidget extends StatelessWidget {
-  final String data = '⭐' * 100;
+  const new();
+
+  static final String _data = '⭐' * 100;
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    mainAxisAlignment: .spaceEvenly,
     children: <Widget>[
       const Text('displayes all the text.'),
-      Text(data),
+      Text(_data),
       const Text(
         '''↓Truncates text if it does not fit on a single line because of `softWrap: false`.''',
       ),
-      Text(data, softWrap: false),
+      Text(_data, softWrap: false),
       const Text(
         '''↓Truncates text if it does not fit on a single line because of `softWrap: false`. `maxLines: 2` is ignored.''',
       ),
-      Text(data, softWrap: false, maxLines: 2),
+      Text(_data, softWrap: false, maxLines: 2),
       const Text(
         '''↓Ellipsizes text if it does not fit on a single line because of `TextOverflow.ellipsis`.''',
       ),
-      Text(data, overflow: TextOverflow.ellipsis),
+      Text(_data, overflow: .ellipsis),
       const Text(
         '''↓Ellipsizes text if it does not fit on a single line because of `TextOverflow.ellipsis` again.''',
       ),
-      Text(data, softWrap: false, overflow: TextOverflow.ellipsis),
+      Text(_data, softWrap: false, overflow: .ellipsis),
       const Text(
         '''↓Ellipsizes text if it does not fit on `maxLines` lines. `softWrap: false` is ignored.''',
       ),
-      Text(data, softWrap: false, overflow: TextOverflow.ellipsis, maxLines: 2),
+      Text(_data, softWrap: false, overflow: .ellipsis, maxLines: 2),
     ],
   );
 }

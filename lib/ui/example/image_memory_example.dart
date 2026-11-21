@@ -10,6 +10,8 @@ import 'package:material_ui/material_ui.dart';
 Widget preview() => _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
+  new();
+
   final Future<Uint8List> imageBytes = downloadBinaryFile(
     'https://media1.tenor.com/m/NVP2kRD7CHsAAAAC',
   );

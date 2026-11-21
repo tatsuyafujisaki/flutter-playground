@@ -9,6 +9,8 @@ void main() => runApp(
 );
 
 class _MyStatelessWidget extends StatelessWidget {
+  new();
+
   final _future = Future<void>.delayed(const Duration(seconds: 5), () {});
 
   @override

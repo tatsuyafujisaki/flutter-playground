@@ -25,7 +25,7 @@ void main() {
   final person = const Person(
     name: 'John',
     age: 42,
-  ).copyWith(lastUpdated: DateTime.now());
+  ).copyWith(lastUpdated: .now());
   final map = person.toJson();
   developer.log(map.toString());
   final personFromJson = Person.fromJson(map);

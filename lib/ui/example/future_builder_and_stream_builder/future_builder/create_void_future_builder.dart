@@ -11,7 +11,7 @@ FutureBuilder<void> createVoidFutureBuilder({
 }) => FutureBuilder<void>(
   future: future,
   builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
+    if (snapshot.connectionState == .done) {
       return onData();
     }
     if (snapshot.hasError) {

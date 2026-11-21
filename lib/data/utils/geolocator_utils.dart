@@ -8,12 +8,11 @@ Future<Position> getPosition() async {
   }
 
   var permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
+  if (permission == .denied) {
     permission = await Geolocator.requestPermission();
   }
 
-  if (permission == LocationPermission.denied ||
-      permission == LocationPermission.deniedForever) {
+  if (permission == .denied || permission == .deniedForever) {
     throw Exception('Location permission is denied.');
   }
 

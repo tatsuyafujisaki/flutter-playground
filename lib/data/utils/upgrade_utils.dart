@@ -16,7 +16,7 @@ Future<void> showForceUpdateDialogIfNeeded(
     await FirebaseRemoteConfig.instance.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: Duration.zero,
+        minimumFetchInterval: .zero,
       ),
     );
     await FirebaseRemoteConfig.instance.fetchAndActivate();
@@ -50,8 +50,8 @@ Version? tryParse(String version) {
 
 Future<bool> _shouldForceUpdate(String minVersionString) async {
   final packageInfo = await PackageInfo.fromPlatform();
-  final currentVersion = tryParse(packageInfo.version) ?? Version.none;
-  final minVersion = tryParse(minVersionString) ?? Version.none;
+  final currentVersion = tryParse(packageInfo.version) ?? .none;
+  final minVersion = tryParse(minVersionString) ?? .none;
   return currentVersion < minVersion;
 }
 
@@ -87,7 +87,7 @@ Future<void> _showUpgradeDialog(
             onPressed: () async {
               final uri = Uri.parse(storeUrl);
               if (await canLaunchUrl(uri)) {
-                await launchUrl(uri, mode: LaunchMode.externalApplication);
+                await launchUrl(uri, mode: .externalApplication);
               }
             },
             child: Text(l10n.forceUpdateDialogUpdateButton),

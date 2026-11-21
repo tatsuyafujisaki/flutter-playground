@@ -26,7 +26,7 @@ class _MyStatelessWidget extends StatelessWidget {
       }),
     );
     unawaited(
-      Future.delayed(Duration.zero, () {
+      Future.delayed(.zero, () {
         developer.log('🍇');
       }),
     );

@@ -12,6 +12,6 @@ class MyAppLifecycleState extends _$MyAppLifecycleState {
       onStateChange: (state) => this.state = state,
     );
     ref.onDispose(listener.dispose);
-    return WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
+    return WidgetsBinding.instance.lifecycleState ?? .resumed;
   }
 }

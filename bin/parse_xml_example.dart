@@ -10,10 +10,7 @@ Future<void> main() async {
   try {
     final response = await dio.get<String>(
       'https://news.google.com/rss',
-      options: Options(
-        responseType: ResponseType.plain,
-        validateStatus: (_) => true,
-      ),
+      options: Options(responseType: .plain, validateStatus: (_) => true),
     );
 
     if (response.statusCode == 200 && response.data != null) {

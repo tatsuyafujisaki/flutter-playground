@@ -14,7 +14,7 @@ class _MyStatelessWidget extends StatelessWidget {
       child: IconButton(
         onPressed: () => showModalBottomSheet<void>(
           context: context,
-          builder: (_) => _BottomSheetContent(),
+          builder: (_) => const _BottomSheetContent(),
         ),
         icon: const Icon(Icons.open_in_new),
       ),
@@ -23,14 +23,14 @@ class _MyStatelessWidget extends StatelessWidget {
 }
 
 class _BottomSheetContent extends StatelessWidget {
-  new();
+  const new();
 
-  final List<int> indices = List<int>.generate(100, (index) => index).toList();
+  static final List<int> _indices = List<int>.generate(100, (index) => index);
 
   @override
   Widget build(BuildContext context) => ListView(
     children: [
-      for (final i in indices)
+      for (final i in _indices)
         ListTile(title: Text('Item $i'), tileColor: Colors.amber),
     ],
   );

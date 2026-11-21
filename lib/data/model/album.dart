@@ -8,7 +8,7 @@ part 'album.g.dart';
 
 /// https://jsonplaceholder.typicode.com/albums/1
 @freezed
-abstract class Album with _$Album {
+sealed class Album with _$Album {
   /// Creates an [Album].
   const factory({int? userId, int? id, String? title}) = _Album;
 

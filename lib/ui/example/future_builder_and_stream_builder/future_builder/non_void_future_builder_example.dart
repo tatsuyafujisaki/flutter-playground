@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() => runApp(
-  ProviderScope(
+  const ProviderScope(
     child: MaterialApp(home: Scaffold(body: _MyStatelessWidget())),
   ),
 );
 
 class _MyStatelessWidget extends StatelessWidget {
+  const new();
+
   @override
   Widget build(BuildContext context) => createNonVoidFutureBuilder<String>(
     future: Future<String>.delayed(const Duration(seconds: 5), () => '🍎'),

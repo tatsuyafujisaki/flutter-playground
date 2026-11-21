@@ -33,7 +33,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
 
   bool _isJoining = false;
   bool _isJoined = false;
-  CameraPosition _cameraPosition = CameraPosition.front;
+  CameraPosition _cameraPosition = .front;
   String? _statusMessage;
 
   @override
@@ -56,7 +56,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     final statuses = await [Permission.camera, Permission.microphone].request();
     final cameraGranted = statuses[Permission.camera]?.isGranted ?? false;
     final micGranted = statuses[Permission.microphone]?.isGranted ?? false;
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (defaultTargetPlatform == .android) {
       await Permission.bluetoothConnect.request();
     }
     return cameraGranted && micGranted;
@@ -114,8 +114,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
           setState(() {
             _isJoined = false;
             _isJoining = false;
-            if (event.reason != null &&
-                event.reason != DisconnectReason.clientInitiated) {
+            if (event.reason != null && event.reason != .clientInitiated) {
               _statusMessage = 'Disconnected: ${event.reason!.name}';
             }
           });
@@ -123,7 +122,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
 
       _room = room;
       _roomListener = roomListener;
-      _cameraPosition = CameraPosition.front;
+      _cameraPosition = .front;
 
       await room.connect(tokenResponse.url, tokenResponse.token);
 
@@ -201,7 +200,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     setState(() {
       _isJoined = false;
       _isJoining = false;
-      _cameraPosition = CameraPosition.front;
+      _cameraPosition = .front;
       _statusMessage = null;
     });
   }
@@ -302,7 +301,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
 
   VideoTrack? _findCameraTrack(Participant<TrackPublication> participant) {
     for (final publication in participant.videoTrackPublications) {
-      if (publication.source == TrackSource.camera &&
+      if (publication.source == .camera &&
           publication.track is VideoTrack &&
           !publication.muted) {
         return publication.track! as VideoTrack;
@@ -319,7 +318,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
   Widget _buildSetupView() => SingleChildScrollView(
     padding: const EdgeInsets.all(24),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: .stretch,
       spacing: 16,
       children: [
         TextField(
@@ -355,10 +354,10 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     return ColoredBox(
       color: Colors.black87,
       child: videoTrack != null
-          ? VideoTrackRenderer(videoTrack, fit: VideoViewFit.cover)
+          ? VideoTrackRenderer(videoTrack, fit: .cover)
           : Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 spacing: 8,
                 children: [
                   const Icon(
@@ -384,7 +383,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     if (remoteParticipants.isEmpty) {
       return Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: 8,
           children: [
             const Icon(Icons.people_outline, size: 48),
@@ -436,7 +435,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
         child: ColoredBox(
           color: Colors.black87,
           child: isVideoEnabled
-              ? VideoTrackRenderer(videoTrack, fit: VideoViewFit.cover)
+              ? VideoTrackRenderer(videoTrack, fit: .cover)
               : const Center(
                   child: Icon(Icons.videocam_off, color: Colors.white),
                 ),
@@ -455,7 +454,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: .spaceEvenly,
           children: [
             IconButton.filledTonal(
               onPressed: _toggleAudio,

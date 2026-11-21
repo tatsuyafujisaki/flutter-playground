@@ -6,16 +6,18 @@ import 'package:material_ui/material_ui.dart';
 import 'package:video_player/video_player.dart';
 
 void main() =>
-    runApp(ProviderScope(child: MaterialApp(home: _MyStatefulWidget())));
+    runApp(const ProviderScope(child: MaterialApp(home: _MyStatefulWidget())));
 
 class _MyStatefulWidget extends StatefulWidget {
+  const new();
+
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   final _controller = VideoPlayerController.networkUrl(
-    Uri.parse(
+    .parse(
       'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
     ),
   );
@@ -48,7 +50,7 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
       child: FutureBuilder<void>(
         future: _initialized.future,
         builder: (context, snapshot) => Center(
-          child: snapshot.connectionState == ConnectionState.done
+          child: snapshot.connectionState == .done
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
                   child: VideoPlayer(_controller),

@@ -46,7 +46,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
     if (widget.cookie case final cookie?) {
       await cookieManager.setCookie(cookie);
     }
-    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await controller.setJavaScriptMode(.unrestricted);
     // Avoid a black screen before the first page loads, even in Dark Mode.
     await controller.setBackgroundColor(Colors.transparent);
     await controller.setNavigationDelegate(
@@ -104,7 +104,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       children: <Widget>[
         Expanded(child: WebViewWidget(controller: controller)),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: .spaceBetween,
           children: [
             Row(
               children: <Widget>[

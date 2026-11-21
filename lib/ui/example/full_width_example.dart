@@ -11,19 +11,19 @@ class _MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Scaffold(
     body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Text(
           '🍎',
           style: TextStyle(backgroundColor: Colors.cyan),
-          textAlign: TextAlign.end,
+          textAlign: .end,
         ),
         SizedBox(
           width: double.infinity,
           child: Text(
             '🍏',
             style: TextStyle(backgroundColor: Colors.cyan),
-            textAlign: TextAlign.end,
+            textAlign: .end,
           ),
         ),
         SizedBox(
@@ -33,7 +33,7 @@ class _MyStatelessWidget extends StatelessWidget {
             child: Text(
               '🍊',
               style: TextStyle(backgroundColor: Colors.cyan),
-              textAlign: TextAlign.end,
+              textAlign: .end,
             ),
           ),
         ),
