@@ -44,29 +44,24 @@ class const LiveKitTokenRepository(final FirebaseFunctions _functions) {
     final result = await callable.call<Map<Object?, Object?>>({
       'roomName': roomName,
     });
-    final data = result.data;
-    final url = data['url'];
-    final resolvedRoomName = data['roomName'];
-    final token = data['token'];
-    final identity = data['identity'];
-    final expiresAt = data['expiresAt'];
-
-    if (url is! String ||
-        resolvedRoomName is! String ||
-        token is! String ||
-        identity is! String ||
-        expiresAt is! num) {
-      throw const FormatException(
+    return switch (result.data) {
+      {
+        'url': final String url,
+        'roomName': final String resolvedRoomName,
+        'token': final String token,
+        'identity': final String identity,
+        'expiresAt': final num expiresAt,
+      } =>
+        LiveKitTokenResponse(
+          url: url,
+          roomName: resolvedRoomName,
+          token: token,
+          identity: identity,
+          expiresAt: expiresAt.toInt(),
+        ),
+      _ => throw const FormatException(
         'Unexpected response format from generateLiveKitToken.',
-      );
-    }
-
-    return LiveKitTokenResponse(
-      url: url,
-      roomName: resolvedRoomName,
-      token: token,
-      identity: identity,
-      expiresAt: expiresAt.toInt(),
-    );
+      ),
+    };
   }
 }
