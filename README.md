@@ -27,7 +27,6 @@ lib/l10n/untranslated.txt
 
 # https://fvm.app
 .fvm/
-.fvmrc
 
 # Firebase
 lib/firebase_options*.dart
