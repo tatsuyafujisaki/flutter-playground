@@ -1,13 +1,11 @@
 /// A supported language.
-enum Language {
+enum Language({
+  /// The ISO 639-1 language code.
+  required final String code,
+}) {
   /// English.
   english(code: 'en'),
 
   /// Japanese.
-  japanese(code: 'ja');
-
-  new({required this.code});
-
-  /// The ISO 639-1 language code.
-  final String code;
+  japanese(code: 'ja'),
 }

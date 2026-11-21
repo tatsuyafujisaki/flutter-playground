@@ -36,12 +36,10 @@ Stack _leftCenterRightWidgetStack({
   Widget? centerWidget,
   Widget? rightWidget,
 }) => Stack(
-  alignment: Alignment.center,
+  alignment: .center,
   children: <Widget>[
-    if (leftWidget != null)
-      Align(alignment: Alignment.centerLeft, child: leftWidget),
+    if (leftWidget != null) Align(alignment: .centerLeft, child: leftWidget),
     ?centerWidget,
-    if (rightWidget != null)
-      Align(alignment: Alignment.centerRight, child: rightWidget),
+    if (rightWidget != null) Align(alignment: .centerRight, child: rightWidget),
   ],
 );

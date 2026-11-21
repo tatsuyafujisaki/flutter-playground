@@ -7,11 +7,7 @@ void main() {
   _sortStringInObjectDescending();
 }
 
-class _Person {
-  new({required this.name, required this.age});
-  final String name;
-  final int age;
-
+class _Person({required final String name, required final int age}) {
   @override
   String toString() => 'Person(name: $name, age: $age)';
 }

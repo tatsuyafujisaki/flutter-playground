@@ -3,9 +3,9 @@ import 'package:flutter_playground/ui/page/livekit_room_page.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The initial page shown on app launch, which links to demo pages.
-class HomePage extends StatelessWidget {
+class const HomePage({super.key}) extends StatelessWidget {
   /// Creates a [HomePage].
-  const new({super.key});
+  this;
 
   @override
   Widget build(BuildContext context) => Scaffold(

@@ -6,11 +6,11 @@ import 'package:flutter_playground/data/model/album.dart';
 const _baseUrl = 'https://jsonplaceholder.typicode.com';
 
 /// A client for performing CRUD operations on albums.
-class AlbumModel {
+class AlbumModel({Dio? dio}) {
   /// Creates an [AlbumModel] with an optional [Dio] client.
-  new({Dio? dio}) : _dio = dio ?? Dio(BaseOptions(baseUrl: _baseUrl));
+  this;
 
-  final Dio _dio;
+  final Dio _dio = dio ?? Dio(BaseOptions(baseUrl: _baseUrl));
 
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<List<Album>> getAlbums() async {

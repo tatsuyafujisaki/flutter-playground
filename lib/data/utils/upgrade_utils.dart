@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
-import 'dart:io';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -60,17 +60,21 @@ Future<bool> _shouldForceUpdate(String minVersionString) async {
 }
 
 Future<String?> get _storeUrl async {
-  if (Platform.isIOS) {
-    // Replace with your actual App Store ID
-    const appStoreId = '544007664';
-    return 'https://apps.apple.com/app/id$appStoreId';
+  if (kIsWeb) {
+    return null;
   }
-  if (Platform.isAndroid) {
-    final packageInfo = await PackageInfo.fromPlatform();
-    final packageName = packageInfo.packageName;
-    return 'https://play.google.com/store/apps/details?id=$packageName';
+  switch (defaultTargetPlatform) {
+    case .iOS:
+      // Replace with your actual App Store ID
+      const appStoreId = '544007664';
+      return 'https://apps.apple.com/app/id$appStoreId';
+    case .android:
+      final packageInfo = await PackageInfo.fromPlatform();
+      final packageName = packageInfo.packageName;
+      return 'https://play.google.com/store/apps/details?id=$packageName';
+    case .fuchsia || .linux || .macOS || .windows:
+      return null;
   }
-  return null;
 }
 
 Future<void> _showUpgradeDialog(

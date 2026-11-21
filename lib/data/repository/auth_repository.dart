@@ -8,11 +8,9 @@ part 'auth_repository.g.dart';
 AuthRepository authRepository(Ref ref) => AuthRepository(FirebaseAuth.instance);
 
 /// A repository that wraps [FirebaseAuth] operations.
-class AuthRepository {
+class const AuthRepository(final FirebaseAuth _auth) {
   /// Creates an [AuthRepository] with the given [FirebaseAuth] instance.
-  const new(this._auth);
-
-  final FirebaseAuth _auth;
+  this;
 
   /// The currently signed-in user, or `null` if none is signed in.
   User? get currentUser => _auth.currentUser;

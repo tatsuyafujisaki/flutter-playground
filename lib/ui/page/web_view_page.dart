@@ -5,23 +5,19 @@ import 'package:material_ui/material_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// A screen that displays web content using a [WebViewWidget].
-class WebViewScreen extends StatefulWidget {
-  /// Creates a [WebViewScreen] that loads [url].
-  const new({
-    required this.url,
-    required this.onBackPressed,
-    super.key,
-    this.cookie,
-  });
-
+class const WebViewScreen({
   /// The initial URL to load in the web view.
-  final String url;
+  required final String url,
 
   /// The callback invoked when the back button is pressed.
-  final VoidCallback onBackPressed;
+  required final VoidCallback onBackPressed,
+  super.key,
 
   /// An optional cookie to set before loading [url].
-  final WebViewCookie? cookie;
+  final WebViewCookie? cookie,
+}) extends StatefulWidget {
+  /// Creates a [WebViewScreen] that loads [url].
+  this;
 
   @override
   State<StatefulWidget> createState() => _WebViewScreenState();

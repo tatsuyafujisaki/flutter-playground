@@ -11,40 +11,32 @@ LiveKitTokenRepository liveKitTokenRepository(Ref ref) =>
     );
 
 /// The response returned by the `generateLiveKitToken` Cloud Function.
-class LiveKitTokenResponse {
-  /// Creates a [LiveKitTokenResponse].
-  const new({
-    required this.url,
-    required this.roomName,
-    required this.token,
-    required this.identity,
-    required this.expiresAt,
-  });
-
+class const LiveKitTokenResponse({
   /// The WebSocket URL of the LiveKit Cloud server.
-  final String url;
+  required final String url,
 
   /// The room name that [token] grants access to.
-  final String roomName;
+  required final String roomName,
 
   /// The generated LiveKit access token (JWT).
-  final String token;
+  required final String token,
 
   /// The participant identity bound to [token].
-  final String identity;
+  required final String identity,
 
   /// The Unix timestamp (in seconds) when [token] expires.
-  final int expiresAt;
+  required final int expiresAt,
+}) {
+  /// Creates a [LiveKitTokenResponse].
+  this;
 }
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for
 /// Firebase.
-class LiveKitTokenRepository {
+class const LiveKitTokenRepository(final FirebaseFunctions _functions) {
   /// Creates a [LiveKitTokenRepository] with the given [FirebaseFunctions]
   /// instance.
-  const new(this._functions);
-
-  final FirebaseFunctions _functions;
+  this;
 
   /// Requests a freshly generated LiveKit access token for [roomName].
   Future<LiveKitTokenResponse> fetchToken({required String roomName}) async {

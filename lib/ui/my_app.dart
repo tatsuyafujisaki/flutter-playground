@@ -14,9 +14,9 @@ import 'package:material_ui/material_ui.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 /// The root widget of the application.
-class MyApp extends ConsumerStatefulWidget {
+class const MyApp({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [MyApp].
-  const new({super.key});
+  this;
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();

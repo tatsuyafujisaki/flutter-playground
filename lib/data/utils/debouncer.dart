@@ -1,12 +1,13 @@
 import 'dart:async';
 
 /// Delays executing a callback until a specified [duration] has elapsed.
-class Debouncer {
-  /// Creates a [Debouncer] with the given [duration].
-  new(this.duration);
-
+class Debouncer(
   /// The delay duration before invoking the callback.
-  final Duration duration;
+  final Duration duration,
+) {
+  /// Creates a [Debouncer] with the given [duration].
+  this;
+
   Timer? _timer;
 
   /// Schedules [callback] to run after [duration], canceling any pending call.

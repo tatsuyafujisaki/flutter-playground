@@ -9,9 +9,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A page that displays Google Maps with the user's location and nearby cafes.
-class GoogleMapsPage extends ConsumerStatefulWidget {
+class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [GoogleMapsPage].
-  const new({super.key});
+  this;
 
   @override
   ConsumerState<GoogleMapsPage> createState() => _GoogleMapsPageState();

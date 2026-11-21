@@ -3,7 +3,10 @@ import 'dart:developer' as developer;
 import 'package:collection/collection.dart';
 
 /// A fruit represented by an emoji.
-enum Fruit {
+enum Fruit(
+  /// The emoji representing this fruit.
+  final String emoji,
+) {
   /// An unknown fruit.
   unknown(''),
 
@@ -13,14 +16,9 @@ enum Fruit {
   /// An orange.
   orange('🍊');
 
-  new(this.emoji);
-
   /// Returns the [Fruit] matching [emoji], or [unknown] if none matches.
   factory of(String emoji) =>
       values.firstWhereOrNull((value) => value.emoji == emoji) ?? unknown;
-
-  /// The emoji representing this fruit.
-  final String emoji;
 }
 
 void main() {

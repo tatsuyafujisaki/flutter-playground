@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
@@ -16,8 +16,11 @@ class GeolocatorWrapper {
   late final StreamController<Position> _controller;
 
   LocationSettings get _locationSettings {
-    if (Platform.isAndroid) {
-      return AndroidSettings(
+    if (kIsWeb) {
+      return const LocationSettings();
+    }
+    return switch (defaultTargetPlatform) {
+      .android => AndroidSettings(
         // > (Optional) Set foreground notification config
         // > to keep the app alive when going to the background
         // https://pub.dev/documentation/geolocator/
@@ -31,12 +34,10 @@ class GeolocatorWrapper {
           notificationTitle: '',
           notificationText: '',
         ),
-      );
-    }
-    if (Platform.isIOS) {
-      return AppleSettings();
-    }
-    return const LocationSettings();
+      ),
+      .iOS => AppleSettings(),
+      .fuchsia || .linux || .macOS || .windows => const LocationSettings(),
+    };
   }
 
   Future<bool> get _isAllowed async {

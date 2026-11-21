@@ -12,9 +12,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// A demo page for real-time audio and video calling using `livekit_client`
 /// with token authentication backed by Cloud Functions for Firebase.
-class LiveKitRoomPage extends ConsumerStatefulWidget {
+class const LiveKitRoomPage({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [LiveKitRoomPage].
-  const new({super.key});
+  this;
 
   @override
   ConsumerState<LiveKitRoomPage> createState() => _LiveKitRoomPageState();
@@ -300,23 +300,23 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
   }
 
   VideoTrack? _findCameraTrack(Participant<TrackPublication> participant) {
+    VideoTrack? fallback;
     for (final publication in participant.videoTrackPublications) {
-      if (publication.source == .camera &&
-          publication.track is VideoTrack &&
-          !publication.muted) {
-        return publication.track! as VideoTrack;
+      if (publication.muted) {
+        continue;
+      }
+      if (publication.track case final VideoTrack track) {
+        if (publication.source == .camera) {
+          return track;
+        }
+        fallback ??= track;
       }
     }
-    for (final publication in participant.videoTrackPublications) {
-      if (publication.track is VideoTrack && !publication.muted) {
-        return publication.track! as VideoTrack;
-      }
-    }
-    return null;
+    return fallback;
   }
 
   Widget _buildSetupView() => SingleChildScrollView(
-    padding: const EdgeInsets.all(24),
+    padding: const .all(24),
     child: Column(
       crossAxisAlignment: .stretch,
       spacing: 16,
@@ -405,7 +405,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     }
 
     return GridView.builder(
-      padding: const EdgeInsets.all(8),
+      padding: const .all(8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 8,
@@ -413,7 +413,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       ),
       itemCount: remoteParticipants.length,
       itemBuilder: (context, index) => ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: .circular(12),
         child: _buildParticipantTile(remoteParticipants[index]),
       ),
     );
@@ -431,7 +431,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       width: 120,
       height: 160,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: .circular(12),
         child: ColoredBox(
           color: Colors.black87,
           child: isVideoEnabled
@@ -452,7 +452,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const .symmetric(vertical: 16, horizontal: 24),
         child: Row(
           mainAxisAlignment: .spaceEvenly,
           children: [
@@ -497,9 +497,9 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
           right: 152,
           child: Material(
             color: Theme.of(context).colorScheme.errorContainer,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: .circular(8),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const .all(8),
               child: Text(
                 message,
                 style: TextStyle(
@@ -509,7 +509,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
             ),
           ),
         ),
-      Align(alignment: Alignment.bottomCenter, child: _buildCallControls(room)),
+      Align(alignment: .bottomCenter, child: _buildCallControls(room)),
     ],
   );
 

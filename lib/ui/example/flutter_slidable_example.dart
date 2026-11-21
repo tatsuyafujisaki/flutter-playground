@@ -67,16 +67,11 @@ Slidable _slidable<T>({
         label: 'Delete',
         // According to my experiment, when null is passed,
         // non-trivial padding appears.
-        padding: EdgeInsets.zero,
+        padding: .zero,
       ),
     ],
   ),
   child: ListTile(title: Text(text)),
 );
 
-class _MyData {
-  new({required this.id, required this.text});
-
-  int id;
-  String text;
-}
+class _MyData({required final int id, required final String text});
