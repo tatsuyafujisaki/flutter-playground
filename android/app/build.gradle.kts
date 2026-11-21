@@ -40,12 +40,6 @@ android {
     // https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
     java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-    compileOptions {
-        // Required by the flutter_local_notifications package
-        // https://pub.dev/packages/flutter_local_notifications#gradle-setup
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     defaultConfig {
         applicationId = "com.tatsuyafujisaki.poc"
         minSdk = 37
@@ -92,11 +86,4 @@ android {
 
 flutter {
     source = "../.."
-}
-
-dependencies {
-    // Required by the flutter_local_notifications package
-    // https://pub.dev/packages/flutter_local_notifications#gradle-setup
-    // https://maven.google.com/web/index.html?q=com.android.tools#com.android.tools:desugar_jdk_libs
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }
