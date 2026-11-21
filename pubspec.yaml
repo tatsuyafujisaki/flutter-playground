@@ -8,7 +8,6 @@ dependencies:
   async: any
   cloud_functions: any
   collection: any
-  device_info_plus: any
   dio: any
   firebase_ai: any
   firebase_analytics: any

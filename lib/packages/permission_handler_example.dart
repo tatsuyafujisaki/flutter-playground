@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// To access photos and videos, use [isPhotoGranted] instead.
@@ -12,18 +9,5 @@ import 'package:permission_handler/permission_handler.dart';
 Future<bool> isGranted<T extends Permission>(T permission) =>
     permission.onPermanentlyDeniedCallback(openAppSettings).request().isGranted;
 
-/// Whether photo or storage permission is granted for the current platform.
-Future<bool> get isPhotoGranted async {
-  /// > Devices running Android 12 (API level 32) or lower:
-  ///   use Permissions.storage.
-  /// > Devices running Android 13 (API level 33) and above:
-  ///   Should use Permissions.photos.
-  /// https://pub.dev/documentation/permission_handler/latest/permission_handler/Permission/photos-constant.html
-  Future<bool> shouldUseStorage() async =>
-      Platform.isAndroid &&
-      (await DeviceInfoPlugin().androidInfo).version.sdkInt <= 32;
-
-  return await isGranted(
-    await shouldUseStorage() ? Permission.storage : Permission.photos,
-  );
-}
+/// Whether photo permission is granted for the current platform.
+Future<bool> get isPhotoGranted => isGranted(Permission.photos);
