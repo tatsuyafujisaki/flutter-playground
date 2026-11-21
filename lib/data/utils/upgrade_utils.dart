@@ -13,17 +13,18 @@ Future<void> showForceUpdateDialogIfNeeded(
   NavigatorState navigatorState,
 ) async {
   try {
-    await FirebaseRemoteConfig.instance.setConfigSettings(
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
         minimumFetchInterval: .zero,
       ),
     );
-    await FirebaseRemoteConfig.instance.fetchAndActivate();
+    await remoteConfig.setDefaults(const {'min_version': '0.0.0'});
+    await remoteConfig.fetchAndActivate();
 
-    final minVersion = FirebaseRemoteConfig.instance.getString('min_version');
-
-    if (!await _shouldForceUpdate(minVersion)) {
+    final minVersion = remoteConfig.getString('min_version').trim();
+    if (minVersion.isEmpty || !await _shouldForceUpdate(minVersion)) {
       return;
     }
 
@@ -40,6 +41,9 @@ Future<void> showForceUpdateDialogIfNeeded(
 
 /// Parses [version] into a [Version], or returns `null` if parsing fails.
 Version? tryParse(String version) {
+  if (version.isEmpty) {
+    return null;
+  }
   try {
     return Version.parse(version);
   } on Exception catch (error, stackTrace) {
