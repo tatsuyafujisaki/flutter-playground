@@ -3,57 +3,56 @@ publish_to: none
 version: 1.0.0+1
 environment:
   sdk: ^3.14.0
-# > The version constraint is optional but recommended. If no version constraint is given, any is assumed.
-# https://dart.dev/tools/pub/dependencies#hosted-packages
+# Unconstrained versions are intentional in this playground repository.
 dependencies:
-  async: any # by dart.dev
+  async: any
   cloud_functions: any
-  collection: any # by dart.dev
-  device_info_plus: any # Flutter Favorite
+  collection: any
+  device_info_plus: any
   dio: any
   firebase_ai: any
-  firebase_analytics: any # by firebase.google.com
-  firebase_auth: any # by firebase.google.com and Flutter Favorite
-  firebase_core: any # by firebase.google.com and Flutter Favorite
-  firebase_crashlytics: any # by firebase.google.com and Flutter Favorite
-  firebase_remote_config: any # by firebase.google.com
-  firebase_ui_firestore: any # by firebase_ui_firestore and Flutter Favorite
+  firebase_analytics: any
+  firebase_auth: any
+  firebase_core: any
+  firebase_crashlytics: any
+  firebase_remote_config: any
+  firebase_ui_firestore: any
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_riverpod: any # Flutter Favorite
-  flutter_slidable: any # Flutter Favorite
-  flutter_svg: any # Flutter Favorite
+  flutter_riverpod: any
+  flutter_slidable: any
+  flutter_svg: any
   freezed_annotation: any
-  geolocator: any # Flutter Favorite
-  glob: any # by tools.dart.dev
-  google_maps_flutter: any # by flutter.dev
-  image_picker: any # by flutter.dev
-  intl: any # by dart.dev and Flutter Favorite
-  json_annotation: any # by google.dev
+  geolocator: any
+  glob: any
+  google_maps_flutter: any
+  image_picker: any
+  intl: any
+  json_annotation: any
   livekit_client: any
   material_ui: any
-  package_info_plus: any # Flutter Favorite
-  path: any # by dart.dev
-  path_provider: any # by path_provider and Flutter Favorite
+  package_info_plus: any
+  path: any
+  path_provider: any
   permission_handler: any
-  pub_semver: any # by tools.dart.dev
+  pub_semver: any
   riverpod_annotation: any
-  shared_preferences: any # by flutter.dev and Flutter Favorite
-  url_launcher: any # by flutter.dev and Fluter Favorite
-  video_player: any # by flutter.dev and Flutter Favorite
-  webview_flutter: any # flutter.dev
+  shared_preferences: any
+  url_launcher: any
+  video_player: any
+  webview_flutter: any
   xml: any
 dev_dependencies:
-  build_runner: any # by tools.dart.dev
+  build_runner: any
   flutter_test:
     sdk: flutter
-  freezed: any # Flutter Favorite
-  json_serializable: any # Flutter Favorite
+  freezed: any
+  json_serializable: any
   riverpod_generator: any
   riverpod_lint: any
-  very_good_analysis: any # Flutter Favorite
+  very_good_analysis: any
 flutter:
   default-flavor: dev
   generate: true # https://docs.flutter.dev/ui/internationalization#adding-your-own-localized-messages
