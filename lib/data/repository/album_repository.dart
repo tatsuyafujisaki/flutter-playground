@@ -2,15 +2,24 @@ import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
 import 'package:flutter_playground/data/model/album.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'album_repository.g.dart';
 
 const _baseUrl = 'https://jsonplaceholder.typicode.com';
 
-/// A client for performing CRUD operations on albums.
-class AlbumModel({Dio? dio}) {
-  /// Creates an [AlbumModel] with an optional [Dio] client.
-  this;
+/// Provides the singleton [AlbumRepository] instance.
+@Riverpod(keepAlive: true)
+AlbumRepository albumRepository(Ref ref) {
+  final dio = Dio(BaseOptions(baseUrl: _baseUrl));
+  ref.onDispose(dio.close);
+  return AlbumRepository(dio);
+}
 
-  final Dio _dio = dio ?? Dio(BaseOptions(baseUrl: _baseUrl));
+/// A repository for performing CRUD operations on [Album] resources.
+class const AlbumRepository(final Dio _dio) {
+  /// Creates an [AlbumRepository] with the given [Dio] client.
+  this;
 
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<List<Album>> getAlbums() async {
@@ -93,24 +102,4 @@ class AlbumModel({Dio? dio}) {
     developer.log('👀response.headers: ${response.headers}');
     developer.log('👀response.data: ${response.data}');
   }
-}
-
-void main() async {
-  final albumModel = AlbumModel();
-
-  final albums = await albumModel.getAlbums();
-  final album = await albumModel.getAlbum(id: 1);
-  final postedAlbum = await albumModel.postAlbum(
-    body: <String, dynamic>{'userId': 42, 'title': 'My posted album'},
-  );
-  final updatedAlbum = await albumModel.updateAlbum(
-    id: 1,
-    body: <String, dynamic>{'userId': 99, 'title': 'My updated album'},
-  );
-
-  developer.log(albums.toString());
-  developer.log(album.toString());
-  developer.log(postedAlbum.toString());
-  developer.log(updatedAlbum.toString());
-  await albumModel.deleteAlbum(id: 1);
 }
