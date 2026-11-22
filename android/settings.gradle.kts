@@ -20,6 +20,9 @@ pluginManagement {
     }
 }
 
+// Dynamic versions ("+") are intentional in this playground repository so
+// that the latest plugin versions are always used, at the cost of
+// reproducible builds.
 plugins {
     id("com.android.application") version "9.5.1" apply false
     id("com.google.firebase.crashlytics") version "+" apply false

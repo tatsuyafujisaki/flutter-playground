@@ -44,7 +44,7 @@ Future<Uri?> getForceUpdateStoreUri() async {
 }
 
 /// Parses [version] into a [Version], or returns `null` if parsing fails.
-Version? tryParse(String version) {
+Version? tryParseVersion(String version) {
   if (version.isEmpty) {
     return null;
   }
@@ -64,24 +64,28 @@ bool _shouldForceUpdate({
   required String currentVersionString,
   required String minVersionString,
 }) {
-  final currentVersion = tryParse(currentVersionString);
-  final minVersion = tryParse(minVersionString);
+  final currentVersion = tryParseVersion(currentVersionString);
+  final minVersion = tryParseVersion(minVersionString);
   if (currentVersion == null || minVersion == null) {
     return false;
   }
   return currentVersion < minVersion;
 }
 
+/// The numeric App Store ID, passed with `--dart-define=APP_STORE_ID=...`.
+const _appStoreId = String.fromEnvironment('APP_STORE_ID');
+
 Uri? _storeUri(String packageName) {
   if (kIsWeb) {
     return null;
   }
   return switch (defaultTargetPlatform) {
-    // Replace with your actual App Store ID.
-    .iOS => .parse('https://apps.apple.com/app/id544007664'),
+    .iOS when _appStoreId.isNotEmpty => .parse(
+      'https://apps.apple.com/app/id$_appStoreId',
+    ),
     .android => .parse(
       'https://play.google.com/store/apps/details?id=$packageName',
     ),
-    .fuchsia || .linux || .macOS || .windows => null,
+    .iOS || .fuchsia || .linux || .macOS || .windows => null,
   };
 }

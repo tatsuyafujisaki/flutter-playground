@@ -1,4 +1,4 @@
-import 'package:flutter_playground/domain/extension/date_time_extension.dart';
+import 'package:flutter_playground/extension/date_time_extension.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,45 +1,88 @@
-# Preparation
+# flutter-playground
 
-## Create `.gitignore`
+A Flutter playground with examples and small demo pages (Google Maps,
+LiveKit, and WebView) backed by Firebase.
 
-1. Follow the instructions in
-   https://github.com/tatsuyafujisaki/dotfiles/blob/main/git/README.md.
-2. Add the lines below to `.gitignore`.
+## Setup
 
-```gitignore
-#
-# Not from https://github.com/github/gitignore
-#
+1. Install the Flutter SDK pinned in `.fvmrc` with [FVM](https://fvm.app):
 
-# https://developer.android.com/studio/publish/app-signing
-android/key.properties
+   ```shell
+   fvm install
+   ```
 
-ios/Runner/GoogleService-Info.plist
+2. Create `dart_defines.json` in the repository root. This file is ignored by
+   Git.
 
-# > don't include most of the files that your IDE or code editor, the pub tool, and other tools generate.
-# > In many source code repositories, the common practice is not to commit generated files, at all.
-# https://dart.dev/tools/pub/private-files
-*.freezed.dart
-*.g.dart
+   ```json
+   {
+     "GOOGLE_MAPS_PLATFORM_API_KEY": "<your-api-key>",
+     "LIVEKIT_ROOM_NAME": "test",
+     "APP_STORE_ID": "<numeric-app-store-id>"
+   }
+   ```
 
-# https://docs.flutter.dev/ui/internationalization
-lib/l10n/app_localizations.dart
-# e.g. app_localizations_en.dart and app_localizations_ja.dart
-lib/l10n/app_localizations_*.dart
-lib/l10n/untranslated.txt
+   | Key | Required | Description |
+   |---|---|---|
+   | `GOOGLE_MAPS_PLATFORM_API_KEY` | Yes | Google Maps API key. The Android build fails without it. |
+   | `LIVEKIT_ROOM_NAME` | No | The default room name on the LiveKit page. Defaults to `test`. |
+   | `APP_STORE_ID` | No | The App Store ID for the iOS force-update dialog. If it's not set, the dialog isn't shown on iOS. |
 
-# https://fvm.app
-.fvm/
+3. Generate the Firebase options with the
+   [FlutterFire CLI](https://firebase.google.com/docs/flutter/setup). This creates
+   `lib/firebase_options_dev.dart` and `lib/firebase_options_prod.dart`, which are
+   ignored by Git.
 
-# Firebase
-functions/lib/
-lib/firebase_options*.dart
+4. Get packages and generate code (Freezed, `json_serializable`, and Riverpod):
 
-# API keys
-dart_defines.json
+   ```shell
+   fvm flutter pub get
+   fvm dart run build_runner build --delete-conflicting-outputs
+   ```
+
+5. Run the app:
+
+   ```shell
+   fvm flutter run --flavor dev --dart-define-from-file=dart_defines.json
+   ```
+
+## Secrets
+
+### Cloud Functions for Firebase
+
+The `generateLiveKitToken` function in `functions/` needs the following
+secrets:
+
+```shell
+firebase functions:secrets:set LIVEKIT_URL
+firebase functions:secrets:set LIVEKIT_API_KEY
+firebase functions:secrets:set LIVEKIT_API_SECRET
 ```
 
-# How to distribute an iOS app
+### GitHub Actions
+
+CI needs the following repository secrets, which contain the Base64-encoded
+Firebase options files:
+
+| Secret | How to create it |
+|---|---|
+| `FIREBASE_OPTIONS_DEV_BASE64` | `base64 -i lib/firebase_options_dev.dart` |
+| `FIREBASE_OPTIONS_PROD_BASE64` | `base64 -i lib/firebase_options_prod.dart` |
+
+## Project structure
+
+| Path | Contents |
+|---|---|
+| `bin/examples/` | Pure Dart examples that you run with `fvm dart run <file>`. |
+| `lib/data/` | Models, repositories, wrappers, and utilities. |
+| `lib/extension/` | Pure Dart extensions shared across layers. |
+| `lib/ui/page/` | Demo pages reachable from `HomePage`. |
+| `lib/ui/example/` | Flutter widget and package examples, mostly viewed as widget previews. |
+
+Some code isn't used by the app and is kept as standalone snippets:
+`StreamExtension`, `isDialogShowing`, `printLocales`, and `Debouncer`.
+
+## Distribute an iOS app
 
 ```shell
 rm -r build/ios # ensures *.ipa matches only the newly built file
@@ -54,7 +97,7 @@ firebase appdistribution:distribute \
   --groups 'group1,group2'
 ```
 
-# How to distribute an Android app
+## Distribute an Android app
 
 ```shell
 rm -r build/app

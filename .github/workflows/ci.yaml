@@ -16,6 +16,18 @@ jobs:
       - run: |
           curl -fsSL https://fvm.app/install.sh | bash
           echo "$HOME/fvm/bin" >> "$GITHUB_PATH"
+      # .fvmrc pins the "stable" channel, so the cache key uses the current
+      # commit of the stable branch to pick up new stable releases.
+      - id: flutter
+        run: echo "stable-sha=$(git ls-remote https://github.com/flutter/flutter.git refs/heads/stable | cut -f1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/fvm/versions
+            ~/.pub-cache
+          key: flutter-${{ runner.os }}-${{ steps.flutter.outputs.stable-sha }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: |
+            flutter-${{ runner.os }}-${{ steps.flutter.outputs.stable-sha }}-
       - run: fvm config --no-use-git-cache --no-update-check
       - run: fvm install --skip-pub-get
       - env:

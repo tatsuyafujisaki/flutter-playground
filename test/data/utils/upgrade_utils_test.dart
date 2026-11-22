@@ -3,15 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 void main() {
-  group('tryParse', () {
+  group('tryParseVersion', () {
     test('parses valid semantic versions', () {
-      expect(tryParse('1.2.3'), Version(1, 2, 3));
-      expect(tryParse('2.0.0-beta.1'), Version.parse('2.0.0-beta.1'));
+      expect(tryParseVersion('1.2.3'), Version(1, 2, 3));
+      expect(tryParseVersion('2.0.0-beta.1'), Version.parse('2.0.0-beta.1'));
     });
 
     test('returns null for empty or invalid version strings', () {
-      expect(tryParse(''), isNull);
-      expect(tryParse('not-a-version'), isNull);
+      expect(tryParseVersion(''), isNull);
+      expect(tryParseVersion('not-a-version'), isNull);
     });
   });
 }

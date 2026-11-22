@@ -1,6 +1,6 @@
 {
   "dart.flutterSdkPath": ".fvm/flutter_sdk",
-  //https://dartcode.org/docs/recommended-settings
+  // https://dartcode.org/docs/recommended-settings
   "debug.internalConsoleOptions": "openOnSessionStart",
   "[dart]": {
     "editor.formatOnSave": true,
@@ -10,6 +10,6 @@
     ],
     "editor.selectionHighlight": false,
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off",
+    "editor.wordBasedSuggestions": "off"
   }
 }

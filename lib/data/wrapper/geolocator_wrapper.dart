@@ -24,21 +24,9 @@ class GeolocatorWrapper {
       return const LocationSettings();
     }
     return switch (defaultTargetPlatform) {
-      .android => AndroidSettings(
-        // > (Optional) Set foreground notification config
-        // > to keep the app alive when going to the background
-        // https://pub.dev/documentation/geolocator/
-        //
-        // If you specify foregroundNotificationConfig,
-        // you must specify the following in AndroidManifest.xml.
-        // <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-        // Otherwise, you won't get any location updates
-        // not only in the background but also in the foreground.
-        foregroundNotificationConfig: const ForegroundNotificationConfig(
-          notificationTitle: '',
-          notificationText: '',
-        ),
-      ),
+      // No foregroundNotificationConfig: this app only tracks location while
+      // it is open, so it needs no foreground service or background location.
+      .android => AndroidSettings(),
       .iOS => AppleSettings(),
       .fuchsia || .linux || .macOS || .windows => const LocationSettings(),
     };
