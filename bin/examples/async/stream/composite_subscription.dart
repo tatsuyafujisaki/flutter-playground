@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 /// A container that manages and disposes multiple stream subscriptions.
 class CompositeSubscription {
@@ -30,4 +31,13 @@ class CompositeSubscription {
       subscriptions.map((subscription) => subscription.cancel()),
     );
   }
+}
+
+Future<void> main() async {
+  final composite = CompositeSubscription();
+  final controller = StreamController<String>.broadcast();
+  composite.add(controller.stream.listen(stdout.writeln));
+  controller.add('🍎');
+  await composite.dispose();
+  await controller.close();
 }

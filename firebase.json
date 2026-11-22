@@ -9,6 +9,20 @@
   ],
   "flutter": {
     "platforms": {
+      "android": {
+        "buildConfigurations": {
+          "src/dev": {
+            "projectId": "tatsuyafujisaki-poc-dev",
+            "appId": "1:665157873291:android:472a426eae68d019eb6e8e",
+            "fileOutput": "android/app/src/dev/google-services.json"
+          },
+          "src/prod": {
+            "projectId": "tatsuyafujisaki-poc-prod",
+            "appId": "1:5550671492:android:0160905bd629556d29a4d1",
+            "fileOutput": "android/app/src/prod/google-services.json"
+          }
+        }
+      },
       "dart": {
         "lib/firebase_options_dev.dart": {
           "projectId": "tatsuyafujisaki-poc-dev",
@@ -26,11 +40,43 @@
         }
       },
       "ios": {
-        "default": {
-          "projectId": "tatsuyafujisaki-poc-prod",
-          "appId": "1:5550671492:ios:e65fe2bf55999e9629a4d1",
-          "uploadDebugSymbols": true,
-          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        "buildConfigurations": {
+          "Debug-dev": {
+            "projectId": "tatsuyafujisaki-poc-dev",
+            "appId": "1:665157873291:ios:4a2f4e0ee5649a4eeb6e8e",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/dev/GoogleService-Info.plist"
+          },
+          "Profile-dev": {
+            "projectId": "tatsuyafujisaki-poc-dev",
+            "appId": "1:665157873291:ios:4a2f4e0ee5649a4eeb6e8e",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/dev/GoogleService-Info.plist"
+          },
+          "Release-dev": {
+            "projectId": "tatsuyafujisaki-poc-dev",
+            "appId": "1:665157873291:ios:4a2f4e0ee5649a4eeb6e8e",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/dev/GoogleService-Info.plist"
+          },
+          "Debug-prod": {
+            "projectId": "tatsuyafujisaki-poc-prod",
+            "appId": "1:5550671492:ios:e65fe2bf55999e9629a4d1",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/prod/GoogleService-Info.plist"
+          },
+          "Profile-prod": {
+            "projectId": "tatsuyafujisaki-poc-prod",
+            "appId": "1:5550671492:ios:e65fe2bf55999e9629a4d1",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/prod/GoogleService-Info.plist"
+          },
+          "Release-prod": {
+            "projectId": "tatsuyafujisaki-poc-prod",
+            "appId": "1:5550671492:ios:e65fe2bf55999e9629a4d1",
+            "uploadDebugSymbols": true,
+            "fileOutput": "ios/Runner/Firebase/prod/GoogleService-Info.plist"
+          }
         }
       }
     }

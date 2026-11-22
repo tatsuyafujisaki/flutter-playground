@@ -4,14 +4,14 @@ import 'dart:io';
 Future<void> main() async {
   await _showBlockingLoopExample1();
   await _showBlockingLoopExample2();
-  await _showNonBlockingLoopExample1();
-  await _showNonBlockingLoopExample2();
+  _showNonBlockingLoopExample1();
+  _showNonBlockingLoopExample2();
 }
 
 Stream<int> get _stream =>
     Stream.periodic(const Duration(seconds: 1), (count) => count).take(3);
 
-Future<void> _showNonBlockingLoopExample1() async {
+void _showNonBlockingLoopExample1() {
   Timer.periodic(const Duration(seconds: 1), (timer) {
     stdout.writeln('Timer.tick: ${timer.tick}');
     if (timer.tick == 3) {
@@ -20,7 +20,7 @@ Future<void> _showNonBlockingLoopExample1() async {
   });
 }
 
-Future<void> _showNonBlockingLoopExample2() async {
+void _showNonBlockingLoopExample2() {
   _stream.listen((value) {
     stdout.writeln('Stream.value in a non-blocking loop: $value');
   });

@@ -5,46 +5,34 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_playground/data/repository/livekit_token_repository.dart';
 import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:livekit_client/livekit_client.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'livekit_room_view_model.freezed.dart';
 part 'livekit_room_view_model.g.dart';
 
 /// Immutable UI state for a LiveKit room session.
-class const LiveKitRoomState({
-  /// The active LiveKit [Room], or `null` when disconnected.
-  final Room? room,
-
-  /// Whether a join attempt is currently in progress.
-  final bool isJoining = false,
-
-  /// Whether the local participant has joined [room].
-  final bool isJoined = false,
-
-  /// The active local camera facing direction.
-  final CameraPosition cameraPosition = .front,
-
-  /// An optional status or error message to show in the UI.
-  final String? statusMessage,
-}) {
+@freezed
+sealed class LiveKitRoomState with _$LiveKitRoomState {
   /// Creates a [LiveKitRoomState].
-  this;
+  const factory({
+    /// The active LiveKit [Room], or `null` when disconnected.
+    Room? room,
 
-  /// Returns a copy of this state with the provided fields updated.
-  LiveKitRoomState copyWith({
-    Room? Function()? room,
-    bool? isJoining,
-    bool? isJoined,
-    CameraPosition? cameraPosition,
-    String? Function()? statusMessage,
-  }) => LiveKitRoomState(
-    room: room != null ? room() : this.room,
-    isJoining: isJoining ?? this.isJoining,
-    isJoined: isJoined ?? this.isJoined,
-    cameraPosition: cameraPosition ?? this.cameraPosition,
-    statusMessage: statusMessage != null ? statusMessage() : this.statusMessage,
-  );
+    /// Whether a join attempt is currently in progress.
+    @Default(false) bool isJoining,
+
+    /// Whether the local participant has joined [room].
+    @Default(false) bool isJoined,
+
+    /// The active local camera facing direction.
+    @Default(CameraPosition.front) CameraPosition cameraPosition,
+
+    /// An optional status or error message to show in the UI.
+    String? statusMessage,
+  }) = _LiveKitRoomState;
 }
 
 /// Returns the active unmuted camera [VideoTrack] for [participant], falling
@@ -112,11 +100,11 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
     }
     final roomName = rawRoomName.trim();
     if (roomName.isEmpty) {
-      state = state.copyWith(statusMessage: () => 'Please enter a room name.');
+      state = state.copyWith(statusMessage: 'Please enter a room name.');
       return;
     }
 
-    state = state.copyWith(isJoining: true, statusMessage: () => null);
+    state = state.copyWith(isJoining: true, statusMessage: null);
 
     try {
       final hasPermissions = await ref.read(
@@ -128,7 +116,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       if (!hasPermissions) {
         state = state.copyWith(
           isJoining: false,
-          statusMessage: () =>
+          statusMessage:
               'Camera and microphone permissions are required to join a call.',
         );
         return;
@@ -172,7 +160,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
 
       _room = room;
       _roomListener = roomListener;
-      state = state.copyWith(room: () => room, cameraPosition: .front);
+      state = state.copyWith(room: room, cameraPosition: .front);
 
       await room.connect(tokenResponse.url, tokenResponse.token);
       if (await _isRoomStale(room)) {
@@ -209,10 +197,10 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       }
 
       state = state.copyWith(
-        room: () => room,
+        room: room,
         isJoining: false,
         isJoined: true,
-        statusMessage: () => publishWarning,
+        statusMessage: publishWarning,
       );
     } on FirebaseFunctionsException catch (error, stackTrace) {
       developer.log(
@@ -292,7 +280,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
         return;
       }
       state = state.copyWith(
-        statusMessage: () => 'Failed to toggle microphone: $error',
+        statusMessage: 'Failed to toggle microphone: $error',
       );
     }
   }
@@ -316,9 +304,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       if (!ref.mounted) {
         return;
       }
-      state = state.copyWith(
-        statusMessage: () => 'Failed to toggle camera: $error',
-      );
+      state = state.copyWith(statusMessage: 'Failed to toggle camera: $error');
     }
   }
 
@@ -348,9 +334,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       if (!ref.mounted) {
         return;
       }
-      state = state.copyWith(
-        statusMessage: () => 'Failed to switch camera: $error',
-      );
+      state = state.copyWith(statusMessage: 'Failed to switch camera: $error');
     }
   }
 }

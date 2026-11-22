@@ -9,7 +9,7 @@ extension DateTimeExtension on DateTime {
   /// A [DateTime] with the same year, month, and day at midnight, preserving
   /// whether this [DateTime] is in UTC or local time.
   DateTime get dateOnly =>
-      isUtc ? .utc(year, month, day) : DateTime(year, month, day);
+      isUtc ? .utc(year, month, day) : .new(year, month, day);
 
   /// Whether this [DateTime] falls on the current local calendar day.
   bool get isToday => toLocal().dateOnly == DateTime.now().dateOnly;

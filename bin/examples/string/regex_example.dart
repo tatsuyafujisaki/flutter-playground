@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// https://stackoverflow.com/a/78931094/10867055
 final _urlPattern = RegExp(
   r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+',
@@ -37,3 +39,7 @@ window.shouldChangeLink = function () {
     window.location = "//vidstreaming.io/load.php?id=MTM0OTgz&title=Mairimashita%21+Iruma-kun+Episode+12";
 }
 ''';
+
+void main() {
+  getUrls(input).forEach(stdout.writeln);
+}

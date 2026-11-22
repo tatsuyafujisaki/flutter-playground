@@ -1,7 +1,6 @@
-import 'package:flutter/widgets.dart';
-
 import 'package:flutter_playground/data/enum/language.dart';
 import 'package:flutter_playground/l10n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Convenience getters and locale helpers on [BuildContext].
 extension BuildContextExtension on BuildContext {

@@ -26,20 +26,10 @@ extension StreamExtension<T> on Stream<T> {
   );
 
   /// Logs data, error, and done events emitted by this stream.
-  Stream<T> log() => transform<T>(
-    .fromHandlers(
-      handleData: (data, sink) {
-        developer.log('👀handleData: $data');
-        sink.add(data);
-      },
-      handleError: (error, stackTrace, sink) {
-        developer.log('👀handleError: $error\n$stackTrace');
-        sink.addError(error, stackTrace);
-      },
-      handleDone: (sink) {
-        developer.log('👀handleDone');
-        sink.close();
-      },
-    ),
+  Stream<T> log() => handle(
+    handleData: (data) => developer.log('👀handleData: $data'),
+    handleError: (error, stackTrace) =>
+        developer.log('👀handleError: $error\n$stackTrace'),
+    handleDone: () => developer.log('👀handleDone'),
   );
 }

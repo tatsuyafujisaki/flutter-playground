@@ -1,6 +1,8 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'livekit_token_repository.freezed.dart';
 part 'livekit_token_repository.g.dart';
 
 /// Provides the singleton [LiveKitTokenRepository] instance.
@@ -11,24 +13,25 @@ LiveKitTokenRepository liveKitTokenRepository(Ref ref) =>
     );
 
 /// The response returned by the `generateLiveKitToken` Cloud Function.
-class const LiveKitTokenResponse({
-  /// The WebSocket URL of the LiveKit Cloud server.
-  required final String url,
-
-  /// The room name that [token] grants access to.
-  required final String roomName,
-
-  /// The generated LiveKit access token (JWT).
-  required final String token,
-
-  /// The participant identity bound to [token].
-  required final String identity,
-
-  /// The Unix timestamp (in seconds) when [token] expires.
-  required final int expiresAt,
-}) {
+@freezed
+sealed class LiveKitTokenResponse with _$LiveKitTokenResponse {
   /// Creates a [LiveKitTokenResponse].
-  this;
+  const factory({
+    /// The WebSocket URL of the LiveKit Cloud server.
+    required String url,
+
+    /// The room name that [token] grants access to.
+    required String roomName,
+
+    /// The generated LiveKit access token (JWT).
+    required String token,
+
+    /// The participant identity bound to [token].
+    required String identity,
+
+    /// The Unix timestamp (in seconds) when [token] expires.
+    required int expiresAt,
+  }) = _LiveKitTokenResponse;
 }
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for

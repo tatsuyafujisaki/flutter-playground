@@ -17,14 +17,14 @@ class const _MyStatelessWidget() extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: .spaceEvenly,
     children: [
-      const Text('''↓Use the following if you want to display all the text.'''),
+      const Text('↓Use the following if you want to display all the text.'),
       Text(_data),
       const Text(
-        '''↓Use the following if you want to ellipsize text on a single line.''',
+        '↓Use the following if you want to ellipsize text on a single line.',
       ),
       Text(_data, overflow: .ellipsis),
       const Text(
-        '''↓Use the following if you want to ellipsize text on `maxLines` lines.''',
+        '↓Use the following if you want to ellipsize text on `maxLines` lines.',
       ),
       Text(_data, overflow: .ellipsis, maxLines: 2),
     ],
