@@ -14,102 +14,76 @@ class AlbumModel({Dio? dio}) {
 
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
   Future<List<Album>> getAlbums() async {
-    try {
-      final response = await _dio.get<List<dynamic>>('/albums');
-      final data = response.data;
-      if (data != null) {
-        return data
-            .map((map) => Album.fromJson(map as Map<String, dynamic>))
-            .toList();
-      }
-      _log(response);
-      throw Exception('Failed to get albums.');
-    } on DioException catch (error) {
-      final response = error.response;
-      if (response != null) {
-        _log(response);
-      }
-      throw Exception('Failed to get albums.');
-    }
+    final data = await _fetch(
+      'Failed to get albums.',
+      () => _dio.get<List<dynamic>>('/albums'),
+    );
+    return data
+        .map((map) => Album.fromJson(map as Map<String, dynamic>))
+        .toList();
   }
 
   /// https://docs.flutter.dev/cookbook/networking/fetch-data#2-make-a-network-request
-  Future<Album> getAlbum({required int id}) async {
-    try {
-      final response = await _dio.get<Map<String, dynamic>>('/albums/$id');
-      final data = response.data;
-      if (data != null) {
-        return Album.fromJson(data);
-      }
-      _log(response);
-      throw Exception('Failed to get an album.');
-    } on DioException catch (error) {
-      final response = error.response;
-      if (response != null) {
-        _log(response);
-      }
-      throw Exception('Failed to get an album.');
-    }
-  }
+  Future<Album> getAlbum({required int id}) async => Album.fromJson(
+    await _fetch(
+      'Failed to get an album.',
+      () => _dio.get<Map<String, dynamic>>('/albums/$id'),
+    ),
+  );
 
   /// https://docs.flutter.dev/cookbook/networking/send-data#convert-the-http-response-to-an-album
-  Future<Album> postAlbum({required Map<String, dynamic> body}) async {
-    try {
-      final response = await _dio.post<Map<String, dynamic>>(
-        '/albums',
-        data: body,
+  Future<Album> postAlbum({required Map<String, dynamic> body}) async =>
+      Album.fromJson(
+        await _fetch(
+          'Failed to post an album.',
+          () => _dio.post<Map<String, dynamic>>('/albums', data: body),
+        ),
       );
-      final data = response.data;
-      if (data != null) {
-        return Album.fromJson(data);
-      }
-      _log(response);
-      throw Exception('Failed to post an album.');
-    } on DioException catch (error) {
-      final response = error.response;
-      if (response != null) {
-        _log(response);
-      }
-      throw Exception('Failed to post an album.');
-    }
-  }
 
   /// https://docs.flutter.dev/cookbook/networking/update-data#2-updating-data-over-the-internet-using-the-http-package
   Future<Album> updateAlbum({
     required int id,
     required Map<String, dynamic> body,
-  }) async {
+  }) async => Album.fromJson(
+    await _fetch(
+      'Failed to update an album.',
+      () => _dio.put<Map<String, dynamic>>('/albums/$id', data: body),
+    ),
+  );
+
+  /// https://docs.flutter.dev/cookbook/networking/delete-data#2-delete-data-on-the-server
+  Future<void> deleteAlbum({required int id}) => _send(
+    'Failed to delete an album.',
+    () => _dio.delete<void>('/albums/$id'),
+  );
+
+  /// Sends a request with [send], logging the response and throwing an
+  /// [Exception] with [failureMessage] if Dio reports an error.
+  Future<Response<T>> _send<T>(
+    String failureMessage,
+    Future<Response<T>> Function() send,
+  ) async {
     try {
-      final response = await _dio.put<Map<String, dynamic>>(
-        '/albums/$id',
-        data: body,
-      );
-      final data = response.data;
-      if (data != null) {
-        return Album.fromJson(data);
-      }
-      _log(response);
-      throw Exception('Failed to update an album.');
+      return await send();
     } on DioException catch (error) {
-      final response = error.response;
-      if (response != null) {
+      if (error.response case final response?) {
         _log(response);
       }
-      throw Exception('Failed to update an album.');
+      throw Exception(failureMessage);
     }
   }
 
-  /// https://docs.flutter.dev/cookbook/networking/delete-data#2-delete-data-on-the-server
-  Future<void> deleteAlbum({required int id}) async {
-    try {
-      await _dio.delete<void>('/albums/$id');
-    } on DioException catch (error) {
-      final response = error.response;
-      if (response != null) {
-        _log(response);
-      }
-      throw Exception('Failed to delete an album.');
+  /// Like [_send], but also throws if the response has no data.
+  Future<T> _fetch<T>(
+    String failureMessage,
+    Future<Response<T>> Function() send,
+  ) async {
+    final response = await _send(failureMessage, send);
+    if (response.data case final data?) {
+      return data;
     }
+    _log(response);
+    throw Exception(failureMessage);
   }
 
   void _log(Response<dynamic> response) {
