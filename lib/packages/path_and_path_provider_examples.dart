@@ -1,9 +1,10 @@
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/packages/io/save_file_example.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() =>
-    runApp(const ProviderScope(child: MaterialApp(home: _MyStatefulWidget())));
+/// Previews saving a text file using `path` and `path_provider`.
+@Preview()
+Widget preview() => const _MyStatefulWidget();
 
 class _MyStatefulWidget extends StatefulWidget {
   const new();

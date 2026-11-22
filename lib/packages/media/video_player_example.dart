@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:video_player/video_player.dart';
 
-void main() =>
-    runApp(const ProviderScope(child: MaterialApp(home: _MyStatefulWidget())));
+/// Previews a [VideoPlayer] widget with play and pause controls.
+@Preview()
+Widget preview() => const _MyStatefulWidget();
 
 class _MyStatefulWidget extends StatefulWidget {
   const new();
