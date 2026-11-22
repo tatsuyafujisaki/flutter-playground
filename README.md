@@ -11,7 +11,8 @@
 # Not from https://github.com/github/gitignore
 #
 
-ios/Runner/GoogleService-Info.plist
+# https://developer.android.com/studio/publish/app-signing
+keystore.properties
 
 # > don't include most of the files that your IDE or code editor, the pub tool, and other tools generate.
 # > In many source code repositories, the common practice is not to commit generated files, at all.
@@ -29,6 +30,7 @@ lib/l10n/untranslated.txt
 .fvm/
 
 # Firebase
+functions/lib/
 lib/firebase_options*.dart
 
 # API keys
@@ -40,7 +42,7 @@ dart_defines.json
 ```shell
 rm -r build/ios # ensures *.ipa matches only the newly built file
 
-fvm flutter build ipa --export-method ad-hoc
+fvm flutter build ipa --flavor prod --dart-define-from-file=dart_defines.json --export-method ad-hoc
 
 # https://firebase.google.com/docs/app-distribution/ios/distribute-cli
 firebase appdistribution:distribute \
@@ -55,11 +57,11 @@ firebase appdistribution:distribute \
 ```shell
 rm -r build/app
 
-fvm flutter build apk # --release is the default, so no need to specify it.
+fvm flutter build apk --flavor prod --dart-define-from-file=dart_defines.json # --release is the default, so no need to specify it.
 
 # https://firebase.google.com/docs/app-distribution/android/distribute-cli
 firebase appdistribution:distribute \
-  build/app/outputs/flutter-apk/app-release.apk \
+  build/app/outputs/flutter-apk/app-prod-release.apk \
   --app <FIREBASE_APP_ID> \
   --release-notes-file release-notes.txt \
   --groups 'group1,group2'
