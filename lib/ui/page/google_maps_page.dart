@@ -51,9 +51,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
             markerId: const MarkerId('current_location'),
             position: LatLng(position.latitude, position.longitude),
             infoWindow: const InfoWindow(title: 'Your location'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueBlue,
-            ),
+            icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           ),
         );
       });
@@ -62,9 +60,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
       if (!mounted) {
         return;
       }
-      await controller.animateCamera(
-        CameraUpdate.newCameraPosition(cameraPosition),
-      );
+      await controller.animateCamera(.newCameraPosition(cameraPosition));
 
       developer.log(
         'Current location: ${position.latitude}, ${position.longitude}',

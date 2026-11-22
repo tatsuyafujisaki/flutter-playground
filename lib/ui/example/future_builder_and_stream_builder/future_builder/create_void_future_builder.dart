@@ -11,14 +11,19 @@ FutureBuilder<void> createVoidFutureBuilder({
 }) => FutureBuilder<void>(
   future: future,
   builder: (context, snapshot) {
-    if (snapshot.hasError) {
-      developer.log(snapshot.error.toString());
-      developer.log(snapshot.stackTrace.toString());
-      return onError?.call() ?? const Center(child: Icon(Icons.error));
+    switch (snapshot) {
+      case AsyncSnapshot(:final error?, :final stackTrace):
+        developer.log(
+          'FutureBuilder error',
+          error: error,
+          stackTrace: stackTrace,
+        );
+        return onError?.call() ?? const Center(child: Icon(Icons.error));
+      case AsyncSnapshot(connectionState: .done):
+        return onData();
+      case AsyncSnapshot():
+        return onElse?.call() ??
+            const Center(child: CircularProgressIndicator());
     }
-    if (snapshot.connectionState == .done) {
-      return onData();
-    }
-    return onElse?.call() ?? const Center(child: CircularProgressIndicator());
   },
 );

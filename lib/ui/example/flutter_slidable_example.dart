@@ -14,7 +14,7 @@ class const _MyStatefulWidget() extends StatefulWidget {
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   final List<_MyData> _list = List<_MyData>.generate(
     20,
-    (index) => _MyData(id: index, text: index.toString()),
+    (index) => (id: index, text: index.toString()),
   );
 
   @override
@@ -23,8 +23,7 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
       list: _list,
       getKey: (item) => item.id,
       getString: (item) => item.text,
-      onPressed: (item) =>
-          setState(() => _list.removeWhere((element) => element == item)),
+      onPressed: (item) => setState(() => _list.remove(item)),
     ),
   );
 }
@@ -74,4 +73,4 @@ class const _SlidableTile({
   );
 }
 
-class _MyData({required final int id, required final String text});
+typedef _MyData = ({int id, String text});
