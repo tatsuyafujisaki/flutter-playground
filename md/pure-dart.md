@@ -1,22 +1,33 @@
 # How to print the Dart version
+
 ```dart
-print(Platform.version); // x.x.x (stable)
+import 'dart:io';
+
+void main() {
+  stdout.writeln(Platform.version); // x.x.x (stable)
+}
 ```
+
 https://api.flutter.dev/flutter/dart-io/Platform/version.html
 
-# Required parameter / optional parameter / named parameter / positional (aka unnamed) parameter
-## Example of positional (aka unnamed) parameters
+# Required, optional, named, and positional parameters
+
+## Example of positional (unnamed) parameters
+
 ```dart
-// a ia a required unnamed parameter.
-// b is an optional unnamed (aka positional) parameter whose default value is null.
-// c is an optional unnamed (aka positional) parameter with a default value.
-class MyClass {
-  MyClass(this.a, [this.b, this.c = 'default!']) {
-    print('a = $a, b = $b, c = $c');
+import 'dart:io';
+
+// `a` is a required positional parameter.
+// `b` is an optional positional parameter whose default value is `null`.
+// `c` is an optional positional parameter with a default value.
+class MyClass(
+  final String a, [
+  final String? b,
+  final String c = 'default!',
+]) {
+  this {
+    stdout.writeln('a = $a, b = $b, c = $c');
   }
-  String a;
-  String? b;
-  String c;
 }
 
 void myFunction(
@@ -24,7 +35,7 @@ void myFunction(
   String? b,
   String c = 'default!',
 ]) {
-  print('a = $a, b = $b, c = $c');
+  stdout.writeln('a = $a, b = $b, c = $c');
 }
 
 void main() {
@@ -39,19 +50,23 @@ void main() {
 ```
 
 ## Example of named parameters
+
 ```dart
-// a ia a required unnamed parameter.
-// b ia a required named parameter.
-// c is an optional named parameter whose default value is null.
-// d is an optional named parameter with a default value.
-class MyClass {
-  MyClass(this.a, {required this.b, this.c, this.d = 'default!'}) {
-    print('a = $a, b = $b, c = $c, d = $d');
+import 'dart:io';
+
+// `a` is a required positional parameter.
+// `b` is a required named parameter.
+// `c` is an optional named parameter whose default value is `null`.
+// `d` is an optional named parameter with a default value.
+class MyClass(
+  final String a, {
+  required final String b,
+  final String? c,
+  final String d = 'default!',
+}) {
+  this {
+    stdout.writeln('a = $a, b = $b, c = $c, d = $d');
   }
-  String a;
-  String b;
-  String? c;
-  String d;
 }
 
 void myFunction(
@@ -60,7 +75,7 @@ void myFunction(
   String? c,
   String d = 'default!',
 }) {
-  print('a = $a, b = $b, c = $c, d = $d');
+  stdout.writeln('a = $a, b = $b, c = $c, d = $d');
 }
 
 void main() {
@@ -75,106 +90,149 @@ void main() {
 ```
 
 # List
-## How to clone (deep copy) a List
+
+## How to copy a `List`
+
 ```dart
-final list1 = <String>['🍎', '🍊'];
-final list2 = List<String>.from(list1);
-list2[0] = '🍏';
-print(list1); // [🍎, 🍊]
-print(list2); // [🍏, 🍊]
+import 'dart:io';
+
+void main() {
+  final list1 = <String>['🍎', '🍊'];
+  final list2 = List<String>.from(list1);
+  list2[0] = '🍏';
+  stdout.writeln(list1); // [🍎, 🍊]
+  stdout.writeln(list2); // [🍏, 🍊]
+}
 ```
 
 ## How to convert `List<dynamic>` to `List<String>`
+
 ```dart
-final list1 = <dynamic>['🍎'];
-print(list1.runtimeType); // List<dynamic>
+import 'dart:io';
 
-final list2 = List<String>.from(list1);
-print(list2.runtimeType); // List<String>
+void main() {
+  final list1 = <dynamic>['🍎'];
+  stdout.writeln(list1.runtimeType); // List<dynamic>
 
-// Not recommended way:
-// > DON'T use cast() when a nearby operation will do
-// https://dart.dev/effective-dart/usage#dont-use-cast-when-a-nearby-operation-will-do
-// > AVOID using cast()
-// https://dart.dev/effective-dart/usage#avoid-using-cast
-final list3 = list1.cast<String>().toList();
-print(list3.runtimeType); // List<String>
+  final list2 = List<String>.from(list1);
+  stdout.writeln(list2.runtimeType); // List<String>
+
+  // Not recommended:
+  // > DON'T use cast() when a nearby operation will do
+  // https://dart.dev/effective-dart/usage#dont-use-cast-when-a-nearby-operation-will-do
+  // > AVOID using cast()
+  // https://dart.dev/effective-dart/usage#avoid-using-cast
+  final list3 = list1.cast<String>().toList();
+  stdout.writeln(list3.runtimeType); // List<String>
+}
 ```
 
-# How to get an item
+## How to get an item
+
 ```dart
-final fruits = ['🍎'];
-print(fruits.elementAtOrNull(0)); // 🍎
-print(fruits.elementAtOrNull(1)); // null
-print(fruits.firstWhereOrNull((element) => element == '🍏')); // null
-print(fruits.firstWhere((element) => element == '🍏', orElse: () => 'Not found!')); // Not found!
+import 'dart:io';
+
+import 'package:collection/collection.dart';
+
+void main() {
+  final fruits = ['🍎'];
+  stdout.writeln(fruits.elementAtOrNull(0)); // 🍎
+  stdout.writeln(fruits.elementAtOrNull(1)); // null
+  stdout.writeln(fruits.firstWhereOrNull((element) => element == '🍏')); // null
+  stdout.writeln(
+    fruits.firstWhere((element) => element == '🍏', orElse: () => 'Not found!'),
+  ); // Not found!
+}
 ```
 
-# Difference between List and UnmodifiableListView
-Operation|List|UnmodifiableListView
---|--|--
-Can add or remove an item?|Yes|No
-Can replace an item?|Yes|No
+## Difference between `List` and `UnmodifiableListView`
 
-## Example of add/remove/modify on List
+| Operation                 | `List` | `UnmodifiableListView` |
+| ------------------------- | ------ | ---------------------- |
+| Can add or remove an item | Yes    | No                     |
+| Can replace an item       | Yes    | No                     |
+
+### Example of modifying a `List`
+
 ```dart
+import 'dart:io';
+
 void main() {
   final fruits = ['🍎']
     ..remove('🍎')
     ..add('🍏');
 
   fruits[0] = '🍊';
-  print(fruits); // ['🍊'];
+  stdout.writeln(fruits); // [🍊]
 }
 ```
 
-## Example of add/remove/modify on UnmodifiableListView
+### Example of `UnmodifiableListView`
+
 ```dart
+import 'dart:collection';
+
 void main() {
   final fruits = UnmodifiableListView(['🍎']);
 
-  // throws "Unsupported operation: Cannot add to an unmodifiable list".
+  // Throws "Unsupported operation: Cannot add to an unmodifiable list".
   // fruits.add('🍏');
 
-  // throws "Unsupported operation: Cannot remove from an unmodifiable list".
+  // Throws "Unsupported operation: Cannot remove from an unmodifiable list".
   // fruits.remove('🍎');
 
-  // throws "Unsupported operation: Cannot modify an unmodifiable list".
+  // Throws "Unsupported operation: Cannot modify an unmodifiable list".
   // fruits[0] = '🍏';
 }
 ```
 
 # Set
-## How to clone (deep copy) a Set
-```dart
-final set1 = <String>{'🍎', '🍊'};
-final set2 = Set<String>.from(set1)
-  ..remove('🍎')
-  ..add('🍏');
-print(set1); // {🍎, 🍊}
-print(set2); // {🍊, 🍏}
-```
 
-# Map
-## How do I get an item from a Map
+## How to copy a `Set`
+
 ```dart
-void main() async {
-  final map = <String, String>{'apple': '🍎'};
-  print(map['apple']); // 🍎
-  print(map['orange']); // null
+import 'dart:io';
+
+void main() {
+  final set1 = <String>{'🍎', '🍊'};
+  final set2 = Set<String>.from(set1)
+    ..remove('🍎')
+    ..add('🍏');
+  stdout.writeln(set1); // {🍎, 🍊}
+  stdout.writeln(set2); // {🍊, 🍏}
 }
 ```
 
-## How to clone (deep copy) a Map
+# Map
+
+## How to get an item from a `Map`
+
 ```dart
-final map1 = <String, String>{'apple': '🍎', 'orange': '🍊'};
-final map2 = Map<String, String>.from(map1);
-map2['apple'] = '🍏';
-print(map1); // {apple: 🍎, orange: 🍊}
-print(map2); // {apple: 🍏, orange: 🍊}
+import 'dart:io';
+
+void main() {
+  final map = <String, String>{'apple': '🍎'};
+  stdout.writeln(map['apple']); // 🍎
+  stdout.writeln(map['orange']); // null
+}
 ```
 
-# What in Dart is equivalent to scope functions﻿ in Kotlin?
+## How to copy a `Map`
+
+```dart
+import 'dart:io';
+
+void main() {
+  final map1 = <String, String>{'apple': '🍎', 'orange': '🍊'};
+  final map2 = Map<String, String>.from(map1);
+  map2['apple'] = '🍏';
+  stdout.writeln(map1); // {apple: 🍎, orange: 🍊}
+  stdout.writeln(map2); // {apple: 🍏, orange: 🍊}
+}
+```
+
+# What in Dart is equivalent to scope functions in Kotlin?
+
 Cascade notation (`..`, `?..`)
 
 https://dart.dev/language/operators#cascade-notation
