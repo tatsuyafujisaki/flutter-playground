@@ -1,8 +1,8 @@
 on:
   push:
     paths:
-      - "*.yaml"
-      - "*.yml"
+      - "**/*.yaml"
+      - "**/*.yml"
   workflow_dispatch:
 permissions:
   contents: read
