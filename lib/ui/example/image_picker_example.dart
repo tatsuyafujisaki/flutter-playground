@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widget_previews.dart';
-import 'package:flutter_playground/packages/permission_handler_example.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -26,16 +24,6 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
       _status = null;
     });
     try {
-      if (!kIsWeb && !await isPhotoGranted) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _isPicking = false;
-          _status = 'Photo permission was not granted.';
-        });
-        return;
-      }
       final images = await ImagePicker().pickMultiImage(limit: 3);
       for (final image in images) {
         developer.log('👀XFile > path: ${image.path}');

@@ -11,7 +11,11 @@ bool exists(String path) {
   try {
     return File(path).existsSync();
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to check whether file exists: $path',
+      error: error,
+      stackTrace: stackTrace,
+    );
     return false;
   }
 }
@@ -26,7 +30,13 @@ String replaceExtension(String path, String extension) => p.setExtension(
 Future<void> deleteIfExists(String path) async {
   try {
     await File(path).delete(recursive: true);
+  } on PathNotFoundException {
+    return;
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to delete file: $path',
+      error: error,
+      stackTrace: stackTrace,
+    );
   }
 }
