@@ -17,7 +17,7 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   Widget build(BuildContext context) => MenuAnchor(
     onOpen: () => setState(() => isMenuOpen = true),
     onClose: () => setState(() => isMenuOpen = false),
-    menuChildren: <Widget>[
+    menuChildren: [
       MenuItemButton(
         onPressed: () => _showDialog('🍎'),
         child: const Text('🍎'),

@@ -12,7 +12,7 @@ class const _MyStatelessWidget() extends StatelessWidget {
     builder: (context, scrollController) => ColoredBox(
       color: Colors.cyan,
       child: Column(
-        children: <Widget>[
+        children: [
           Flexible(
             child: ListView.builder(
               controller: scrollController,

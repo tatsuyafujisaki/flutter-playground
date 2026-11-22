@@ -16,7 +16,7 @@ class const _MyStatelessWidget() extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: .spaceEvenly,
-    children: <Widget>[
+    children: [
       const Text('↓Displays all the text.'),
       Text(_data),
       const Text(

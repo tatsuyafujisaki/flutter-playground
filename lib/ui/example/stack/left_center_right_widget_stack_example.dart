@@ -9,7 +9,7 @@ class const _MyStatelessWidget() extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Column(
     mainAxisAlignment: .center,
-    children: <Widget>[
+    children: [
       _LeftCenterRightWidgetStack(
         leftWidget: FlutterLogo(),
         centerWidget: FlutterLogo(),
@@ -35,7 +35,7 @@ class const _LeftCenterRightWidgetStack({
   @override
   Widget build(BuildContext context) => Stack(
     alignment: .center,
-    children: <Widget>[
+    children: [
       if (leftWidget != null) Align(alignment: .centerLeft, child: leftWidget),
       ?centerWidget,
       if (rightWidget != null)

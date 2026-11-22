@@ -8,22 +8,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _FakeUser extends Fake implements User;
 
-class _FakeUserCredential extends Fake implements UserCredential {
-  new(this.user);
+class _FakeUserCredential(@override final User? user) extends Fake
+    implements UserCredential;
 
-  @override
-  final User? user;
-}
-
-class _FakeAuthRepository implements AuthRepository {
-  new({this.currentUser, this.onSignIn});
-
-  @override
-  User? currentUser;
-
+class _FakeAuthRepository({
+  @override var User? currentUser,
+  var Future<UserCredential> Function()? onSignIn,
+}) implements AuthRepository {
   int signInCallCount = 0;
-
-  Future<UserCredential> Function()? onSignIn;
 
   @override
   Future<UserCredential> signInAnonymously() {

@@ -9,6 +9,6 @@ class const _MyStatelessWidget() extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Row(
     mainAxisAlignment: .spaceBetween,
-    children: <Widget>[FlutterLogo(), FlutterLogo()],
+    children: [FlutterLogo(), FlutterLogo()],
   );
 }
