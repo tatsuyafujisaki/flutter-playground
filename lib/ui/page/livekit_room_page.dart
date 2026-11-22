@@ -69,7 +69,20 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     setState(() {});
   }
 
+  Future<bool> _isRoomStale(Room room) async {
+    if (mounted && _room == room) {
+      return false;
+    }
+    if (_room == room) {
+      await _releaseRoom();
+    }
+    return true;
+  }
+
   Future<void> _joinRoom() async {
+    if (_isJoining) {
+      return;
+    }
     final roomName = _roomController.text.trim();
     if (roomName.isEmpty) {
       setState(() => _statusMessage = 'Please enter a room name.');
@@ -83,10 +96,10 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
 
     try {
       final hasPermissions = await _requestPermissions();
+      if (!mounted) {
+        return;
+      }
       if (!hasPermissions) {
-        if (!mounted) {
-          return;
-        }
         setState(() {
           _isJoining = false;
           _statusMessage =
@@ -96,11 +109,20 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       }
 
       await ref.read(authViewModelProvider.notifier).signInAnonymously();
+      if (!mounted) {
+        return;
+      }
       final tokenResponse = await ref
           .read(liveKitTokenRepositoryProvider)
           .fetchToken(roomName: roomName);
+      if (!mounted) {
+        return;
+      }
 
       await _releaseRoom();
+      if (!mounted) {
+        return;
+      }
 
       final room = Room(
         roomOptions: const RoomOptions(adaptiveStream: true, dynacast: true),
@@ -108,12 +130,16 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       final roomListener = room.createListener()
         ..on<RoomDisconnectedEvent>((event) {
           developer.log('Disconnected from LiveKit room: ${event.reason}');
+          if (_room == room) {
+            unawaited(_releaseRoom());
+          }
           if (!mounted) {
             return;
           }
           setState(() {
             _isJoined = false;
             _isJoining = false;
+            _cameraPosition = .front;
             if (event.reason != null && event.reason != .clientInitiated) {
               _statusMessage = 'Disconnected: ${event.reason!.name}';
             }
@@ -125,6 +151,9 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       _cameraPosition = .front;
 
       await room.connect(tokenResponse.url, tokenResponse.token);
+      if (await _isRoomStale(room)) {
+        return;
+      }
 
       String? publishWarning;
       try {
@@ -137,6 +166,9 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
         );
         publishWarning = 'Camera unavailable: $error';
       }
+      if (await _isRoomStale(room)) {
+        return;
+      }
 
       try {
         await room.localParticipant?.setMicrophoneEnabled(true);
@@ -148,10 +180,10 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
         );
         publishWarning ??= 'Microphone unavailable: $error';
       }
-
-      if (!mounted) {
+      if (await _isRoomStale(room)) {
         return;
       }
+
       setState(() {
         _isJoining = false;
         _isJoined = true;
