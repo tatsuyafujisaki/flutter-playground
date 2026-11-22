@@ -9,7 +9,11 @@ Future<bool> get isOnline async {
     final internetAddresses = await InternetAddress.lookup('example.com');
     return internetAddresses.firstOrNull?.rawAddress.isNotEmpty ?? false;
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to check online connectivity',
+      error: error,
+      stackTrace: stackTrace,
+    );
     return false;
   }
 }
@@ -47,7 +51,11 @@ Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
         return statusCode != null && statusCode >= 200 && statusCode < 300;
     }
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to check URL accessibility: $url',
+      error: error,
+      stackTrace: stackTrace,
+    );
   } finally {
     if (dio == null) {
       client.close();

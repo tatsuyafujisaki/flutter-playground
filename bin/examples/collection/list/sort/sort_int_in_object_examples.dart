@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 
@@ -21,15 +21,15 @@ List<_Person> _createPersonList() => <_Person>[
 
 void _sortIntInObject() {
   final list = _createPersonList()..sortBy<num>((person) => person.age);
-  developer.log(list.toString());
+  stdout.writeln(list.toString());
 }
 
 void _sortIntInObjectDescending1() {
   final list = _createPersonList()..sort((a, b) => b.age.compareTo(a.age));
-  developer.log(list.toString());
+  stdout.writeln(list.toString());
 }
 
 void _sortIntInObjectDescending2() {
   final list = _createPersonList()..sortBy<num>((x) => x.age * -1);
-  developer.log(list.toString());
+  stdout.writeln(list.toString());
 }

@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 class const _MyAsyncConstructorClass._(final String data) {
   static Future<_MyAsyncConstructorClass> create(String emoji) async {
@@ -7,7 +7,7 @@ class const _MyAsyncConstructorClass._(final String data) {
   }
 }
 
-void main() async {
+Future<void> main() async {
   final myClass = await _MyAsyncConstructorClass.create('🍎');
-  developer.log(myClass.data); // 🍎
+  stdout.writeln(myClass.data); // 🍎
 }

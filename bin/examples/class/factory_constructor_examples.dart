@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 class const _Person1(final String name, final int age) {
   factory fromJson(Map<String, dynamic> map) => switch (map) {
@@ -15,7 +15,7 @@ class _Person2(Map<String, dynamic> map) {
 void main() {
   final map = <String, dynamic>{'name': 'Jane', 'age': 18};
   final person1 = _Person1.fromJson(map);
-  developer.log(person1.name);
+  stdout.writeln(person1.name);
   final person2 = _Person2(map);
-  developer.log(person2.name);
+  stdout.writeln(person2.name);
 }

@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
@@ -14,8 +14,9 @@ void main() {
     'foo.PNG',
   ];
 
-  developer.log(_filterJpeg(filenames).toString());
-  developer.log(_filterPng(filenames).toString());
+  stdout
+    ..writeln(_filterJpeg(filenames).toString())
+    ..writeln(_filterPng(filenames).toString());
 }
 
 Iterable<String> _filterJpeg(Iterable<String> filenames) => filenames.where(

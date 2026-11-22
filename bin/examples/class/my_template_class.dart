@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 class _MyTemplateClass(List<String> myList, [DateTime? dateTime]) {
   final List<String> myList = .unmodifiable(myList);
@@ -8,6 +8,7 @@ class _MyTemplateClass(List<String> myList, [DateTime? dateTime]) {
 
 void main() {
   final myTemplateClass = _MyTemplateClass(['🍎', '🍊']);
-  developer.log(myTemplateClass.myList.toString());
-  developer.log(myTemplateClass.myDateTime.toString());
+  stdout
+    ..writeln(myTemplateClass.myList.toString())
+    ..writeln(myTemplateClass.myDateTime.toString());
 }

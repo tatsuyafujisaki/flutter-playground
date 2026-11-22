@@ -34,7 +34,11 @@ Future<Uri?> getForceUpdateStoreUri() async {
 
     return _storeUri(packageInfo.packageName);
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to check force update status',
+      error: error,
+      stackTrace: stackTrace,
+    );
     return null;
   }
 }
@@ -47,7 +51,11 @@ Version? tryParse(String version) {
   try {
     return .parse(version);
   } on Exception catch (error, stackTrace) {
-    developer.log('', error: error, stackTrace: stackTrace);
+    developer.log(
+      'Failed to parse semantic version: $version',
+      error: error,
+      stackTrace: stackTrace,
+    );
     return null;
   }
 }

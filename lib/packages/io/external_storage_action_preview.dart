@@ -49,7 +49,7 @@ class _ExternalStorageActionPreviewState
     try {
       final path = await widget.onSave();
       if (path != null) {
-        showHowtoPullSavedFile(path);
+        showHowToPullSavedFile(path);
       }
       if (!mounted) {
         return;

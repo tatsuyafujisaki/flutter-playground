@@ -1,11 +1,11 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 /// https://stackoverflow.com/a/12649574/10867055
 class _MySingleton._() {
   factory() {
     if (!initialized) {
       initialized = true;
-      developer.log('Perform some initialization.');
+      stdout.writeln('Perform some initialization.');
     }
     return _singleton;
   }
@@ -15,8 +15,9 @@ class _MySingleton._() {
 }
 
 void main() {
-  developer.log((_MySingleton() == _MySingleton()).toString()); // true
-  developer.log(
-    _MySingleton().initializedAt.toString(),
-  ); // prints the same timestamp as above.
+  stdout
+    ..writeln((_MySingleton() == _MySingleton()).toString()) // true
+    ..writeln(
+      _MySingleton().initializedAt.toString(),
+    ); // prints the same timestamp as above.
 }

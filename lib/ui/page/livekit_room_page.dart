@@ -246,9 +246,7 @@ class const _CallControls({
             children: [
               IconButton.filledTonal(
                 onPressed: onToggleAudio,
-                tooltip: isAudioMuted
-                    ? 'Unmute microphone'
-                    : 'Mute microphone',
+                tooltip: isAudioMuted ? 'Unmute microphone' : 'Mute microphone',
                 icon: Icon(isAudioMuted ? Icons.mic_off : Icons.mic),
               ),
               IconButton.filledTonal(

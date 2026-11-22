@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 void _addOrRemove<T>(Set<T> set, T value) {
   if (!set.add(value)) {
@@ -9,7 +9,7 @@ void _addOrRemove<T>(Set<T> set, T value) {
 void main() {
   final fruits = {'🍎', '🍊'};
   _addOrRemove(fruits, '🍏');
-  developer.log(fruits.toString());
+  stdout.writeln(fruits.toString());
   _addOrRemove(fruits, '🍏');
-  developer.log(fruits.toString());
+  stdout.writeln(fruits.toString());
 }

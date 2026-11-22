@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:async/async.dart';
 
@@ -15,5 +15,5 @@ void main() {
   ).take(3);
 
   StreamGroup.merge<String>([stream1, stream2])
-      .listen((event) => developer.log('onData: $event'));
+      .listen((event) => stdout.writeln('onData: $event'));
 }

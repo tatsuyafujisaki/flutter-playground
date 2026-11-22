@@ -43,9 +43,7 @@ class const LiveKitRoomState({
     isJoining: isJoining ?? this.isJoining,
     isJoined: isJoined ?? this.isJoined,
     cameraPosition: cameraPosition ?? this.cameraPosition,
-    statusMessage: statusMessage != null
-        ? statusMessage()
-        : this.statusMessage,
+    statusMessage: statusMessage != null ? statusMessage() : this.statusMessage,
   );
 }
 

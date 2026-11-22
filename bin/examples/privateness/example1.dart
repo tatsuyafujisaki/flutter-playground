@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 const _myTopPrivateLevelVariable = '_myTopPrivateLevelVariable';
 
@@ -13,12 +13,12 @@ class MyPublic {
   final myPublicVariable = 'myPublicVariable';
 
   void _myPrivateMethod() {
-    developer.log('_myPrivateMethod');
+    stdout.writeln('_myPrivateMethod');
   }
 
   /// Logs a message from this public method.
   void myPublicMethod() {
-    developer.log('myPublicMethod');
+    stdout.writeln('myPublicMethod');
   }
 }
 
@@ -26,14 +26,15 @@ class _MyPrivate;
 
 void main() {
   // Top-level private variables are only accessible from within the same file.
-  developer.log(_myTopPrivateLevelVariable);
-  developer.log(myTopLevelPublicVariable);
+  stdout
+    ..writeln(_myTopPrivateLevelVariable)
+    ..writeln(myTopLevelPublicVariable);
 
   final myPublic = MyPublic();
   // Private instance variables can only be accessed from the same file.
-  developer.log(myPublic._myPrivateVariable);
-
-  developer.log(myPublic.myPublicVariable);
+  stdout
+    ..writeln(myPublic._myPrivateVariable)
+    ..writeln(myPublic.myPublicVariable);
   // Private instance methods can only be accessed from the same file.
   myPublic
     .._myPrivateMethod()
@@ -41,5 +42,5 @@ void main() {
 
   // Private classes can only be accessed from the same file.
   final myPrivate = _MyPrivate();
-  developer.log(myPrivate.toString());
+  stdout.writeln(myPrivate.toString());
 }

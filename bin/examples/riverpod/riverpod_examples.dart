@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,9 +26,9 @@ String myGeneratedRequiredParameters(Ref ref, String name, int age) =>
 void showGeneratedBoolNotifierProviderExamples() {
   final container = ProviderContainer();
   try {
-    developer.log(container.read(myBoolProvider).toString()); // false
+    stdout.writeln(container.read(myBoolProvider).toString()); // false
     container.read(myBoolProvider.notifier).toggle();
-    developer.log(container.read(myBoolProvider).toString()); // true
+    stdout.writeln(container.read(myBoolProvider).toString()); // true
   } finally {
     container.dispose();
   }
@@ -38,19 +38,20 @@ void showGeneratedBoolNotifierProviderExamples() {
 void showGeneratedFunctionProviderExamples() {
   final container = ProviderContainer();
   try {
-    developer.log(container.read(myGeneratedParameterlessProvider)); // Hello!
-    developer.log(
-      container.read(myGeneratedRequiredParameterProvider('Minnie')),
-    ); // Hello, Minnie!
-    developer.log(
-      container.read(myGeneratedOptionalParameterProvider()),
-    ); // Hello, Anonymous!
-    developer.log(
-      container.read(myGeneratedOptionalParameterProvider('Donald')),
-    ); // Hello, Donald!
-    developer.log(
-      container.read(myGeneratedRequiredParametersProvider('Goofy', 18)),
-    ); // Hello, 18-year-old Goofy!
+    stdout
+      ..writeln(container.read(myGeneratedParameterlessProvider)) // Hello!
+      ..writeln(
+        container.read(myGeneratedRequiredParameterProvider('Minnie')),
+      ) // Hello, Minnie!
+      ..writeln(
+        container.read(myGeneratedOptionalParameterProvider()),
+      ) // Hello, Anonymous!
+      ..writeln(
+        container.read(myGeneratedOptionalParameterProvider('Donald')),
+      ) // Hello, Donald!
+      ..writeln(
+        container.read(myGeneratedRequiredParametersProvider('Goofy', 18)),
+      ); // Hello, 18-year-old Goofy!
   } finally {
     container.dispose();
   }
@@ -60,12 +61,12 @@ void showGeneratedFunctionProviderExamples() {
 void showGeneratedSetNotifierProviderExamples() {
   final container = ProviderContainer();
   try {
-    developer.log(container.read(mySetProvider).toString()); // {}
+    stdout.writeln(container.read(mySetProvider).toString()); // {}
     container.read(mySetProvider.notifier).add('a');
-    developer.log(container.read(mySetProvider).toString()); // {'a'}
+    stdout.writeln(container.read(mySetProvider).toString()); // {'a'}
     container.read(mySetProvider.notifier).add('b');
     container.read(mySetProvider.notifier).remove('a');
-    developer.log(container.read(mySetProvider).toString()); // {'b'}
+    stdout.writeln(container.read(mySetProvider).toString()); // {'b'}
   } finally {
     container.dispose();
   }

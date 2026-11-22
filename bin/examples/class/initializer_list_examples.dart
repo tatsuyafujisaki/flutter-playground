@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 class const _Person({
   required final String firstName,
@@ -14,7 +14,8 @@ void main() {
     middleName: 'Robin',
     lastName: 'Milne',
   );
-  developer.log(person.firstName);
-  developer.log(person.lastName);
-  developer.log(person.fullName);
+  stdout
+    ..writeln(person.firstName)
+    ..writeln(person.lastName)
+    ..writeln(person.fullName);
 }

@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 
@@ -9,11 +9,10 @@ void main() {
 
   const iterableEquality = IterableEquality<String>();
 
-  developer.log((iterable1 == iterable2).toString()); // false
-  developer.log(
-    iterableEquality.equals(iterable1, iterable2).toString(),
-  ); // true
-  developer.log(
-    iterableEquality.equals(iterable1, iterable3).toString(),
-  ); // false
+  stdout
+    ..writeln((iterable1 == iterable2).toString()) // false
+    ..writeln(iterableEquality.equals(iterable1, iterable2).toString()) // true
+    ..writeln(
+      iterableEquality.equals(iterable1, iterable3).toString(),
+    ); // false
 }

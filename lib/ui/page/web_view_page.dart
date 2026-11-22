@@ -24,47 +24,51 @@ class const WebViewPage({
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  late final WebViewController controller;
-  final WebViewCookieManager cookieManager = .new();
-  String title = '';
-  bool canGoBack = false;
-  bool canGoForward = false;
+  late final WebViewController _controller;
+  final WebViewCookieManager _cookieManager = .new();
+  String _title = '';
+  bool _canGoBack = false;
+  bool _canGoForward = false;
 
   @override
   void initState() {
     super.initState();
-    controller = .new();
+    _controller = .new();
     unawaited(_initController());
   }
 
   Future<void> _initController() async {
     if (widget.cookie case final cookie?) {
-      await cookieManager.setCookie(cookie);
+      await _cookieManager.setCookie(cookie);
     }
-    await controller.setJavaScriptMode(.unrestricted);
+    await _controller.setJavaScriptMode(.unrestricted);
     // Avoid a black screen before the first page loads, even in Dark Mode.
-    await controller.setBackgroundColor(Colors.transparent);
-    await controller.setNavigationDelegate(
+    await _controller.setBackgroundColor(Colors.transparent);
+    await _controller.setNavigationDelegate(
       NavigationDelegate(
         onPageFinished: (_) async {
-          final title = await controller.getTitle() ?? '';
-          final canGoBack = await controller.canGoBack();
-          final canGoForward = await controller.canGoForward();
+          final title = await _controller.getTitle() ?? '';
+          final canGoBack = await _controller.canGoBack();
+          final canGoForward = await _controller.canGoForward();
           if (!mounted) {
             return;
           }
           setState(() {
-            this.title = title;
-            this.canGoBack = canGoBack;
-            this.canGoForward = canGoForward;
+            _title = title;
+            _canGoBack = canGoBack;
+            _canGoForward = canGoForward;
           });
         },
       ),
     );
     try {
-      await controller.loadRequest(.parse(widget.url));
+      await _controller.loadRequest(.parse(widget.url));
     } on Exception catch (error, stackTrace) {
-      developer.log('', error: error, stackTrace: stackTrace);
+      developer.log(
+        'Failed to load URL in WebView: ${widget.url}',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -75,27 +79,27 @@ class _WebViewPageState extends State<WebViewPage> {
         onPressed: widget.onBackPressed,
         child: const FittedBox(child: Text('Back')),
       ),
-      title: Text(title),
+      title: Text(_title),
       centerTitle: true,
       leadingWidth: 70,
     ),
     body: Column(
       children: [
-        Expanded(child: WebViewWidget(controller: controller)),
+        Expanded(child: WebViewWidget(controller: _controller)),
         SafeArea(
           top: false,
           child: Row(
             children: [
               IconButton(
-                onPressed: canGoBack ? controller.goBack : null,
+                onPressed: _canGoBack ? _controller.goBack : null,
                 icon: const Icon(Icons.navigate_before),
               ),
               IconButton(
-                onPressed: canGoForward ? controller.goForward : null,
+                onPressed: _canGoForward ? _controller.goForward : null,
                 icon: const Icon(Icons.navigate_next),
               ),
               IconButton(
-                onPressed: controller.reload,
+                onPressed: _controller.reload,
                 icon: const Icon(Icons.refresh),
               ),
             ],

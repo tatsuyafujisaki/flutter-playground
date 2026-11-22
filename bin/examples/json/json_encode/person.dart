@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 class const _Person(final String name, final int age) {
   factory fromJson(Map<String, dynamic> json) => switch (json) {
@@ -16,6 +16,6 @@ void main() {
   if (jsonDecode(json) case final Map<String, dynamic> map) {
     final user = _Person.fromJson(map);
     final encoded = jsonEncode(user);
-    developer.log(encoded);
+    stdout.writeln(encoded);
   }
 }

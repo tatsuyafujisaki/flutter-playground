@@ -1,6 +1,6 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 String _trimWhitespace(String s) => s.replaceAll(RegExp(r'\s'), '');
 void main() {
-  developer.log(_trimWhitespace('🍎 🍏　🍊\n🍇')); // 🍎🍏🍊🍇
+  stdout.writeln(_trimWhitespace('🍎 🍏　🍊\n🍇')); // 🍎🍏🍊🍇
 }

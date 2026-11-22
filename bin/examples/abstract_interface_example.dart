@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 /// Constants representing fruit emojis.
 abstract final class Fruit {
@@ -12,6 +12,7 @@ abstract final class Fruit {
 void main() {
   const apple = Fruit.apple; // 🍎
   const orange = Fruit.orange; // 🍊
-  developer.log(apple);
-  developer.log(orange);
+  stdout
+    ..writeln(apple)
+    ..writeln(orange);
 }

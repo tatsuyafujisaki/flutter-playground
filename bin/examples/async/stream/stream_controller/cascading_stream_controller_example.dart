@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 // This example is ...
 //   - impractical and not worth reading for many people.
@@ -23,7 +23,7 @@ class _MyChildClass extends _MyParentClass {
 Future<void> main() async {
   final myChildClass = _MyChildClass();
   final subscription = myChildClass.streamController.stream.listen(
-    (event) => developer.log('onData: $event'),
+    (event) => stdout.writeln('onData: $event'),
   );
 
   try {

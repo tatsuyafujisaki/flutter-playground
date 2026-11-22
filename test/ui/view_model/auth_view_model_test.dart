@@ -8,7 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _FakeUser extends Fake implements User;
 
-class _FakeUserCredential(@override final User? user) extends Fake
+class _FakeUserCredential(@override final User? user)
+    extends Fake
     implements UserCredential;
 
 class _FakeAuthRepository({

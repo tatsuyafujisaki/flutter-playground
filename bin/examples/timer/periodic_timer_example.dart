@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 /// A periodic timer that can be restarted and canceled.
 class PeriodicRestartableTimer(
@@ -31,7 +31,7 @@ class PeriodicRestartableTimer(
 void main() {
   final timer = PeriodicRestartableTimer(
     const Duration(seconds: 1),
-    () => developer.log(DateTime.now().toString()),
+    () => stdout.writeln(DateTime.now().toString()),
   );
 
   Future<void>.delayed(const Duration(seconds: 3), timer.restart);

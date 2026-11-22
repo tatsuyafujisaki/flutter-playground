@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 void main() {
   _sortString();
@@ -7,10 +7,10 @@ void main() {
 
 void _sortString() {
   final list = <String>['c', 'b', 'a']..sort();
-  developer.log(list.toString()); // [a, b, c]
+  stdout.writeln(list.toString()); // [a, b, c]
 }
 
 void _sortStringDescending() {
   final list = <String>['c', 'b', 'a']..sort((a, b) => b.compareTo(a));
-  developer.log(list.toString()); // [c, b, a]
+  stdout.writeln(list.toString()); // [c, b, a]
 }

@@ -1,9 +1,11 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 void main() {
   try {
     throw Exception('💀');
   } on Exception catch (error, stackTrace) {
-    developer.log('An error occurred', error: error, stackTrace: stackTrace);
+    stderr
+      ..writeln('An error occurred: $error')
+      ..writeln(stackTrace);
   }
 }

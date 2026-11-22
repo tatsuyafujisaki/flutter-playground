@@ -1,9 +1,9 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
-void main() async {
-  developer.log('-- Example of "Stream.listen(...)" --');
+Future<void> main() async {
+  stdout.writeln('-- Example of "Stream.listen(...)" --');
   await showListenExample();
-  developer.log('-- Example of "await for" --');
+  stdout.writeln('-- Example of "await for" --');
   await showAwaitForExample();
 }
 
@@ -14,9 +14,9 @@ Stream<String> _createStream() => Stream<String>.periodic(
 
 /// Demonstrates consuming a stream using [Stream.listen].
 Future<void> showListenExample() async {
-  developer.log('👀Starts consuming a stream.');
+  stdout.writeln('👀Starts consuming a stream.');
   final subscription = _createStream().listen(
-    (data) => developer.log('👀$data'),
+    (data) => stdout.writeln('👀$data'),
   );
   // Unlike "await for", listen() does not wait until the stream is done.
   // Without "await subscription.asFuture(...)",
@@ -24,21 +24,21 @@ Future<void> showListenExample() async {
   final result = await subscription.asFuture<String>(
     '👀Finishes consuming a stream.',
   );
-  developer.log(result);
+  stdout.writeln(result);
 
   await subscription.cancel();
 }
 
 /// Demonstrates consuming a stream using an `await for` loop.
 Future<void> showAwaitForExample() async {
-  developer.log('👀Starts consuming a stream.');
+  stdout.writeln('👀Starts consuming a stream.');
   // Unlike listen(), "await for" waits until the stream is done.
   //
   // > When reading events using an await for loop, the loops stops when the
   // > stream is done.
   // https://dart.dev/libraries/async/using-streams#error-events
   await for (final data in _createStream()) {
-    developer.log('👀$data');
+    stdout.writeln('👀$data');
   }
-  developer.log('👀Finishes consuming a stream.');
+  stdout.writeln('👀Finishes consuming a stream.');
 }

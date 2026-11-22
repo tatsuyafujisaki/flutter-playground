@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:flutter_playground/data/utils/date_time_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -27,8 +27,9 @@ void main() {
     age: 42,
   ).copyWith(lastUpdated: .now());
   final map = person.toJson();
-  developer.log(map.toString());
+  stdout.writeln(map.toString());
   final personFromJson = Person.fromJson(map);
-  developer.log(personFromJson.toString());
-  developer.log(jsonEncode(person)); // jsonEncode implicitly calls toJson.
+  stdout
+    ..writeln(personFromJson.toString())
+    ..writeln(jsonEncode(person)); // jsonEncode implicitly calls toJson.
 }

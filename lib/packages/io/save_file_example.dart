@@ -30,7 +30,7 @@ Future<String?> saveTextFileToExternalStorageDirectory(
 }
 
 /// Logs an `adb pull` command to retrieve the file saved at [path].
-void showHowtoPullSavedFile(String path) =>
+void showHowToPullSavedFile(String path) =>
     developer.log('👉 adb pull $path ~/Desktop');
 
 String _getDeviceFileExplorerFriendlyExternalStorageDirectory(

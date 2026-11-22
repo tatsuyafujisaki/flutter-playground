@@ -11,12 +11,12 @@ class const _MyStatefulWidget() extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
-  bool isMenuOpen = false;
+  bool _isMenuOpen = false;
 
   @override
   Widget build(BuildContext context) => MenuAnchor(
-    onOpen: () => setState(() => isMenuOpen = true),
-    onClose: () => setState(() => isMenuOpen = false),
+    onOpen: () => setState(() => _isMenuOpen = true),
+    onClose: () => setState(() => _isMenuOpen = false),
     menuChildren: [
       MenuItemButton(
         onPressed: () => _showDialog('🍎'),
@@ -35,7 +35,7 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
           controller.open();
         }
       },
-      child: child ?? Icon(isMenuOpen ? Icons.menu_open : Icons.menu),
+      child: child ?? Icon(_isMenuOpen ? Icons.menu_open : Icons.menu),
     ),
   );
 

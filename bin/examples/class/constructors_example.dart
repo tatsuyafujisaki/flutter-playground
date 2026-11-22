@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 /// https://dart.dev/language/constructors
 class _MyClass {
@@ -28,13 +28,13 @@ class _MyClass {
 
 void main() {
   final myClass1 = _MyClass('🍣');
-  developer.log(myClass1.toString());
+  stdout.writeln(myClass1.toString());
   final myClass2 = _MyClass.myNamedConstructor1('🍣');
-  developer.log(myClass2.toString());
+  stdout.writeln(myClass2.toString());
   final myClass3 = _MyClass.myNamedConstructor2('🐟', '🍚');
-  developer.log(myClass3.toString());
+  stdout.writeln(myClass3.toString());
   final myClass4 = _MyClass.myRedirectingConstructor1('🍣');
-  developer.log(myClass4.toString());
+  stdout.writeln(myClass4.toString());
   final myClass5 = _MyClass.myRedirectingConstructor2('🐟', '🍚');
-  developer.log(myClass5.toString());
+  stdout.writeln(myClass5.toString());
 }

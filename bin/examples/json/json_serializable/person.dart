@@ -1,10 +1,10 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
 
 part 'person.g.dart';
 
-// Specify "filedname: FieldRename.snake" as follows if you need to input
+// Specify "fieldRename: FieldRename.snake" as follows if you need to input
 // and output JSON whose keys are snake_case.
 // @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @JsonSerializable(explicitToJson: true)
@@ -18,9 +18,10 @@ class const _Person({
 }
 
 void _print(_Person person) {
-  developer.log(person.firstName.toString());
-  developer.log(person.lastName);
-  developer.log(person.toJson().toString());
+  stdout
+    ..writeln(person.firstName.toString())
+    ..writeln(person.lastName)
+    ..writeln(person.toJson().toString());
 }
 
 void main() {

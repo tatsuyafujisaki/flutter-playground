@@ -10,7 +10,7 @@ import 'package:flutter_playground/ui/my_app.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _configureFlavor();
   _setupErrorHandling();

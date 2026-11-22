@@ -69,7 +69,11 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
         'Current location: ${position.latitude}, ${position.longitude}',
       );
     } on Exception catch (error, stackTrace) {
-      developer.log('', error: error, stackTrace: stackTrace);
+      developer.log(
+        'Failed to get current location',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -79,7 +83,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     body: SafeArea(
       child: GoogleMap(
         initialCameraPosition: const CameraPosition(
-          target: LatLng(35.6812, 139.7671), // 東京駅の座標（デフォルト）
+          target: LatLng(35.6812, 139.7671), // Default: Tokyo Station.
           zoom: 14.4746,
         ),
         onMapCreated: _controller.complete,

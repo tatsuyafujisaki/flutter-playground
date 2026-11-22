@@ -8,12 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _FakeUser extends Fake implements User;
 
-class _FakeAuthRepository(final User? currentUser) implements AuthRepository {
-  @override
-  User? get currentUser => _currentUser;
-
-  final User? _currentUser = currentUser;
-
+class _FakeAuthRepository(@override final User? currentUser)
+    implements AuthRepository {
   @override
   Future<UserCredential> signInAnonymously() =>
       throw UnimplementedError('Not expected to sign in.');
@@ -43,28 +39,31 @@ void main() {
       expect(state.statusMessage, 'Please enter a room name.');
     });
 
-    test('reports error when camera or microphone permission is denied', () async {
-      final container = ProviderContainer(
-        overrides: [
-          liveKitPermissionRequesterProvider.overrideWithValue(
-            () async => false,
-          ),
-        ],
-      );
-      addTearDown(container.dispose);
+    test(
+      'reports error when camera or microphone permission is denied',
+      () async {
+        final container = ProviderContainer(
+          overrides: [
+            liveKitPermissionRequesterProvider.overrideWithValue(
+              () async => false,
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
 
-      await container
-          .read(liveKitRoomViewModelProvider.notifier)
-          .joinRoom('test-room');
+        await container
+            .read(liveKitRoomViewModelProvider.notifier)
+            .joinRoom('test-room');
 
-      final state = container.read(liveKitRoomViewModelProvider);
-      expect(state.isJoining, isFalse);
-      expect(state.isJoined, isFalse);
-      expect(
-        state.statusMessage,
-        'Camera and microphone permissions are required to join a call.',
-      );
-    });
+        final state = container.read(liveKitRoomViewModelProvider);
+        expect(state.isJoining, isFalse);
+        expect(state.isJoined, isFalse);
+        expect(
+          state.statusMessage,
+          'Camera and microphone permissions are required to join a call.',
+        );
+      },
+    );
 
     test('formats FirebaseFunctionsException from token fetch', () async {
       final container = ProviderContainer(

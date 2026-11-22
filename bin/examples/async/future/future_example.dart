@@ -1,13 +1,13 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
-void main() async {
+Future<void> main() async {
   final future1 = Future<String>.value('🍎');
   final future2 = Future<String>.error('☠️');
 
   await _printFuture(future1);
-  developer.log('--');
+  stdout.writeln('--');
   await _printFuture(future2);
-  developer.log('--');
+  stdout.writeln('--');
   await _printFuture(future1, deliberatelyThrowErrorInsideThen: true);
 }
 
@@ -21,14 +21,18 @@ Future<void> _printFuture<T>(
           if (deliberatelyThrowErrorInsideThen) {
             throw Exception('This exception originate in `then`.');
           }
-          developer.log('👀then.onValue: $value');
+          stdout.writeln('👀then.onValue: $value');
         },
         onError: (Object error, StackTrace stackTrace) {
-          developer.log('👀then.onError', error: error, stackTrace: stackTrace);
+          stderr
+            ..writeln('👀then.onError: $error')
+            ..writeln(stackTrace);
         },
       )
       .catchError((Object error, StackTrace stackTrace) {
-        developer.log('👀catchError', error: error, stackTrace: stackTrace);
+        stderr
+          ..writeln('👀catchError: $error')
+          ..writeln(stackTrace);
       })
-      .whenComplete(() => developer.log('👀whenComplete'));
+      .whenComplete(() => stdout.writeln('👀whenComplete'));
 }

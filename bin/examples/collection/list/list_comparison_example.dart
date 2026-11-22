@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 
@@ -9,7 +9,8 @@ void main() {
 
   const listEquality = ListEquality<String>();
 
-  developer.log((list1 == list2).toString()); // false
-  developer.log(listEquality.equals(list1, list2).toString()); // true
-  developer.log(listEquality.equals(list1, list3).toString()); // false
+  stdout
+    ..writeln((list1 == list2).toString()) // false
+    ..writeln(listEquality.equals(list1, list2).toString()) // true
+    ..writeln(listEquality.equals(list1, list3).toString()); // false
 }

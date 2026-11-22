@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import '../freezed/person.dart';
 
@@ -8,13 +8,11 @@ Map<String, dynamic> jsonDecodeToMap(String json) {
     if (jsonDecode(json) case final Map<String, dynamic> map) {
       return map;
     }
-    developer.log('Decoded JSON is not an object: $json');
+    stderr.writeln('Decoded JSON is not an object: $json');
   } on FormatException catch (error, stackTrace) {
-    developer.log(
-      'Failed to decode JSON to map',
-      error: error,
-      stackTrace: stackTrace,
-    );
+    stderr
+      ..writeln('Failed to decode JSON to map: $error')
+      ..writeln(stackTrace);
   }
   return <String, dynamic>{};
 }
@@ -44,22 +42,20 @@ List<T> _parseArray<T>(
 };
 
 void _logJsonRootType(String json) {
-  developer.log(jsonDecode(json).runtimeType.toString());
+  stdout.writeln(jsonDecode(json).runtimeType);
 }
 
 void main() {
-  developer.log(jsonDecodeToMap('{"a": 1}').toString());
-  developer.log(minifyJson('{"a": 1, "b": 2}'));
-
-  developer.log(
-    _parseObject('{ "name": "John", "age": 42 }', Person.fromJson).toString(),
-  );
-  developer.log(
-    _parseArray(
-      '[{ "name": "John", "age": 42 }, { "name": "Jane", "age": 18 }]',
-      Person.fromJson,
-    ).toString(),
-  );
+  stdout
+    ..writeln(jsonDecodeToMap('{"a": 1}'))
+    ..writeln(minifyJson('{"a": 1, "b": 2}'))
+    ..writeln(_parseObject('{ "name": "John", "age": 42 }', Person.fromJson))
+    ..writeln(
+      _parseArray(
+        '[{ "name": "John", "age": 42 }, { "name": "Jane", "age": 18 }]',
+        Person.fromJson,
+      ),
+    );
 
   _logJsonRootType('{ "name": "Jane", "age": 18 }'); // _Map<String, dynamic>
 

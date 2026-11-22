@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665157873291",
+    "project_id": "tatsuyafujisaki-poc-dev",
+    "storage_bucket": "tatsuyafujisaki-poc-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665157873291:android:472a426eae68d019eb6e8e",
+        "android_client_info": {
+          "package_name": "com.tatsuyafujisaki.poc.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQfNj7bWeIo9F_IUtdQe2Lk9zC-Is27qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:async/async.dart';
 
@@ -11,8 +11,9 @@ RestartableTimer createAndStartNonPeriodicRestartableTimer([
 void main() {
   final nonPeriodicRestartableTimer = createAndStartNonPeriodicRestartableTimer(
     () {
-      developer.log('The given duration has elapsed.');
-      developer.log(DateTime.now().toString());
+      stdout
+        ..writeln('The given duration has elapsed.')
+        ..writeln(DateTime.now().toString());
     },
   );
 

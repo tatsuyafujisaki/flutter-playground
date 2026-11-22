@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 
@@ -20,10 +20,10 @@ List<_Person> _createPersonList() => <_Person>[
 
 void _sortStringInObject() {
   final list = _createPersonList()..sortBy((person) => person.name);
-  developer.log(list.toString());
+  stdout.writeln(list.toString());
 }
 
 void _sortStringInObjectDescending() {
   final list = _createPersonList()..sort((a, b) => b.name.compareTo(a.name));
-  developer.log(list.toString());
+  stdout.writeln(list.toString());
 }

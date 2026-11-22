@@ -1,11 +1,12 @@
-import 'dart:developer' as developer;
+import 'dart:io';
 
 void main() {
   final xs = List<int>.generate(5, (x) => x);
   final (evens, odds) = xs.partition((x) => x.isEven);
 
-  developer.log(evens.toString()); // [0, 2, 4]
-  developer.log(odds.toString()); // [1, 3]
+  stdout
+    ..writeln(evens.toString()) // [0, 2, 4]
+    ..writeln(odds.toString()); // [1, 3]
 }
 
 extension<T> on Iterable<T> {
