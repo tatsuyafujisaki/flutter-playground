@@ -25,6 +25,14 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _getCurrentLocation());
   }
 
+  @override
+  void dispose() {
+    if (_controller.isCompleted) {
+      unawaited(_controller.future.then((controller) => controller.dispose()));
+    }
+    super.dispose();
+  }
+
   Future<void> _getCurrentLocation() async {
     try {
       final position = await getPosition();

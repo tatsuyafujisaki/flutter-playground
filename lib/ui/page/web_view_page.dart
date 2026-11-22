@@ -75,29 +75,31 @@ class _WebViewPageState extends State<WebViewPage> {
         onPressed: widget.onBackPressed,
         child: const FittedBox(child: Text('Back')),
       ),
-      title: Text(title, style: const TextStyle(color: Colors.black)),
-      backgroundColor: Colors.white,
+      title: Text(title),
       centerTitle: true,
       leadingWidth: 70,
     ),
     body: Column(
-      children: <Widget>[
+      children: [
         Expanded(child: WebViewWidget(controller: controller)),
-        Row(
-          children: <Widget>[
-            IconButton(
-              onPressed: canGoBack ? controller.goBack : null,
-              icon: const Icon(Icons.navigate_before),
-            ),
-            IconButton(
-              onPressed: canGoForward ? controller.goForward : null,
-              icon: const Icon(Icons.navigate_next),
-            ),
-            IconButton(
-              onPressed: controller.reload,
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
+        SafeArea(
+          top: false,
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: canGoBack ? controller.goBack : null,
+                icon: const Icon(Icons.navigate_before),
+              ),
+              IconButton(
+                onPressed: canGoForward ? controller.goForward : null,
+                icon: const Icon(Icons.navigate_next),
+              ),
+              IconButton(
+                onPressed: controller.reload,
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
+          ),
         ),
       ],
     ),

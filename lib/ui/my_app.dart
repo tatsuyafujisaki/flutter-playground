@@ -37,8 +37,9 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final lifecycleState = ref.watch(myAppLifecycleStateProvider);
-    developer.log('🔄${lifecycleState.name}');
+    ref.listen(myAppLifecycleStateProvider, (_, next) {
+      developer.log('🔄${next.name}');
+    });
 
     return MaterialApp(
       navigatorKey: navigatorKey,
