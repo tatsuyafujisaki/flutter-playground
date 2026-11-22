@@ -1,19 +1,12 @@
+import 'package:flutter_playground/data/utils/path_utils.dart';
+import 'package:flutter_playground/ui/example/io/directories.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 /// Creates a timestamp-based file path in [directory] with [extension].
 Future<String> createTemporaryFilePath({
   String directory = '',
   String extension = '',
-}) async {
-  final normalizedExtension = extension.isEmpty || extension.startsWith('.')
-      ? extension
-      : '.$extension';
-  return p.join(
-    directory.isNotEmpty ? directory : (await getTemporaryDirectory()).path,
-    p.setExtension(
-      DateTime.now().microsecondsSinceEpoch.toString(),
-      normalizedExtension,
-    ),
-  );
-}
+}) async => p.join(
+  directory.isNotEmpty ? directory : await temporaryDirectory,
+  replaceExtension(DateTime.now().microsecondsSinceEpoch.toString(), extension),
+);

@@ -26,10 +26,7 @@ class const LiveKitTokenResponse({
 
   /// The Unix timestamp (in seconds) when [token] expires.
   required final int expiresAt,
-}) {
-  /// Creates a [LiveKitTokenResponse].
-  this;
-}
+});
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for
 /// Firebase.

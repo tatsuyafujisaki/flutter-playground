@@ -9,23 +9,19 @@ dependencies:
   cloud_functions: any
   collection: any
   dio: any
-  firebase_ai: any
   firebase_analytics: any
   firebase_auth: any
   firebase_core: any
   firebase_crashlytics: any
   firebase_remote_config: any
-  firebase_ui_firestore: any
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: any
   flutter_slidable: any
-  flutter_svg: any
   freezed_annotation: any
   geolocator: any
-  glob: any
   google_maps_flutter: any
   google_maps_flutter_ios_sdk10: any
   image_picker: any
@@ -39,7 +35,6 @@ dependencies:
   permission_handler: any
   pub_semver: any
   riverpod_annotation: any
-  shared_preferences: any
   url_launcher: any
   video_player: any
   webview_flutter: any

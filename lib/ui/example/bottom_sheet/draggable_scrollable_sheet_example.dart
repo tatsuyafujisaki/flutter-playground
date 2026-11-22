@@ -11,21 +11,15 @@ class const _MyStatelessWidget() extends StatelessWidget {
     initialChildSize: 0.7,
     builder: (context, scrollController) => ColoredBox(
       color: Colors.cyan,
-      child: Column(
-        children: [
-          Flexible(
-            child: ListView.builder(
-              controller: scrollController,
-              itemCount: 25,
-              itemBuilder: (context, index) => ListTile(
-                title: Text(
-                  'Item $index',
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+      child: ListView.builder(
+        controller: scrollController,
+        itemCount: 25,
+        itemBuilder: (context, index) => ListTile(
+          title: Text(
+            'Item $index',
+            style: const TextStyle(color: Colors.white),
           ),
-        ],
+        ),
       ),
     ),
   );

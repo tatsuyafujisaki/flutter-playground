@@ -29,11 +29,8 @@ Future<void> _showUpgradeDialog(NavigatorState navigatorState, Uri storeUri) =>
             content: Text(l10n.forceUpdateDialogBody),
             actions: [
               TextButton(
-                onPressed: () async {
-                  if (await canLaunchUrl(storeUri)) {
-                    await launchUrl(storeUri, mode: .externalApplication);
-                  }
-                },
+                onPressed: () =>
+                    launchUrl(storeUri, mode: .externalApplication),
                 child: Text(l10n.forceUpdateDialogUpdateButton),
               ),
             ],

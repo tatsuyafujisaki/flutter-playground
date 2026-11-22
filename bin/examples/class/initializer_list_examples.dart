@@ -2,6 +2,8 @@ import 'dart:io';
 
 class const _Person({
   required final String firstName,
+  // Omitting `final` makes `middleName` an initializer-only parameter rather
+  // than an instance field.
   required String middleName,
   required final String lastName,
 }) {

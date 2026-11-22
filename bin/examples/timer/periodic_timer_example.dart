@@ -4,10 +4,10 @@ import 'dart:io';
 /// A periodic timer that can be restarted and canceled.
 class PeriodicRestartableTimer(
   /// The interval between timer ticks.
-  var Duration duration,
+  final Duration duration,
 
   /// The callback invoked on each timer tick.
-  var void Function()? callback,
+  final void Function()? callback,
 ) {
   /// Creates and starts a [PeriodicRestartableTimer].
   this {
