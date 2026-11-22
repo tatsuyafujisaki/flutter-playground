@@ -4,14 +4,27 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a non-void [FutureBuilder] example.
 @Preview()
-Widget preview() => const _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
+class _MyStatefulWidget extends StatefulWidget {
   const new();
 
   @override
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  late final Future<String> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = Future<String>.delayed(const Duration(seconds: 5), () => '🍎');
+  }
+
+  @override
   Widget build(BuildContext context) => createNonVoidFutureBuilder<String>(
-    future: Future<String>.delayed(const Duration(seconds: 5), () => '🍎'),
+    future: _future,
     onData: (data) => Center(child: Text(data)),
   );
 }

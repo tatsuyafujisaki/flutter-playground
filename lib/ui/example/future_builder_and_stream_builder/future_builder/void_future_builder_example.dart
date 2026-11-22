@@ -4,12 +4,23 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a void [FutureBuilder] example.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
-  new();
+class _MyStatefulWidget extends StatefulWidget {
+  const new();
 
-  final _future = Future<void>.delayed(const Duration(seconds: 5), () {});
+  @override
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  late final Future<void> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = Future<void>.delayed(const Duration(seconds: 5), () {});
+  }
 
   @override
   Widget build(BuildContext context) => createVoidFutureBuilder(

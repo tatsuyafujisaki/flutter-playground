@@ -40,9 +40,9 @@ ListView _slidableListView<T, K>({
   required void Function(T item) onPressed,
 }) => ListView(
   children: [
-    for (final (index, item) in list.indexed)
-      _slidable<int>(
-        key: index,
+    for (final item in list)
+      _slidable<K>(
+        key: getKey(item),
         text: getString(item),
         onPressed: (context) {
           onPressed(item);

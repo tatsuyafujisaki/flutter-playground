@@ -10,10 +10,16 @@ class GeolocatorWrapper {
   /// Returns the singleton [GeolocatorWrapper] instance.
   factory() => _instance;
   new _internal() {
-    _controller = StreamController();
+    _controller = StreamController<Position>(
+      onCancel: () async {
+        await _subscription?.cancel();
+        _subscription = null;
+      },
+    );
   }
   static final _instance = GeolocatorWrapper._internal();
   late final StreamController<Position> _controller;
+  StreamSubscription<Position>? _subscription;
 
   LocationSettings get _locationSettings {
     if (kIsWeb) {
@@ -60,11 +66,12 @@ class GeolocatorWrapper {
 
   /// A stream of device [Position] updates.
   Future<Stream<Position>?> get positionStream async {
-    if (!_controller.hasListener && await _isAllowed) {
-      await _controller.addStream(
-        Geolocator.getPositionStream(locationSettings: _locationSettings),
-      );
+    if (!await _isAllowed) {
+      return null;
     }
+    _subscription ??= Geolocator.getPositionStream(
+      locationSettings: _locationSettings,
+    ).listen(_controller.add, onError: _controller.addError);
     return _controller.stream;
   }
 
@@ -72,7 +79,7 @@ class GeolocatorWrapper {
   void demoOneShot() {
     Future<void>.delayed(
       .zero,
-      () => developer.log(currentPosition.toString()),
+      () async => developer.log((await currentPosition).toString()),
     );
   }
 

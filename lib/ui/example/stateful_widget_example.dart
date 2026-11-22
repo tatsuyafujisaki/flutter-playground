@@ -25,6 +25,12 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   }
 
   @override
+  void dispose() {
+    albumViewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => MaterialApp(
     home: Scaffold(
       body: ListenableBuilder(

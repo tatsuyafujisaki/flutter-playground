@@ -7,18 +7,29 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews an [Image.memory] widget displaying downloaded binary image bytes.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
-  new();
+class _MyStatefulWidget extends StatefulWidget {
+  const new();
 
-  final Future<Uint8List> imageBytes = downloadBinaryFile(
-    'https://media1.tenor.com/m/NVP2kRD7CHsAAAAC',
-  );
+  @override
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  late final Future<Uint8List> _imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageBytes = downloadBinaryFile(
+      'https://media1.tenor.com/m/NVP2kRD7CHsAAAAC',
+    );
+  }
 
   @override
   Widget build(BuildContext context) => FutureBuilder<Uint8List>(
-    future: imageBytes,
+    future: _imageBytes,
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         return Image.memory(snapshot.data!);

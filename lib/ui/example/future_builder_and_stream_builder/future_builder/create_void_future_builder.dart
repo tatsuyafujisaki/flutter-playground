@@ -11,13 +11,13 @@ FutureBuilder<void> createVoidFutureBuilder({
 }) => FutureBuilder<void>(
   future: future,
   builder: (context, snapshot) {
-    if (snapshot.connectionState == .done) {
-      return onData();
-    }
     if (snapshot.hasError) {
       developer.log(snapshot.error.toString());
       developer.log(snapshot.stackTrace.toString());
       return onError?.call() ?? const Center(child: Icon(Icons.error));
+    }
+    if (snapshot.connectionState == .done) {
+      return onData();
     }
     return onElse?.call() ?? const Center(child: CircularProgressIndicator());
   },

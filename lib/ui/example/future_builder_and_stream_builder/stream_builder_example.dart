@@ -5,20 +5,31 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a [StreamBuilder] displaying periodic counter events.
 @Preview()
-Widget preview() => _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
-  new();
+class _MyStatefulWidget extends StatefulWidget {
+  const new();
 
-  final countStream = Stream<String>.periodic(
-    const Duration(seconds: 1),
-    (count) => '$count!',
-  );
+  @override
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  late final Stream<String> _countStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _countStream = Stream<String>.periodic(
+      const Duration(seconds: 1),
+      (count) => '$count!',
+    );
+  }
 
   @override
   Widget build(BuildContext context) => Center(
     child: StreamBuilder<String>(
-      stream: countStream,
+      stream: _countStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data!);

@@ -3,39 +3,48 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews [Tooltip] widgets displayed programmatically.
 @Preview()
-Widget preview() => const _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
+class _MyStatefulWidget extends StatefulWidget {
   const new();
 
   @override
-  Widget build(BuildContext context) {
-    final key = GlobalKey<TooltipState>();
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => key.currentState?.ensureTooltipVisible(),
-    );
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  final _firstTooltipKey = GlobalKey<TooltipState>();
+  final _secondTooltipKey = GlobalKey<TooltipState>();
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: .center,
-        children: [
-          Tooltip(
-            key: key,
-            message: 'Tooltip!',
-            decoration: const BoxDecoration(color: Colors.white),
-            textStyle: const TextStyle(color: Colors.black),
-            child: const FlutterLogo(),
-          ),
-          Tooltip(
-            key: key,
-            message: 'Tooltip!',
-            decoration: const BoxDecoration(color: Colors.white),
-            textStyle: const TextStyle(color: Colors.black),
-            child: const FlutterLogo(),
-          ),
-        ],
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _firstTooltipKey.currentState?.ensureTooltipVisible();
+      _secondTooltipKey.currentState?.ensureTooltipVisible();
+    });
   }
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Column(
+      mainAxisAlignment: .center,
+      children: [
+        Tooltip(
+          key: _firstTooltipKey,
+          message: 'Tooltip!',
+          decoration: const BoxDecoration(color: Colors.white),
+          textStyle: const TextStyle(color: Colors.black),
+          child: const FlutterLogo(),
+        ),
+        Tooltip(
+          key: _secondTooltipKey,
+          message: 'Tooltip!',
+          decoration: const BoxDecoration(color: Colors.white),
+          textStyle: const TextStyle(color: Colors.black),
+          child: const FlutterLogo(),
+        ),
+      ],
+    ),
+  );
 }
