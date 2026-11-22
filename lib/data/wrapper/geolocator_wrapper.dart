@@ -1,21 +1,22 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-/// Singleton wrapper around [Geolocator] for location permissions and updates.
-class GeolocatorWrapper._internal() {
-  /// Returns the singleton [GeolocatorWrapper] instance.
-  factory() => _instance;
-  static final _instance = GeolocatorWrapper._internal();
-  late final _controller = StreamController<Position>(
-    onCancel: () async {
-      await _subscription?.cancel();
-      _subscription = null;
-    },
-  );
+part 'geolocator_wrapper.g.dart';
+
+/// Provides the singleton [GeolocatorWrapper] instance.
+@Riverpod(keepAlive: true)
+GeolocatorWrapper geolocatorWrapper(Ref ref) {
+  final wrapper = GeolocatorWrapper();
+  ref.onDispose(() => unawaited(wrapper.dispose()));
+  return wrapper;
+}
+
+/// Wrapper around [Geolocator] for location permissions and updates.
+class GeolocatorWrapper {
+  StreamController<Position>? _controller;
   StreamSubscription<Position>? _subscription;
 
   LocationSettings get _locationSettings {
@@ -66,29 +67,23 @@ class GeolocatorWrapper._internal() {
     if (!await _isAllowed) {
       return null;
     }
+    final controller = _controller ??= StreamController<Position>.broadcast(
+      onCancel: () {
+        unawaited(_subscription?.cancel());
+        _subscription = null;
+      },
+    );
     _subscription ??= Geolocator.getPositionStream(
       locationSettings: _locationSettings,
-    ).listen(_controller.add, onError: _controller.addError);
-    return _controller.stream;
+    ).listen(controller.add, onError: controller.addError);
+    return controller.stream;
   }
 
-  /// Logs the current device position once for demonstration.
-  void demoOneShot() {
-    Future<void>.delayed(
-      .zero,
-      () async => developer.log((await currentPosition).toString()),
-    );
-  }
-
-  /// Subscribes to [positionStream] and logs each update for demonstration.
-  void demoListen() {
-    Future<void>.delayed(
-      .zero,
-      () async => (await GeolocatorWrapper().positionStream)?.listen(
-        (position) => developer.log(
-          '$position, Time: ${DateFormat.Hms().format(.now())}',
-        ),
-      ),
-    );
+  /// Cancels any active location subscription and closes the stream controller.
+  Future<void> dispose() async {
+    await _subscription?.cancel();
+    _subscription = null;
+    await _controller?.close();
+    _controller = null;
   }
 }

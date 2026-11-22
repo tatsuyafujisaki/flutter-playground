@@ -7,11 +7,17 @@ import 'package:material_ui/material_ui.dart';
 /// Previews a template widget that logs post-frame, microtask, and delayed
 /// callbacks.
 @Preview()
-Widget preview() => const _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class const _MyStatelessWidget() extends StatelessWidget {
+class const _MyStatefulWidget() extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+  @override
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       developer.log('🍎');
     });
@@ -25,6 +31,8 @@ class const _MyStatelessWidget() extends StatelessWidget {
         developer.log('🍇');
       }),
     );
-    return const FlutterLogo();
   }
+
+  @override
+  Widget build(BuildContext context) => const FlutterLogo();
 }
