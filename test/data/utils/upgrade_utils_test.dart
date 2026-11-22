@@ -6,7 +6,7 @@ void main() {
   group('tryParseVersion', () {
     test('parses valid semantic versions', () {
       expect(tryParseVersion('1.2.3'), Version(1, 2, 3));
-      expect(tryParseVersion('2.0.0-beta.1'), Version.parse('2.0.0-beta.1'));
+      expect(tryParseVersion('2.0.0-beta.1'), Version(2, 0, 0, pre: 'beta.1'));
     });
 
     test('returns null for empty or invalid version strings', () {
