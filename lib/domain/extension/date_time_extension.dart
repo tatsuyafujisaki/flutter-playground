@@ -1,5 +1,3 @@
-import 'package:material_ui/material_ui.dart';
-
 /// Convenience comparison and date helpers for [DateTime].
 extension DateTimeExtension on DateTime {
   /// Returns whether this [DateTime] is before or equal to [other].
@@ -12,5 +10,5 @@ extension DateTimeExtension on DateTime {
   DateTime get dateOnly => DateTime(year, month, day);
 
   /// Whether this [DateTime] falls on the current calendar day.
-  bool get isToday => DateUtils.isSameDay(this, .now());
+  bool get isToday => dateOnly == DateTime.now().dateOnly;
 }

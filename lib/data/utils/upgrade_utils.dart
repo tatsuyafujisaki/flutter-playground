@@ -2,16 +2,12 @@ import 'dart:developer' as developer;
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_playground/ui/extension/build_context_extension.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-/// Checks if a force update is required and shows a dialog if it is.
-Future<void> showForceUpdateDialogIfNeeded(
-  NavigatorState navigatorState,
-) async {
+/// Checks Firebase Remote Config and returns the platform store [Uri] if a
+/// force update is required, or `null` otherwise.
+Future<Uri?> getForceUpdateStoreUri() async {
   try {
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(
@@ -24,18 +20,22 @@ Future<void> showForceUpdateDialogIfNeeded(
     await remoteConfig.fetchAndActivate();
 
     final minVersion = remoteConfig.getString('min_version').trim();
-    if (minVersion.isEmpty || !await _shouldForceUpdate(minVersion)) {
-      return;
+    if (minVersion.isEmpty) {
+      return null;
     }
 
-    final storeUrl = await _storeUrl;
-    if (storeUrl == null || !navigatorState.mounted) {
-      return;
+    final packageInfo = await PackageInfo.fromPlatform();
+    if (!_shouldForceUpdate(
+      currentVersionString: packageInfo.version,
+      minVersionString: minVersion,
+    )) {
+      return null;
     }
 
-    await _showUpgradeDialog(navigatorState, storeUrl);
+    return _storeUri(packageInfo.packageName);
   } on Exception catch (error, stackTrace) {
     developer.log('', error: error, stackTrace: stackTrace);
+    return null;
   }
 }
 
@@ -52,56 +52,25 @@ Version? tryParse(String version) {
   }
 }
 
-Future<bool> _shouldForceUpdate(String minVersionString) async {
-  final packageInfo = await PackageInfo.fromPlatform();
-  final currentVersion = tryParse(packageInfo.version) ?? .none;
+bool _shouldForceUpdate({
+  required String currentVersionString,
+  required String minVersionString,
+}) {
+  final currentVersion = tryParse(currentVersionString) ?? .none;
   final minVersion = tryParse(minVersionString) ?? .none;
   return currentVersion < minVersion;
 }
 
-Future<String?> get _storeUrl async {
+Uri? _storeUri(String packageName) {
   if (kIsWeb) {
     return null;
   }
-  switch (defaultTargetPlatform) {
-    case .iOS:
-      // Replace with your actual App Store ID
-      const appStoreId = '544007664';
-      return 'https://apps.apple.com/app/id$appStoreId';
-    case .android:
-      final packageInfo = await PackageInfo.fromPlatform();
-      final packageName = packageInfo.packageName;
-      return 'https://play.google.com/store/apps/details?id=$packageName';
-    case .fuchsia || .linux || .macOS || .windows:
-      return null;
-  }
+  return switch (defaultTargetPlatform) {
+    // Replace with your actual App Store ID.
+    .iOS => Uri.parse('https://apps.apple.com/app/id544007664'),
+    .android => Uri.parse(
+      'https://play.google.com/store/apps/details?id=$packageName',
+    ),
+    .fuchsia || .linux || .macOS || .windows => null,
+  };
 }
-
-Future<void> _showUpgradeDialog(
-  NavigatorState navigatorState,
-  String storeUrl,
-) => showDialog<void>(
-  context: navigatorState.context,
-  barrierDismissible: false,
-  builder: (context) {
-    final l10n = context.l10n;
-    return PopScope(
-      canPop: false,
-      child: AlertDialog(
-        title: Text(l10n.forceUpdateDialogTitle),
-        content: Text(l10n.forceUpdateDialogBody),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              final uri = Uri.parse(storeUrl);
-              if (await canLaunchUrl(uri)) {
-                await launchUrl(uri, mode: .externalApplication);
-              }
-            },
-            child: Text(l10n.forceUpdateDialogUpdateButton),
-          ),
-        ],
-      ),
-    );
-  },
-);

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter_playground/data/utils/upgrade_utils.dart';
 import 'package:flutter_playground/l10n/app_localizations.dart';
 import 'package:flutter_playground/ui/page/home_page.dart';
 import 'package:flutter_playground/ui/provider/my_app_lifecycle_state.dart';
+import 'package:flutter_playground/ui/utils/force_update_dialog.dart';
 import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
