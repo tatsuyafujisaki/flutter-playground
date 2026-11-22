@@ -1,12 +1,10 @@
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/ui/example/future_builder_and_stream_builder/future_builder/create_void_future_builder.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() => runApp(
-  ProviderScope(
-    child: MaterialApp(home: Scaffold(body: _MyStatelessWidget())),
-  ),
-);
+/// Previews a void [FutureBuilder] example.
+@Preview()
+Widget preview() => _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
   new();

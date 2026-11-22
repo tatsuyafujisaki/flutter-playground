@@ -1,12 +1,10 @@
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_playground/ui/example/future_builder_and_stream_builder/future_builder/create_non_void_future_builder.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() => runApp(
-  const ProviderScope(
-    child: MaterialApp(home: Scaffold(body: _MyStatelessWidget())),
-  ),
-);
+/// Previews a non-void [FutureBuilder] example.
+@Preview()
+Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
   const new();

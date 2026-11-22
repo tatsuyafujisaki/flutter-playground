@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() => runApp(
-  const ProviderScope(
-    child: MaterialApp(
-      home: SafeArea(child: Scaffold(body: _MyStatelessWidget())),
-    ),
-  ),
-);
+/// Previews a template widget that logs post-frame, microtask, and delayed
+/// callbacks.
+@Preview()
+Widget preview() => const _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
   const new();

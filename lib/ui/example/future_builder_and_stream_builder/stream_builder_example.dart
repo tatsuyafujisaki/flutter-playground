@@ -1,13 +1,11 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
-void main() => runApp(
-  ProviderScope(
-    child: MaterialApp(home: Scaffold(body: _MyStatelessWidget())),
-  ),
-);
+/// Previews a [StreamBuilder] displaying periodic counter events.
+@Preview()
+Widget preview() => _MyStatelessWidget();
 
 class _MyStatelessWidget extends StatelessWidget {
   new();
