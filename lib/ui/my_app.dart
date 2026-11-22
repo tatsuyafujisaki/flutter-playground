@@ -32,7 +32,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         await showForceUpdateDialogIfNeeded(navigatorState);
       }
     });
-    unawaited(ref.read(authViewModelProvider.notifier).signInAnonymously());
+    ref.read(authViewModelProvider.notifier).signInAnonymously().ignore();
   }
 
   @override
