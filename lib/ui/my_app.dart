@@ -29,12 +29,15 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
       final navigatorState = _navigatorKey.currentState;
       if (navigatorState != null) {
         unawaited(showForceUpdateDialogIfNeeded(navigatorState));
       }
+      ref.read(authViewModelProvider.notifier).signInAnonymously().ignore();
     });
-    ref.read(authViewModelProvider.notifier).signInAnonymously().ignore();
   }
 
   @override
