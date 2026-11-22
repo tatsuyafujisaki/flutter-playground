@@ -28,4 +28,17 @@ jobs:
       - run: fvm dart run build_runner build --delete-conflicting-outputs
       - run: fvm dart format --output none --set-exit-if-changed .
       - run: fvm flutter analyze --fatal-infos
-      - run: test ! -d test || fvm flutter test
+      - run: fvm flutter test
+  functions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: functions
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: functions/package.json
+      - run: npm install --no-package-lock
+      - run: npx tsc --noEmit
