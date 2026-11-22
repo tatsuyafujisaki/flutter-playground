@@ -2,20 +2,19 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:flutter_playground/data/utils/geolocator_utils.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A page that displays Google Maps with the user's location.
-class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
+class const GoogleMapsPage({super.key}) extends StatefulWidget {
   /// Creates a [GoogleMapsPage].
   this;
 
   @override
-  ConsumerState<GoogleMapsPage> createState() => _GoogleMapsPageState();
+  State<GoogleMapsPage> createState() => _GoogleMapsPageState();
 }
 
-class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
+class _GoogleMapsPageState extends State<GoogleMapsPage> {
   final _controller = Completer<GoogleMapController>();
 
   final Set<Marker> _markers = {};

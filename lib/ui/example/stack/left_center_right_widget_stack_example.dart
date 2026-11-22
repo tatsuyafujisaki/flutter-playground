@@ -9,25 +9,23 @@ class _MyStatelessWidget extends StatelessWidget {
   const new();
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    home: Column(
-      mainAxisAlignment: .center,
-      children: <Widget>[
-        _leftCenterRightWidgetStack(
-          leftWidget: const FlutterLogo(),
-          centerWidget: const FlutterLogo(),
-        ),
-        _leftCenterRightWidgetStack(
-          centerWidget: const FlutterLogo(),
-          rightWidget: const FlutterLogo(),
-        ),
-        _leftCenterRightWidgetStack(
-          leftWidget: const FlutterLogo(),
-          centerWidget: const FlutterLogo(),
-          rightWidget: const FlutterLogo(),
-        ),
-      ],
-    ),
+  Widget build(BuildContext context) => Column(
+    mainAxisAlignment: .center,
+    children: <Widget>[
+      _leftCenterRightWidgetStack(
+        leftWidget: const FlutterLogo(),
+        centerWidget: const FlutterLogo(),
+      ),
+      _leftCenterRightWidgetStack(
+        centerWidget: const FlutterLogo(),
+        rightWidget: const FlutterLogo(),
+      ),
+      _leftCenterRightWidgetStack(
+        leftWidget: const FlutterLogo(),
+        centerWidget: const FlutterLogo(),
+        rightWidget: const FlutterLogo(),
+      ),
+    ],
   );
 }
 

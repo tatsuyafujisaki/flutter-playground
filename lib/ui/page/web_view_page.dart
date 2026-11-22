@@ -27,7 +27,6 @@ class _WebViewPageState extends State<WebViewPage> {
   late final WebViewController controller;
   final WebViewCookieManager cookieManager = .new();
   String title = '';
-  int loadingPercentage = 0;
   bool canGoBack = false;
   bool canGoForward = false;
 
@@ -47,18 +46,6 @@ class _WebViewPageState extends State<WebViewPage> {
     await controller.setBackgroundColor(Colors.transparent);
     await controller.setNavigationDelegate(
       NavigationDelegate(
-        onPageStarted: (_) {
-          if (!mounted) {
-            return;
-          }
-          setState(() => loadingPercentage = 0);
-        },
-        onProgress: (progress) {
-          if (!mounted) {
-            return;
-          }
-          setState(() => loadingPercentage = progress);
-        },
         onPageFinished: (_) async {
           final title = await controller.getTitle() ?? '';
           final canGoBack = await controller.canGoBack();
@@ -70,7 +57,6 @@ class _WebViewPageState extends State<WebViewPage> {
             this.title = title;
             this.canGoBack = canGoBack;
             this.canGoForward = canGoForward;
-            loadingPercentage = 100;
           });
         },
       ),
@@ -85,11 +71,9 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      leading: Builder(
-        builder: (context) => TextButton(
-          onPressed: widget.onBackPressed,
-          child: const FittedBox(child: Text('Back')),
-        ),
+      leading: TextButton(
+        onPressed: widget.onBackPressed,
+        child: const FittedBox(child: Text('Back')),
       ),
       title: Text(title, style: const TextStyle(color: Colors.black)),
       backgroundColor: Colors.white,
@@ -100,23 +84,18 @@ class _WebViewPageState extends State<WebViewPage> {
       children: <Widget>[
         Expanded(child: WebViewWidget(controller: controller)),
         Row(
-          mainAxisAlignment: .spaceBetween,
-          children: [
-            Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: canGoBack ? controller.goBack : null,
-                  icon: const Icon(Icons.navigate_before),
-                ),
-                IconButton(
-                  onPressed: canGoForward ? controller.goForward : null,
-                  icon: const Icon(Icons.navigate_next),
-                ),
-                IconButton(
-                  onPressed: controller.reload,
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
+          children: <Widget>[
+            IconButton(
+              onPressed: canGoBack ? controller.goBack : null,
+              icon: const Icon(Icons.navigate_before),
+            ),
+            IconButton(
+              onPressed: canGoForward ? controller.goForward : null,
+              icon: const Icon(Icons.navigate_next),
+            ),
+            IconButton(
+              onPressed: controller.reload,
+              icon: const Icon(Icons.refresh),
             ),
           ],
         ),

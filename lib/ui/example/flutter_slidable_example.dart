@@ -17,12 +17,11 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   final List<_MyData> _list = List<_MyData>.generate(
     20,
     (index) => _MyData(id: index, text: index.toString()),
-  ).toList();
+  );
 
   @override
   Widget build(BuildContext context) => Scaffold(
     body: _slidableListView<_MyData, int>(
-      context: context,
       list: _list,
       getKey: (item) => item.id,
       getString: (item) => item.text,
@@ -33,7 +32,6 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
 }
 
 ListView _slidableListView<T, K>({
-  required BuildContext context,
   required List<T> list,
   required K Function(T item) getKey,
   required String Function(T item) getString,
