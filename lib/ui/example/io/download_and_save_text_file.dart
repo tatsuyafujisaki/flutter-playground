@@ -13,10 +13,11 @@ Widget preview() => ExternalStorageActionPreview(
   idleLabel: 'Download & Save Text File',
   runningLabel: 'Downloading...',
   failureMessage: 'Failed to download and save text file',
-  onSave: () => _downloadAndSaveTextFile(_sampleUrl),
+  onSave: () => downloadAndSaveTextFile(_sampleUrl),
 );
 
-Future<String?> _downloadAndSaveTextFile(String url) async {
+/// Downloads text content from [url] and saves it to external storage.
+Future<String?> downloadAndSaveTextFile(String url) async {
   final uri = Uri.parse(url);
   final contents = await downloadTextFile(uri);
   return await saveTextFileToExternalStorageDirectory(

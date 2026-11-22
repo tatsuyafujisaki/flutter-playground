@@ -21,9 +21,10 @@ StreamBuilder<T> createStreamBuilder<T extends Object>({
           error: error,
           stackTrace: stackTrace,
         );
-        return onError?.call() ?? const Icon(Icons.error);
+        return onError?.call() ?? const Center(child: Icon(Icons.error));
       case AsyncSnapshot():
-        return onElse?.call() ?? const CircularProgressIndicator();
+        return onElse?.call() ??
+            const Center(child: CircularProgressIndicator());
     }
   },
 );

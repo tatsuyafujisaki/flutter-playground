@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_playground/data/model/livekit_token_response.dart';
 import 'package:flutter_playground/data/repository/auth_repository.dart';
 import 'package:flutter_playground/data/repository/livekit_token_repository.dart';
 import 'package:flutter_playground/ui/view_model/livekit_room_view_model.dart';

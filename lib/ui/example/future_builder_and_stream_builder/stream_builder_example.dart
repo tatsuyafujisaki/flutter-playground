@@ -18,7 +18,8 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   );
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: createStreamBuilder<String>(stream: _countStream, onData: Text.new),
+  Widget build(BuildContext context) => createStreamBuilder<String>(
+    stream: _countStream,
+    onData: (data) => Center(child: Text(data)),
   );
 }
