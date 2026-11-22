@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a [MenuAnchor] with selectable menu items.
-@Preview()
+@Preview(group: 'Widgets', name: 'MenuAnchor')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

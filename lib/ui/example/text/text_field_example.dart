@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews [TextField] widgets with different border configurations.
-@Preview()
+@Preview(group: 'Text', name: 'TextField Borders')
 Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {

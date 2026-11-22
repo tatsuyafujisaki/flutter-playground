@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a [DraggableScrollableSheet] example.
-@Preview()
+@Preview(group: 'Bottom Sheet', name: 'Draggable Scrollable Sheet')
 Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {

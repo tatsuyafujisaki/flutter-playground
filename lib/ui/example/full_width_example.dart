@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews full-width [Text] layout examples.
-@Preview()
+@Preview(group: 'Layout', name: 'Full-Width Text')
 Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {

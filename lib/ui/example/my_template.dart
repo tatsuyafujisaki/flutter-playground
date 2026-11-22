@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a template widget that logs post-frame, microtask, and delayed
 /// callbacks.
-@Preview()
+@Preview(group: 'Widgets', name: 'Lifecycle Callback Template')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

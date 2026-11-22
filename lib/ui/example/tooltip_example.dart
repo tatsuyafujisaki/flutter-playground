@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews [Tooltip] widgets displayed programmatically.
-@Preview()
+@Preview(group: 'Widgets', name: 'Programmatic Tooltip')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews recommended [Text] overflow and line-clamping configurations.
-@Preview()
+@Preview(group: 'Text', name: 'Text Best Practices')
 Widget preview() => const _MyStatelessWidget();
 
 /// Note of the Text widget:

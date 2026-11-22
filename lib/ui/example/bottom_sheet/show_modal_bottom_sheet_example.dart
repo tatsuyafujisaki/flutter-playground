@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a full-height modal bottom sheet using [showModalBottomSheet].
-@Preview()
+@Preview(group: 'Bottom Sheet', name: 'Full-Height Modal Bottom Sheet')
 Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {

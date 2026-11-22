@@ -3,7 +3,7 @@ import 'package:flutter_playground/ui/example/future_builder_and_stream_builder/
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a void [FutureBuilder] example.
-@Preview()
+@Preview(group: 'Async', name: 'Void FutureBuilder')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a [StreamBuilder] displaying periodic counter events.
-@Preview()
+@Preview(group: 'Async', name: 'StreamBuilder')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

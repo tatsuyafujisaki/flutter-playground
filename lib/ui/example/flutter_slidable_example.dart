@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a [Slidable] list example with swipe-to-delete actions.
-@Preview()
+@Preview(group: 'Widgets', name: 'Slidable List')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

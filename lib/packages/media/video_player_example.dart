@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:video_player/video_player.dart';
 
 /// Previews a [VideoPlayer] widget with play and pause controls.
-@Preview()
+@Preview(group: 'Packages', name: 'Video Player')
 Widget preview() => const _MyStatefulWidget();
 
 class const _MyStatefulWidget() extends StatefulWidget {

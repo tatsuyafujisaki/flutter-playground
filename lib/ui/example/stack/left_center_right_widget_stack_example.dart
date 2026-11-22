@@ -2,7 +2,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews widgets aligned to the left, center, and right in a [Stack].
-@Preview()
+@Preview(group: 'Layout', name: 'Left-Center-Right Stack')
 Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {
