@@ -13,7 +13,7 @@ Future<Uri?> getForceUpdateStoreUri() async {
     await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: .zero,
+        minimumFetchInterval: kDebugMode ? .zero : const Duration(hours: 12),
       ),
     );
     await remoteConfig.setDefaults(const {'min_version': '0.0.0'});
@@ -56,8 +56,11 @@ bool _shouldForceUpdate({
   required String currentVersionString,
   required String minVersionString,
 }) {
-  final currentVersion = tryParse(currentVersionString) ?? .none;
-  final minVersion = tryParse(minVersionString) ?? .none;
+  final currentVersion = tryParse(currentVersionString);
+  final minVersion = tryParse(minVersionString);
+  if (currentVersion == null || minVersion == null) {
+    return false;
+  }
   return currentVersion < minVersion;
 }
 

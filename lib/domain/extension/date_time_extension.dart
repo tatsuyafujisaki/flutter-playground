@@ -6,9 +6,11 @@ extension DateTimeExtension on DateTime {
   /// Returns whether this [DateTime] is after or equal to [other].
   bool isAfterOrEqualTo(DateTime other) => !isBefore(other);
 
-  /// A [DateTime] with the same year, month, and day at midnight.
-  DateTime get dateOnly => DateTime(year, month, day);
+  /// A [DateTime] with the same year, month, and day at midnight, preserving
+  /// whether this [DateTime] is in UTC or local time.
+  DateTime get dateOnly =>
+      isUtc ? DateTime.utc(year, month, day) : DateTime(year, month, day);
 
-  /// Whether this [DateTime] falls on the current calendar day.
-  bool get isToday => dateOnly == DateTime.now().dateOnly;
+  /// Whether this [DateTime] falls on the current local calendar day.
+  bool get isToday => toLocal().dateOnly == DateTime.now().dateOnly;
 }

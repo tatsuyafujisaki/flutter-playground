@@ -2,8 +2,8 @@ import 'dart:developer' as developer;
 
 import 'package:material_ui/material_ui.dart';
 
-/// Creates a [FutureBuilder] for a non-void [future] with fallback widgets.
-FutureBuilder<T> createNonVoidFutureBuilder<T>({
+/// Creates a [FutureBuilder] for a non-nullable [future] with fallback widgets.
+FutureBuilder<T> createNonVoidFutureBuilder<T extends Object>({
   required Widget Function(T) onData,
   Future<T>? future,
   Widget Function()? onError,

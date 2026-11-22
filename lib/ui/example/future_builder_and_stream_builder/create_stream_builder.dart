@@ -2,8 +2,9 @@ import 'dart:developer' as developer;
 
 import 'package:material_ui/material_ui.dart';
 
-/// Creates a [StreamBuilder] that handles data, error, and loading states.
-StreamBuilder<T> createStreamBuilder<T>({
+/// Creates a [StreamBuilder] for a non-nullable [stream] that handles data,
+/// error, and loading states.
+StreamBuilder<T> createStreamBuilder<T extends Object>({
   required Widget Function(T) onData,
   Stream<T>? stream,
   Widget Function()? onError,

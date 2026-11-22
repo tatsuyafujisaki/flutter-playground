@@ -68,14 +68,21 @@ class GeolocatorWrapper {
       return null;
     }
     final controller = _controller ??= StreamController<Position>.broadcast(
+      onListen: () {
+        _subscription ??=
+            Geolocator.getPositionStream(
+              locationSettings: _locationSettings,
+            ).listen(
+              (position) => _controller?.add(position),
+              onError: (Object error, StackTrace stackTrace) =>
+                  _controller?.addError(error, stackTrace),
+            );
+      },
       onCancel: () {
         unawaited(_subscription?.cancel());
         _subscription = null;
       },
     );
-    _subscription ??= Geolocator.getPositionStream(
-      locationSettings: _locationSettings,
-    ).listen(controller.add, onError: controller.addError);
     return controller.stream;
   }
 

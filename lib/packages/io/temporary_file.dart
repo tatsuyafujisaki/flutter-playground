@@ -5,7 +5,15 @@ import 'package:path_provider/path_provider.dart';
 Future<String> createTemporaryFilePath({
   String directory = '',
   String extension = '',
-}) async => p.join(
-  directory.isNotEmpty ? directory : (await getTemporaryDirectory()).path,
-  p.setExtension(DateTime.now().microsecondsSinceEpoch.toString(), extension),
-);
+}) async {
+  final normalizedExtension = extension.isEmpty || extension.startsWith('.')
+      ? extension
+      : '.$extension';
+  return p.join(
+    directory.isNotEmpty ? directory : (await getTemporaryDirectory()).path,
+    p.setExtension(
+      DateTime.now().microsecondsSinceEpoch.toString(),
+      normalizedExtension,
+    ),
+  );
+}

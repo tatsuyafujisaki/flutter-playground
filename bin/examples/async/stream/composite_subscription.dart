@@ -2,7 +2,7 @@ import 'dart:async';
 
 /// A container that manages and disposes multiple stream subscriptions.
 class CompositeSubscription {
-  final _subscriptions = <StreamSubscription<Object>>{};
+  final _subscriptions = <StreamSubscription<Object?>>{};
   var _isDisposed = false;
 
   /// Whether this subscription container has been disposed.
@@ -11,7 +11,7 @@ class CompositeSubscription {
   /// Adds [subscription] to this container.
   ///
   /// Throws a [StateError] if this container has already been disposed.
-  void add(StreamSubscription<Object> subscription) {
+  void add(StreamSubscription<Object?> subscription) {
     if (_isDisposed) {
       throw StateError('CompositeSubscription is already disposed.');
     }
@@ -20,10 +20,14 @@ class CompositeSubscription {
 
   /// Cancels all managed subscriptions and marks this container as disposed.
   Future<void> dispose() async {
-    await Future.wait(
-      _subscriptions.map((subscription) => subscription.cancel()),
-    );
-    _subscriptions.clear();
+    if (_isDisposed) {
+      return;
+    }
     _isDisposed = true;
+    final subscriptions = _subscriptions.toList();
+    _subscriptions.clear();
+    await Future.wait(
+      subscriptions.map((subscription) => subscription.cancel()),
+    );
   }
 }
