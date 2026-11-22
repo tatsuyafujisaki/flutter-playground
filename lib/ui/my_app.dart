@@ -10,9 +10,6 @@ import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The global navigator key used by [MyApp].
-final navigatorKey = GlobalKey<NavigatorState>();
-
 /// The root widget of the application.
 class const MyApp({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [MyApp].
@@ -23,13 +20,18 @@ class const MyApp({super.key}) extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  late final List<NavigatorObserver> _navigatorObservers = [
+    FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+  ];
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final navigatorState = navigatorKey.currentState;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final navigatorState = _navigatorKey.currentState;
       if (navigatorState != null) {
-        await showForceUpdateDialogIfNeeded(navigatorState);
+        unawaited(showForceUpdateDialogIfNeeded(navigatorState));
       }
     });
     ref.read(authViewModelProvider.notifier).signInAnonymously().ignore();
@@ -42,11 +44,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
 
     return MaterialApp(
-      navigatorKey: navigatorKey,
+      navigatorKey: _navigatorKey,
       home: const HomePage(),
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-      ],
+      navigatorObservers: _navigatorObservers,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         ...GlobalMaterialLocalizations.delegates,
