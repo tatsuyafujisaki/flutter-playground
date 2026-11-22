@@ -12,7 +12,7 @@ Future<String?> saveBinaryFileToExternalStorageDirectory(
   if (path == null) {
     return null;
   }
-  File(path).writeAsBytesSync(bytes, mode: .writeOnly);
+  await File(path).writeAsBytes(bytes, mode: .writeOnly);
   return _getDeviceFileExplorerFriendlyExternalStorageDirectory(path);
 }
 
@@ -25,7 +25,7 @@ Future<String?> saveTextFileToExternalStorageDirectory(
   if (path == null) {
     return null;
   }
-  File(path).writeAsStringSync(contents, mode: .writeOnly);
+  await File(path).writeAsString(contents, mode: .writeOnly);
   return _getDeviceFileExplorerFriendlyExternalStorageDirectory(path);
 }
 

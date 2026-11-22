@@ -23,13 +23,13 @@ String replaceExtension(String path, String extension) => p.setExtension(
 );
 
 /// Deletes the file at [path] if it exists.
-void deleteIfExists(String path) {
+Future<void> deleteIfExists(String path) async {
   final file = File(path);
   try {
     if (!file.existsSync()) {
       return;
     }
-    file.deleteSync(recursive: true);
+    await file.delete(recursive: true);
   } on Exception catch (error, stackTrace) {
     developer.log('', error: error, stackTrace: stackTrace);
   }
