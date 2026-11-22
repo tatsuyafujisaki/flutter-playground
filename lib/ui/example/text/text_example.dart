@@ -10,9 +10,7 @@ Widget preview() => const _MyStatelessWidget();
 /// - If [TextOverflow.ellipsis] is NOT set, the default [Text.maxLines] is
 ///   infinite.
 /// - If [TextOverflow.ellipsis] is set, the default [Text.maxLines] is 1.
-class _MyStatelessWidget extends StatelessWidget {
-  const new();
-
+class const _MyStatelessWidget() extends StatelessWidget {
   static final String _data = '⭐' * 100;
 
   @override

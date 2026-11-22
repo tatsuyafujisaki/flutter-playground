@@ -6,19 +6,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 /// Singleton wrapper around [Geolocator] for location permissions and updates.
-class GeolocatorWrapper {
+class GeolocatorWrapper._internal() {
   /// Returns the singleton [GeolocatorWrapper] instance.
   factory() => _instance;
-  new _internal() {
-    _controller = StreamController<Position>(
-      onCancel: () async {
-        await _subscription?.cancel();
-        _subscription = null;
-      },
-    );
-  }
   static final _instance = GeolocatorWrapper._internal();
-  late final StreamController<Position> _controller;
+  late final _controller = StreamController<Position>(
+    onCancel: () async {
+      await _subscription?.cancel();
+      _subscription = null;
+    },
+  );
   StreamSubscription<Position>? _subscription;
 
   LocationSettings get _locationSettings {

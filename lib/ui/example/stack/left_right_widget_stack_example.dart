@@ -5,9 +5,7 @@ import 'package:material_ui/material_ui.dart';
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
-  const new();
-
+class const _MyStatelessWidget() extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Row(
     mainAxisAlignment: .spaceBetween,

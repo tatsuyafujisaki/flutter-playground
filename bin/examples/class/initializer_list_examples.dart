@@ -1,15 +1,11 @@
 import 'dart:developer' as developer;
 
-class _Person {
-  new({
-    required this.firstName,
-    required String middleName,
-    required this.lastName,
-  }) : fullName = '$firstName $middleName $lastName';
-
-  String firstName;
-  String lastName;
-  String fullName;
+class _Person({
+  required final String firstName,
+  required String middleName,
+  required final String lastName,
+}) {
+  final String fullName = '$firstName $middleName $lastName';
 }
 
 void main() {

@@ -9,9 +9,7 @@ import 'package:video_player/video_player.dart';
 @Preview()
 Widget preview() => const _MyStatefulWidget();
 
-class _MyStatefulWidget extends StatefulWidget {
-  const new();
-
+class const _MyStatefulWidget() extends StatefulWidget {
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }

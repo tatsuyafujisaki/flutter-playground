@@ -8,9 +8,7 @@ import 'package:path/path.dart' as p;
 @Preview()
 Widget preview() => const _MyStatefulWidget();
 
-class _MyStatefulWidget extends StatefulWidget {
-  const new();
-
+class const _MyStatefulWidget() extends StatefulWidget {
   @override
   State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }

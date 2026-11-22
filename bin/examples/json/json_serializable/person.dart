@@ -8,12 +8,11 @@ part 'person.g.dart';
 // and output JSON whose keys are snake_case.
 // @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @JsonSerializable(explicitToJson: true)
-class _Person {
-  new({required this.firstName, required this.lastName});
-
+class _Person({
+  required final String? firstName,
+  required final String lastName,
+}) {
   factory fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
-  final String? firstName;
-  final String lastName;
 
   Map<String, dynamic> toJson() => _$PersonToJson(this);
 }

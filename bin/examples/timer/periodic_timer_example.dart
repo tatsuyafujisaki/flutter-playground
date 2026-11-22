@@ -2,17 +2,17 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 /// A periodic timer that can be restarted and canceled.
-class PeriodicRestartableTimer {
-  /// Creates and starts a [PeriodicRestartableTimer].
-  new(this.duration, this.callback) {
-    _timer = _createTimer();
-  }
-
+class PeriodicRestartableTimer(
   /// The interval between timer ticks.
-  Duration duration;
+  var Duration duration,
 
   /// The callback invoked on each timer tick.
-  void Function()? callback;
+  var void Function()? callback,
+) {
+  /// Creates and starts a [PeriodicRestartableTimer].
+  this {
+    _timer = _createTimer();
+  }
 
   /// Cancels the active timer and starts a new periodic timer.
   void restart() {

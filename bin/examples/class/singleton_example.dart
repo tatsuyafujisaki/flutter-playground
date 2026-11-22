@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 /// https://stackoverflow.com/a/12649574/10867055
-class _MySingleton {
+class _MySingleton._() {
   factory() {
     if (!initialized) {
       initialized = true;
@@ -9,7 +9,6 @@ class _MySingleton {
     }
     return _singleton;
   }
-  new _();
   static final _singleton = _MySingleton._();
   static bool initialized = false;
   final DateTime initializedAt = .now();

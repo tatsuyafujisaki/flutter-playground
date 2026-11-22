@@ -5,9 +5,7 @@ import 'package:material_ui/material_ui.dart';
 @Preview()
 Widget preview() => const _MyStatelessWidget();
 
-class _MyStatelessWidget extends StatelessWidget {
-  const new();
-
+class const _MyStatelessWidget() extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: Center(
@@ -22,9 +20,7 @@ class _MyStatelessWidget extends StatelessWidget {
   );
 }
 
-class _BottomSheetContent extends StatelessWidget {
-  const new();
-
+class const _BottomSheetContent() extends StatelessWidget {
   static final List<int> _indices = List<int>.generate(100, (index) => index);
 
   @override
