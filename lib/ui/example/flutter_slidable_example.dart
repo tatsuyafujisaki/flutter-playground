@@ -19,7 +19,7 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: _slidableListView<_MyData, int>(
+    body: _SlidableListView<_MyData, int>(
       list: _list,
       getKey: (item) => item.id,
       getString: (item) => item.text,
@@ -29,45 +29,49 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   );
 }
 
-ListView _slidableListView<T, K>({
-  required List<T> list,
-  required K Function(T item) getKey,
-  required String Function(T item) getString,
-  required void Function(T item) onPressed,
-}) => ListView(
-  children: [
-    for (final item in list)
-      _slidable<K>(
-        key: getKey(item),
+class const _SlidableListView<T, K>({
+  required final List<T> list,
+  required final K Function(T item) getKey,
+  required final String Function(T item) getString,
+  required final void Function(T item) onPressed,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => ListView.builder(
+    itemCount: list.length,
+    itemBuilder: (context, index) {
+      final item = list[index];
+      return _SlidableTile(
+        key: ValueKey(getKey(item)),
         text: getString(item),
-        onPressed: (context) {
-          onPressed(item);
-        },
-      ),
-  ],
-);
+        onPressed: (_) => onPressed(item),
+      );
+    },
+  );
+}
 
-Slidable _slidable<T>({
-  required T key,
-  required String text,
-  required SlidableActionCallback onPressed,
-}) => Slidable(
-  key: ValueKey(key),
-  endActionPane: ActionPane(
-    extentRatio: 0.2,
-    motion: const ScrollMotion(),
-    children: <SlidableAction>[
-      SlidableAction(
-        backgroundColor: Colors.red,
-        onPressed: onPressed,
-        label: 'Delete',
-        // According to my experiment, when null is passed,
-        // non-trivial padding appears.
-        padding: .zero,
-      ),
-    ],
-  ),
-  child: ListTile(title: Text(text)),
-);
+class const _SlidableTile({
+  required final String text,
+  required final SlidableActionCallback onPressed,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Slidable(
+    endActionPane: ActionPane(
+      extentRatio: 0.2,
+      motion: const ScrollMotion(),
+      children: <SlidableAction>[
+        SlidableAction(
+          backgroundColor: Colors.red,
+          onPressed: onPressed,
+          label: 'Delete',
+          // According to my experiment, when null is passed,
+          // non-trivial padding appears.
+          padding: .zero,
+        ),
+      ],
+    ),
+    child: ListTile(title: Text(text)),
+  );
+}
 
 class _MyData({required final int id, required final String text});

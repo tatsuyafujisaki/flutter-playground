@@ -29,15 +29,19 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
     child: StreamBuilder<String>(
       stream: _countStream,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data!);
+        switch (snapshot) {
+          case AsyncSnapshot(:final data?):
+            return Text(data);
+          case AsyncSnapshot(:final error?, :final stackTrace):
+            developer.log(
+              'StreamBuilder error',
+              error: error,
+              stackTrace: stackTrace,
+            );
+            return const Icon(Icons.error);
+          case AsyncSnapshot():
+            return const CircularProgressIndicator();
         }
-        if (snapshot.hasError) {
-          developer.log(snapshot.error.toString());
-          developer.log(snapshot.stackTrace.toString());
-          return const Icon(Icons.error);
-        }
-        return const CircularProgressIndicator();
       },
     ),
   );

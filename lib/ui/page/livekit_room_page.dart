@@ -299,57 +299,95 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     }
   }
 
-  VideoTrack? _findCameraTrack(Participant<TrackPublication> participant) {
-    VideoTrack? fallback;
-    for (final publication in participant.videoTrackPublications) {
-      if (publication.muted) {
-        continue;
-      }
-      if (publication.track case final VideoTrack track) {
-        if (publication.source == .camera) {
-          return track;
-        }
-        fallback ??= track;
-      }
-    }
-    return fallback;
+  @override
+  Widget build(BuildContext context) {
+    final room = _room;
+    return Scaffold(
+      appBar: AppBar(title: const Text('LiveKit')),
+      body: SafeArea(
+        child: _isJoined && room != null
+            ? _CallView(
+                room: room,
+                fallbackRoomName: _roomController.text.trim(),
+                statusMessage: _statusMessage,
+                onToggleAudio: _toggleAudio,
+                onToggleVideo: _toggleVideo,
+                onSwitchCamera: _switchCamera,
+                onLeave: _leaveRoom,
+              )
+            : _SetupView(
+                roomController: _roomController,
+                isJoining: _isJoining,
+                statusMessage: _statusMessage,
+                onJoin: _joinRoom,
+              ),
+      ),
+    );
   }
+}
 
-  Widget _buildSetupView() => SingleChildScrollView(
+VideoTrack? _findCameraTrack(Participant<TrackPublication> participant) {
+  VideoTrack? fallback;
+  for (final publication in participant.videoTrackPublications) {
+    if (publication.muted) {
+      continue;
+    }
+    if (publication.track case final VideoTrack track) {
+      if (publication.source == .camera) {
+        return track;
+      }
+      fallback ??= track;
+    }
+  }
+  return fallback;
+}
+
+class const _SetupView({
+  required final TextEditingController roomController,
+  required final bool isJoining,
+  required final String? statusMessage,
+  required final VoidCallback onJoin,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
     padding: const .all(24),
     child: Column(
       crossAxisAlignment: .stretch,
       spacing: 16,
       children: [
         TextField(
-          controller: _roomController,
-          enabled: !_isJoining,
+          controller: roomController,
+          enabled: !isJoining,
           decoration: const InputDecoration(
             labelText: 'Room Name',
             hintText: 'e.g. test',
             border: OutlineInputBorder(),
           ),
         ),
-        if (_statusMessage case final message?)
+        if (statusMessage case final message?)
           Text(
             message,
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         FilledButton.icon(
-          onPressed: _isJoining ? null : _joinRoom,
-          icon: _isJoining
+          onPressed: isJoining ? null : onJoin,
+          icon: isJoining
               ? const SizedBox.square(
                   dimension: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.video_call),
-          label: Text(_isJoining ? 'Joining...' : 'Join Room'),
+          label: Text(isJoining ? 'Joining...' : 'Join Room'),
         ),
       ],
     ),
   );
+}
 
-  Widget _buildParticipantTile(RemoteParticipant participant) {
+class const _ParticipantTile({required final RemoteParticipant participant})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final videoTrack = _findCameraTrack(participant);
     return ColoredBox(
       color: Colors.black87,
@@ -374,10 +412,16 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
             ),
     );
   }
+}
 
-  Widget _buildRemoteVideos(Room room) {
+class const _RemoteVideos({
+  required final Room room,
+  required final String fallbackRoomName,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final remoteParticipants = room.remoteParticipants.values.toList();
-    final roomName = room.name ?? _roomController.text.trim();
+    final roomName = room.name ?? fallbackRoomName;
     final localIdentity = room.localParticipant?.identity ?? '-';
 
     if (remoteParticipants.isEmpty) {
@@ -401,7 +445,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     }
 
     if (remoteParticipants.length == 1) {
-      return _buildParticipantTile(remoteParticipants.first);
+      return _ParticipantTile(participant: remoteParticipants.first);
     }
 
     return GridView.builder(
@@ -414,12 +458,15 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       itemCount: remoteParticipants.length,
       itemBuilder: (context, index) => ClipRRect(
         borderRadius: .circular(12),
-        child: _buildParticipantTile(remoteParticipants[index]),
+        child: _ParticipantTile(participant: remoteParticipants[index]),
       ),
     );
   }
+}
 
-  Widget _buildLocalPreview(Room room) {
+class const _LocalPreview({required final Room room}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final localParticipant = room.localParticipant;
     final videoTrack = localParticipant != null
         ? _findCameraTrack(localParticipant)
@@ -443,8 +490,17 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       ),
     );
   }
+}
 
-  Widget _buildCallControls(Room room) {
+class const _CallControls({
+  required final Room room,
+  required final VoidCallback onToggleAudio,
+  required final VoidCallback onToggleVideo,
+  required final VoidCallback onSwitchCamera,
+  required final VoidCallback onLeave,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final localParticipant = room.localParticipant;
     final isAudioMuted = !(localParticipant?.isMicrophoneEnabled() ?? false);
     final isVideoMuted = !(localParticipant?.isCameraEnabled() ?? false);
@@ -457,17 +513,17 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
           mainAxisAlignment: .spaceEvenly,
           children: [
             IconButton.filledTonal(
-              onPressed: _toggleAudio,
+              onPressed: onToggleAudio,
               tooltip: isAudioMuted ? 'Unmute microphone' : 'Mute microphone',
               icon: Icon(isAudioMuted ? Icons.mic_off : Icons.mic),
             ),
             IconButton.filledTonal(
-              onPressed: _toggleVideo,
+              onPressed: onToggleVideo,
               tooltip: isVideoMuted ? 'Turn camera on' : 'Turn camera off',
               icon: Icon(isVideoMuted ? Icons.videocam_off : Icons.videocam),
             ),
             IconButton.filledTonal(
-              onPressed: isVideoMuted ? null : _switchCamera,
+              onPressed: isVideoMuted ? null : onSwitchCamera,
               tooltip: 'Switch camera',
               icon: const Icon(Icons.cameraswitch),
             ),
@@ -476,7 +532,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
                 backgroundColor: Theme.of(context).colorScheme.error,
                 foregroundColor: Theme.of(context).colorScheme.onError,
               ),
-              onPressed: _leaveRoom,
+              onPressed: onLeave,
               tooltip: 'Leave room',
               icon: const Icon(Icons.call_end),
             ),
@@ -485,12 +541,25 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
       ),
     );
   }
+}
 
-  Widget _buildCallView(Room room) => Stack(
+class const _CallView({
+  required final Room room,
+  required final String fallbackRoomName,
+  required final String? statusMessage,
+  required final VoidCallback onToggleAudio,
+  required final VoidCallback onToggleVideo,
+  required final VoidCallback onSwitchCamera,
+  required final VoidCallback onLeave,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Stack(
     children: [
-      Positioned.fill(child: _buildRemoteVideos(room)),
-      Positioned(top: 16, right: 16, child: _buildLocalPreview(room)),
-      if (_statusMessage case final message?)
+      Positioned.fill(
+        child: _RemoteVideos(room: room, fallbackRoomName: fallbackRoomName),
+      ),
+      Positioned(top: 16, right: 16, child: _LocalPreview(room: room)),
+      if (statusMessage case final message?)
         Positioned(
           top: 16,
           left: 16,
@@ -509,20 +578,16 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
             ),
           ),
         ),
-      Align(alignment: .bottomCenter, child: _buildCallControls(room)),
+      Align(
+        alignment: .bottomCenter,
+        child: _CallControls(
+          room: room,
+          onToggleAudio: onToggleAudio,
+          onToggleVideo: onToggleVideo,
+          onSwitchCamera: onSwitchCamera,
+          onLeave: onLeave,
+        ),
+      ),
     ],
   );
-
-  @override
-  Widget build(BuildContext context) {
-    final room = _room;
-    return Scaffold(
-      appBar: AppBar(title: const Text('LiveKit')),
-      body: SafeArea(
-        child: _isJoined && room != null
-            ? _buildCallView(room)
-            : _buildSetupView(),
-      ),
-    );
-  }
 }

@@ -29,15 +29,19 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   Widget build(BuildContext context) => FutureBuilder<Uint8List>(
     future: _imageBytes,
     builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return Image.memory(snapshot.data!);
+      switch (snapshot) {
+        case AsyncSnapshot(:final data?):
+          return Image.memory(data);
+        case AsyncSnapshot(:final error?, :final stackTrace):
+          developer.log(
+            'Failed to download image',
+            error: error,
+            stackTrace: stackTrace,
+          );
+          return const Icon(Icons.broken_image);
+        case AsyncSnapshot():
+          return const CircularProgressIndicator();
       }
-      if (snapshot.hasError) {
-        developer.log(snapshot.error.toString());
-        developer.log(snapshot.stackTrace.toString());
-        return const Icon(Icons.broken_image);
-      }
-      return const CircularProgressIndicator();
     },
   );
 }

@@ -7,35 +7,39 @@ Widget preview() => const _MyStatelessWidget();
 
 class const _MyStatelessWidget() extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) => const Column(
     mainAxisAlignment: .center,
     children: <Widget>[
-      _leftCenterRightWidgetStack(
-        leftWidget: const FlutterLogo(),
-        centerWidget: const FlutterLogo(),
+      _LeftCenterRightWidgetStack(
+        leftWidget: FlutterLogo(),
+        centerWidget: FlutterLogo(),
       ),
-      _leftCenterRightWidgetStack(
-        centerWidget: const FlutterLogo(),
-        rightWidget: const FlutterLogo(),
+      _LeftCenterRightWidgetStack(
+        centerWidget: FlutterLogo(),
+        rightWidget: FlutterLogo(),
       ),
-      _leftCenterRightWidgetStack(
-        leftWidget: const FlutterLogo(),
-        centerWidget: const FlutterLogo(),
-        rightWidget: const FlutterLogo(),
+      _LeftCenterRightWidgetStack(
+        leftWidget: FlutterLogo(),
+        centerWidget: FlutterLogo(),
+        rightWidget: FlutterLogo(),
       ),
     ],
   );
 }
 
-Stack _leftCenterRightWidgetStack({
-  Widget? leftWidget,
-  Widget? centerWidget,
-  Widget? rightWidget,
-}) => Stack(
-  alignment: .center,
-  children: <Widget>[
-    if (leftWidget != null) Align(alignment: .centerLeft, child: leftWidget),
-    ?centerWidget,
-    if (rightWidget != null) Align(alignment: .centerRight, child: rightWidget),
-  ],
-);
+class const _LeftCenterRightWidgetStack({
+  final Widget? leftWidget,
+  final Widget? centerWidget,
+  final Widget? rightWidget,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Stack(
+    alignment: .center,
+    children: <Widget>[
+      if (leftWidget != null) Align(alignment: .centerLeft, child: leftWidget),
+      ?centerWidget,
+      if (rightWidget != null)
+        Align(alignment: .centerRight, child: rightWidget),
+    ],
+  );
+}

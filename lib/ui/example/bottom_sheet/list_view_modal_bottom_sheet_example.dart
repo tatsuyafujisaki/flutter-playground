@@ -21,13 +21,10 @@ class const _MyStatelessWidget() extends StatelessWidget {
 }
 
 class const _BottomSheetContent() extends StatelessWidget {
-  static final List<int> _indices = List<int>.generate(100, (index) => index);
-
   @override
-  Widget build(BuildContext context) => ListView(
-    children: [
-      for (final i in _indices)
-        ListTile(title: Text('Item $i'), tileColor: Colors.amber),
-    ],
+  Widget build(BuildContext context) => ListView.builder(
+    itemCount: 100,
+    itemBuilder: (context, index) =>
+        ListTile(title: Text('Item $index'), tileColor: Colors.amber),
   );
 }

@@ -11,14 +11,18 @@ StreamBuilder<T> createStreamBuilder<T>({
 }) => StreamBuilder<T>(
   stream: stream,
   builder: (context, snapshot) {
-    if (snapshot.hasData) {
-      return onData(snapshot.data as T);
+    switch (snapshot) {
+      case AsyncSnapshot(:final data?):
+        return onData(data);
+      case AsyncSnapshot(:final error?, :final stackTrace):
+        developer.log(
+          'StreamBuilder error',
+          error: error,
+          stackTrace: stackTrace,
+        );
+        return onError?.call() ?? const Icon(Icons.error);
+      case AsyncSnapshot():
+        return onElse?.call() ?? const CircularProgressIndicator();
     }
-    if (snapshot.hasError) {
-      developer.log(snapshot.error.toString());
-      developer.log(snapshot.stackTrace.toString());
-      return onError?.call() ?? const Icon(Icons.error);
-    }
-    return onElse?.call() ?? const CircularProgressIndicator();
   },
 );
