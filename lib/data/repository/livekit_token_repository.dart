@@ -4,12 +4,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'livekit_token_repository.g.dart';
 
+const _region = 'asia-northeast1';
+const _generateTokenFunctionName = 'generateLiveKitToken';
+
 /// Provides the singleton [LiveKitTokenRepository] instance.
 @Riverpod(keepAlive: true)
 LiveKitTokenRepository liveKitTokenRepository(Ref ref) =>
-    LiveKitTokenRepository(
-      FirebaseFunctions.instanceFor(region: 'asia-northeast1'),
-    );
+    LiveKitTokenRepository(FirebaseFunctions.instanceFor(region: _region));
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for
 /// Firebase.
@@ -20,7 +21,7 @@ class const LiveKitTokenRepository(final FirebaseFunctions _functions) {
 
   /// Requests a freshly generated LiveKit access token for [roomName].
   Future<LiveKitTokenResponse> fetchToken({required String roomName}) async {
-    final callable = _functions.httpsCallable('generateLiveKitToken');
+    final callable = _functions.httpsCallable(_generateTokenFunctionName);
     final result = await callable.call<Map<Object?, Object?>>({
       'roomName': roomName,
     });

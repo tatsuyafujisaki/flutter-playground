@@ -33,7 +33,7 @@ fun getDartDefine(key: String): String? {
 }
 
 android {
-    namespace = "com.tatsuyafujisaki.flutterplayground"
+    namespace = "com.tatsuyafujisaki.poc"
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
     // https://developer.android.com/build/jdks#toolchain

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import '../freezed/person.dart';
 
+/// Decodes a JSON object string into a map, or returns an empty map on failure.
 Map<String, dynamic> jsonDecodeToMap(String json) {
   try {
     if (jsonDecode(json) case final Map<String, dynamic> map) {
@@ -17,6 +18,7 @@ Map<String, dynamic> jsonDecodeToMap(String json) {
   return <String, dynamic>{};
 }
 
+/// Removes whitespace from a JSON string by decoding and re-encoding it.
 String minifyJson(String json) => jsonEncode(jsonDecode(json));
 
 T _parseObject<T>(

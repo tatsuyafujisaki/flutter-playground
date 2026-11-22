@@ -6,8 +6,21 @@ import 'package:flutter_playground/data/repository/livekit_token_repository.dart
 import 'package:flutter_playground/ui/view_model/livekit_room_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:livekit_client/livekit_client.dart';
 
 class _FakeUser extends Fake implements User;
+
+class _FakeVideoTrack extends Fake implements VideoTrack;
+
+class _FakeTrackPublication({
+  @override required final TrackSource source,
+  @override final bool muted = false,
+  @override final Track? track,
+}) extends Fake implements TrackPublication<Track>;
+
+class _FakeParticipant(
+  @override final List<TrackPublication<Track>> videoTrackPublications,
+) extends Fake implements Participant<TrackPublication<Track>>;
 
 class _FakeAuthRepository(@override final User? currentUser)
     implements AuthRepository {
@@ -101,6 +114,47 @@ void main() {
         state.statusMessage,
         'Failed to fetch token (permission-denied): Access denied',
       );
+    });
+  });
+
+  group('findCameraTrack', () {
+    test('prefers unmuted camera track over other video tracks', () {
+      final screenTrack = _FakeVideoTrack();
+      final cameraTrack = _FakeVideoTrack();
+      final participant = _FakeParticipant([
+        _FakeTrackPublication(source: .screenShareVideo, track: screenTrack),
+        _FakeTrackPublication(source: .camera, track: cameraTrack),
+      ]);
+
+      expect(findCameraTrack(participant), same(cameraTrack));
+    });
+
+    test('falls back to unmuted non-camera track when camera is muted', () {
+      final mutedCameraTrack = _FakeVideoTrack();
+      final screenTrack = _FakeVideoTrack();
+      final participant = _FakeParticipant([
+        _FakeTrackPublication(
+          source: .camera,
+          muted: true,
+          track: mutedCameraTrack,
+        ),
+        _FakeTrackPublication(source: .screenShareVideo, track: screenTrack),
+      ]);
+
+      expect(findCameraTrack(participant), same(screenTrack));
+    });
+
+    test('returns null when no unmuted video tracks exist', () {
+      final mutedCameraTrack = _FakeVideoTrack();
+      final participant = _FakeParticipant([
+        _FakeTrackPublication(
+          source: .camera,
+          muted: true,
+          track: mutedCameraTrack,
+        ),
+      ]);
+
+      expect(findCameraTrack(participant), isNull);
     });
   });
 }
