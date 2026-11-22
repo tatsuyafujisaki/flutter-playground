@@ -47,10 +47,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       navigatorKey: _navigatorKey,
       home: const HomePage(),
       navigatorObservers: _navigatorObservers,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        ...GlobalMaterialLocalizations.delegates,
-      ],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );
   }
