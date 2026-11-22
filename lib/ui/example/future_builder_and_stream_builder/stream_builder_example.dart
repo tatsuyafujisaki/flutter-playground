@@ -1,6 +1,5 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_playground/ui/example/future_builder_and_stream_builder/create_stream_builder.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews a [StreamBuilder] displaying periodic counter events.
@@ -26,23 +25,6 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) => Center(
-    child: StreamBuilder<String>(
-      stream: _countStream,
-      builder: (context, snapshot) {
-        switch (snapshot) {
-          case AsyncSnapshot(:final data?):
-            return Text(data);
-          case AsyncSnapshot(:final error?, :final stackTrace):
-            developer.log(
-              'StreamBuilder error',
-              error: error,
-              stackTrace: stackTrace,
-            );
-            return const Icon(Icons.error);
-          case AsyncSnapshot():
-            return const CircularProgressIndicator();
-        }
-      },
-    ),
+    child: createStreamBuilder<String>(stream: _countStream, onData: Text.new),
   );
 }

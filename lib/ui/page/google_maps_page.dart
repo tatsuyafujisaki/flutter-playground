@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
-import 'package:flutter_playground/data/utils/geolocator_utils.dart';
+import 'package:flutter_playground/data/wrapper/geolocator_wrapper.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A page that displays Google Maps with the user's location.
-class const GoogleMapsPage({super.key}) extends StatefulWidget {
+class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [GoogleMapsPage].
   this;
 
   @override
-  State<GoogleMapsPage> createState() => _GoogleMapsPageState();
+  ConsumerState<GoogleMapsPage> createState() => _GoogleMapsPageState();
 }
 
-class _GoogleMapsPageState extends State<GoogleMapsPage> {
+class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   final _controller = Completer<GoogleMapController>();
 
   final Set<Marker> _markers = {};
@@ -35,8 +36,10 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
 
   Future<void> _getCurrentLocation() async {
     try {
-      final position = await getPosition();
-      if (!mounted) {
+      final position = await ref
+          .read(geolocatorWrapperProvider)
+          .currentPosition;
+      if (position == null || !mounted) {
         return;
       }
 

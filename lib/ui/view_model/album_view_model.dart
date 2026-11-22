@@ -16,60 +16,45 @@ class AlbumViewModel extends _$AlbumViewModel {
   Future<List<Album>> build() => ref.read(albumRepositoryProvider).getAlbums();
 
   /// Refreshes the list of albums.
-  Future<void> fetchAlbums() async {
-    state = const AsyncLoading();
-    final nextState = await AsyncValue.guard(
-      () => ref.read(albumRepositoryProvider).getAlbums(),
-    );
-    if (ref.mounted) {
-      state = nextState;
-    }
-  }
+  Future<void> fetchAlbums() =>
+      _runGuarded((_) => ref.read(albumRepositoryProvider).getAlbums());
 
   /// Creates an album from [body] and appends it to the current list.
-  Future<void> postAlbum({required Map<String, dynamic> body}) async {
-    final previousAlbums = state.value ?? const <Album>[];
-    state = const AsyncLoading();
-    final nextState = await AsyncValue.guard(() async {
-      final created = await ref
-          .read(albumRepositoryProvider)
-          .postAlbum(body: body);
-      return [...previousAlbums, created];
-    });
-    if (ref.mounted) {
-      state = nextState;
-    }
-  }
+  Future<void> postAlbum({required Map<String, dynamic> body}) =>
+      _runGuarded((previousAlbums) async {
+        final created = await ref
+            .read(albumRepositoryProvider)
+            .postAlbum(body: body);
+        return [...previousAlbums, created];
+      });
 
   /// Updates the album with the given [id] using [body].
   Future<void> updateAlbum({
     required int id,
     required Map<String, dynamic> body,
-  }) async {
-    final previousAlbums = state.value ?? const <Album>[];
-    state = const AsyncLoading();
-    final nextState = await AsyncValue.guard(() async {
-      final updated = await ref
-          .read(albumRepositoryProvider)
-          .updateAlbum(id: id, body: body);
-      return [
-        for (final album in previousAlbums)
-          if (album.id == id) updated else album,
-      ];
-    });
-    if (ref.mounted) {
-      state = nextState;
-    }
-  }
+  }) => _runGuarded((previousAlbums) async {
+    final updated = await ref
+        .read(albumRepositoryProvider)
+        .updateAlbum(id: id, body: body);
+    return [
+      for (final album in previousAlbums)
+        if (album.id == id) updated else album,
+    ];
+  });
 
   /// Deletes the album with the given [id] and removes it from the list.
-  Future<void> deleteAlbum({required int id}) async {
+  Future<void> deleteAlbum({required int id}) =>
+      _runGuarded((previousAlbums) async {
+        await ref.read(albumRepositoryProvider).deleteAlbum(id: id);
+        return previousAlbums.where((album) => album.id != id).toList();
+      });
+
+  Future<void> _runGuarded(
+    Future<List<Album>> Function(List<Album> previousAlbums) action,
+  ) async {
     final previousAlbums = state.value ?? const <Album>[];
     state = const AsyncLoading();
-    final nextState = await AsyncValue.guard(() async {
-      await ref.read(albumRepositoryProvider).deleteAlbum(id: id);
-      return previousAlbums.where((album) => album.id != id).toList();
-    });
+    final nextState = await AsyncValue.guard(() => action(previousAlbums));
     if (ref.mounted) {
       state = nextState;
     }
