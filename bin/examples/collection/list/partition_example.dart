@@ -5,8 +5,8 @@ void main() {
   final (evens, odds) = xs.partition((x) => x.isEven);
 
   stdout
-    ..writeln(evens.toString()) // [0, 2, 4]
-    ..writeln(odds.toString()); // [1, 3]
+    ..writeln(evens) // [0, 2, 4]
+    ..writeln(odds); // [1, 3]
 }
 
 extension<T> on Iterable<T> {

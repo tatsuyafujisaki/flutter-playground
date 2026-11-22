@@ -26,9 +26,9 @@ String myGeneratedRequiredParameters(Ref ref, String name, int age) =>
 void showGeneratedBoolNotifierProviderExamples() {
   final container = ProviderContainer();
   try {
-    stdout.writeln(container.read(myBoolProvider).toString()); // false
+    stdout.writeln(container.read(myBoolProvider)); // false
     container.read(myBoolProvider.notifier).toggle();
-    stdout.writeln(container.read(myBoolProvider).toString()); // true
+    stdout.writeln(container.read(myBoolProvider)); // true
   } finally {
     container.dispose();
   }
@@ -61,12 +61,12 @@ void showGeneratedFunctionProviderExamples() {
 void showGeneratedSetNotifierProviderExamples() {
   final container = ProviderContainer();
   try {
-    stdout.writeln(container.read(mySetProvider).toString()); // {}
+    stdout.writeln(container.read(mySetProvider)); // {}
     container.read(mySetProvider.notifier).add('a');
-    stdout.writeln(container.read(mySetProvider).toString()); // {'a'}
+    stdout.writeln(container.read(mySetProvider)); // {'a'}
     container.read(mySetProvider.notifier).add('b');
     container.read(mySetProvider.notifier).remove('a');
-    stdout.writeln(container.read(mySetProvider).toString()); // {'b'}
+    stdout.writeln(container.read(mySetProvider)); // {'b'}
   } finally {
     container.dispose();
   }

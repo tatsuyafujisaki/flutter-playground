@@ -261,80 +261,49 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
   }
 
   /// Toggles the local microphone state.
-  Future<void> toggleAudio() async {
-    final localParticipant = _room?.localParticipant;
-    if (localParticipant == null) {
-      return;
-    }
-    try {
-      await localParticipant.setMicrophoneEnabled(
-        !localParticipant.isMicrophoneEnabled(),
-      );
-    } on Exception catch (error, stackTrace) {
-      developer.log(
-        'Failed to toggle microphone',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(
-        statusMessage: 'Failed to toggle microphone: $error',
-      );
-    }
-  }
+  Future<void> toggleAudio() => _runParticipantAction(
+    'Failed to toggle microphone',
+    (participant) =>
+        participant.setMicrophoneEnabled(!participant.isMicrophoneEnabled()),
+  );
 
   /// Toggles the local camera state.
-  Future<void> toggleVideo() async {
-    final localParticipant = _room?.localParticipant;
-    if (localParticipant == null) {
-      return;
-    }
-    try {
-      await localParticipant.setCameraEnabled(
-        !localParticipant.isCameraEnabled(),
-      );
-    } on Exception catch (error, stackTrace) {
-      developer.log(
-        'Failed to toggle camera',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(statusMessage: 'Failed to toggle camera: $error');
-    }
-  }
+  Future<void> toggleVideo() => _runParticipantAction(
+    'Failed to toggle camera',
+    (participant) =>
+        participant.setCameraEnabled(!participant.isCameraEnabled()),
+  );
 
   /// Switches between the front and back cameras for the local video track.
-  Future<void> switchCamera() async {
+  Future<void> switchCamera() =>
+      _runParticipantAction('Failed to switch camera', (participant) async {
+        final cameraTrack = findCameraTrack(participant);
+        if (cameraTrack is! LocalVideoTrack) {
+          return;
+        }
+        final nextPosition = state.cameraPosition.switched();
+        await cameraTrack.setCameraPosition(nextPosition);
+        if (ref.mounted) {
+          state = state.copyWith(cameraPosition: nextPosition);
+        }
+      });
+
+  Future<void> _runParticipantAction(
+    String failureMessage,
+    Future<void> Function(LocalParticipant participant) action,
+  ) async {
     final localParticipant = _room?.localParticipant;
     if (localParticipant == null) {
       return;
     }
-    final cameraTrack = findCameraTrack(localParticipant);
-    if (cameraTrack is! LocalVideoTrack) {
-      return;
-    }
-    final nextPosition = state.cameraPosition.switched();
     try {
-      await cameraTrack.setCameraPosition(nextPosition);
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(cameraPosition: nextPosition);
+      await action(localParticipant);
     } on Exception catch (error, stackTrace) {
-      developer.log(
-        'Failed to switch camera',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      developer.log(failureMessage, error: error, stackTrace: stackTrace);
       if (!ref.mounted) {
         return;
       }
-      state = state.copyWith(statusMessage: 'Failed to switch camera: $error');
+      state = state.copyWith(statusMessage: '$failureMessage: $error');
     }
   }
 }

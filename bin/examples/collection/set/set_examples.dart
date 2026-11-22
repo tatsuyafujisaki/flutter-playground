@@ -9,7 +9,7 @@ void _addOrRemove<T>(Set<T> set, T value) {
 void main() {
   final fruits = {'🍎', '🍊'};
   _addOrRemove(fruits, '🍏');
-  stdout.writeln(fruits.toString());
+  stdout.writeln(fruits);
   _addOrRemove(fruits, '🍏');
-  stdout.writeln(fruits.toString());
+  stdout.writeln(fruits);
 }

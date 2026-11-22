@@ -31,7 +31,7 @@ class PeriodicRestartableTimer(
 void main() {
   final timer = PeriodicRestartableTimer(
     const Duration(seconds: 1),
-    () => stdout.writeln(DateTime.now().toString()),
+    () => stdout.writeln(DateTime.now()),
   );
 
   Future<void>.delayed(const Duration(seconds: 3), timer.restart);

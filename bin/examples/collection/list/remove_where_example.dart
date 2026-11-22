@@ -18,7 +18,7 @@ void main() {
     const Fruit(emoji: '🍊'),
   ];
 
-  stdout.writeln(fruits.toString());
+  stdout.writeln(fruits);
   fruits.removeWhere((fruits) => fruits.emoji == '🍏');
-  stdout.writeln(fruits.toString());
+  stdout.writeln(fruits);
 }

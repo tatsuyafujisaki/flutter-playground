@@ -10,9 +10,7 @@ void main() {
   const iterableEquality = IterableEquality<String>();
 
   stdout
-    ..writeln((iterable1 == iterable2).toString()) // false
-    ..writeln(iterableEquality.equals(iterable1, iterable2).toString()) // true
-    ..writeln(
-      iterableEquality.equals(iterable1, iterable3).toString(),
-    ); // false
+    ..writeln(iterable1 == iterable2) // false
+    ..writeln(iterableEquality.equals(iterable1, iterable2)) // true
+    ..writeln(iterableEquality.equals(iterable1, iterable3)); // false
 }

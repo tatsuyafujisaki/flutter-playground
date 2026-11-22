@@ -3,29 +3,24 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews widgets aligned to the left, center, and right in a [Stack].
 @Preview(group: 'Layout', name: 'Left-Center-Right Stack')
-Widget preview() => const _MyStatelessWidget();
-
-class const _MyStatelessWidget() extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => const Column(
-    mainAxisAlignment: .center,
-    children: [
-      _LeftCenterRightWidgetStack(
-        leftWidget: FlutterLogo(),
-        centerWidget: FlutterLogo(),
-      ),
-      _LeftCenterRightWidgetStack(
-        centerWidget: FlutterLogo(),
-        rightWidget: FlutterLogo(),
-      ),
-      _LeftCenterRightWidgetStack(
-        leftWidget: FlutterLogo(),
-        centerWidget: FlutterLogo(),
-        rightWidget: FlutterLogo(),
-      ),
-    ],
-  );
-}
+Widget preview() => const Column(
+  mainAxisAlignment: .center,
+  children: [
+    _LeftCenterRightWidgetStack(
+      leftWidget: FlutterLogo(),
+      centerWidget: FlutterLogo(),
+    ),
+    _LeftCenterRightWidgetStack(
+      centerWidget: FlutterLogo(),
+      rightWidget: FlutterLogo(),
+    ),
+    _LeftCenterRightWidgetStack(
+      leftWidget: FlutterLogo(),
+      centerWidget: FlutterLogo(),
+      rightWidget: FlutterLogo(),
+    ),
+  ],
+);
 
 class const _LeftCenterRightWidgetStack({
   final Widget? leftWidget,

@@ -27,9 +27,9 @@ void main() {
     age: 42,
   ).copyWith(lastUpdated: .now());
   final map = person.toJson();
-  stdout.writeln(map.toString());
+  stdout.writeln(map);
   final personFromJson = Person.fromJson(map);
   stdout
-    ..writeln(personFromJson.toString())
+    ..writeln(personFromJson)
     ..writeln(jsonEncode(person)); // jsonEncode implicitly calls toJson.
 }

@@ -21,15 +21,15 @@ List<_Person> _createPersonList() => <_Person>[
 
 void _sortIntInObject() {
   final list = _createPersonList()..sortBy<num>((person) => person.age);
-  stdout.writeln(list.toString());
+  stdout.writeln(list);
 }
 
 void _sortIntInObjectDescending1() {
   final list = _createPersonList()..sort((a, b) => b.age.compareTo(a.age));
-  stdout.writeln(list.toString());
+  stdout.writeln(list);
 }
 
 void _sortIntInObjectDescending2() {
   final list = _createPersonList()..sortBy<num>((x) => x.age * -1);
-  stdout.writeln(list.toString());
+  stdout.writeln(list);
 }

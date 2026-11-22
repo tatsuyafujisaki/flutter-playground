@@ -20,10 +20,10 @@ List<_Person> _createPersonList() => <_Person>[
 
 void _sortStringInObject() {
   final list = _createPersonList()..sortBy((person) => person.name);
-  stdout.writeln(list.toString());
+  stdout.writeln(list);
 }
 
 void _sortStringInObjectDescending() {
   final list = _createPersonList()..sort((a, b) => b.name.compareTo(a.name));
-  stdout.writeln(list.toString());
+  stdout.writeln(list);
 }

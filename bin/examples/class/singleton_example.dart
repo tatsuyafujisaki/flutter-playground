@@ -16,8 +16,8 @@ class _MySingleton._() {
 
 void main() {
   stdout
-    ..writeln((_MySingleton() == _MySingleton()).toString()) // true
+    ..writeln(_MySingleton() == _MySingleton()) // true
     ..writeln(
-      _MySingleton().initializedAt.toString(),
+      _MySingleton().initializedAt,
     ); // prints the same timestamp as above.
 }

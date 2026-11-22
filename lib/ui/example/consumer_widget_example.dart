@@ -15,23 +15,17 @@ class const _PreviewScope({required final Widget child})
 }
 
 class _PreviewScopeState extends State<_PreviewScope> {
-  late final ProviderContainer _container;
-
-  @override
-  void initState() {
-    super.initState();
-    _container = ProviderContainer(
-      overrides: [
-        albumViewModelProvider.overrideWithBuild(
-          (_, _) => const [
-            Album(userId: 1, id: 1, title: 'quidem molestiae enim'),
-            Album(userId: 1, id: 2, title: 'sunt qui excepturi placeat culpa'),
-            Album(userId: 1, id: 3, title: 'omnis laborum odio'),
-          ],
-        ),
-      ],
-    );
-  }
+  final _container = ProviderContainer(
+    overrides: [
+      albumViewModelProvider.overrideWithBuild(
+        (_, _) => const [
+          Album(userId: 1, id: 1, title: 'quidem molestiae enim'),
+          Album(userId: 1, id: 2, title: 'sunt qui excepturi placeat culpa'),
+          Album(userId: 1, id: 3, title: 'omnis laborum odio'),
+        ],
+      ),
+    ],
+  );
 
   @override
   void dispose() {

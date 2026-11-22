@@ -9,6 +9,6 @@ class _MyTemplateClass(List<String> myList, [DateTime? dateTime]) {
 void main() {
   final myTemplateClass = _MyTemplateClass(['🍎', '🍊']);
   stdout
-    ..writeln(myTemplateClass.myList.toString())
-    ..writeln(myTemplateClass.myDateTime.toString());
+    ..writeln(myTemplateClass.myList)
+    ..writeln(myTemplateClass.myDateTime);
 }

@@ -13,7 +13,7 @@ void main() {
     () {
       stdout
         ..writeln('The given duration has elapsed.')
-        ..writeln(DateTime.now().toString());
+        ..writeln(DateTime.now());
     },
   );
 

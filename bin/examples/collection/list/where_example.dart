@@ -15,8 +15,8 @@ void main() {
   ];
 
   stdout
-    ..writeln(_filterJpeg(filenames).toString())
-    ..writeln(_filterPng(filenames).toString());
+    ..writeln(_filterJpeg(filenames))
+    ..writeln(_filterPng(filenames));
 }
 
 Iterable<String> _filterJpeg(Iterable<String> filenames) => filenames.where(

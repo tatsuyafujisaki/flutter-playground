@@ -28,13 +28,13 @@ class _MyClass {
 
 void main() {
   final myClass1 = _MyClass('🍣');
-  stdout.writeln(myClass1.toString());
+  stdout.writeln(myClass1);
   final myClass2 = _MyClass.myNamedConstructor1('🍣');
-  stdout.writeln(myClass2.toString());
+  stdout.writeln(myClass2);
   final myClass3 = _MyClass.myNamedConstructor2('🐟', '🍚');
-  stdout.writeln(myClass3.toString());
+  stdout.writeln(myClass3);
   final myClass4 = _MyClass.myRedirectingConstructor1('🍣');
-  stdout.writeln(myClass4.toString());
+  stdout.writeln(myClass4);
   final myClass5 = _MyClass.myRedirectingConstructor2('🐟', '🍚');
-  stdout.writeln(myClass5.toString());
+  stdout.writeln(myClass5);
 }

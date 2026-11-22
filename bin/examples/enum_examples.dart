@@ -4,11 +4,11 @@ import 'package:flutter_playground/data/enum/fruit.dart';
 
 void main() {
   stdout
-    ..writeln(Fruit.values.elementAtOrNull(0).toString()) // Fruit.unknown
-    ..writeln(Fruit.values.elementAtOrNull(1).toString()) // Fruit.apple
-    ..writeln(Fruit.values.elementAtOrNull(2).toString()) // Fruit.orange
-    ..writeln(Fruit.values.elementAtOrNull(3).toString()); // null
-  // stdout.writeln(Fruit.values.elementAtOrNull(null).toString()); // Compilation error
+    ..writeln(Fruit.values.elementAtOrNull(0)) // Fruit.unknown
+    ..writeln(Fruit.values.elementAtOrNull(1)) // Fruit.apple
+    ..writeln(Fruit.values.elementAtOrNull(2)) // Fruit.orange
+    ..writeln(Fruit.values.elementAtOrNull(3)); // null
+  // stdout.writeln(Fruit.values.elementAtOrNull(null)); // Compilation error
 
   switch (Fruit.of('🍎')) {
     case .unknown:

@@ -19,9 +19,9 @@ class const _Person({
 
 void _print(_Person person) {
   stdout
-    ..writeln(person.firstName.toString())
+    ..writeln(person.firstName)
     ..writeln(person.lastName)
-    ..writeln(person.toJson().toString());
+    ..writeln(person.toJson());
 }
 
 void main() {

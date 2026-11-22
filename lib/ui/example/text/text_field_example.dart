@@ -3,25 +3,20 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews [TextField] widgets with different border configurations.
 @Preview(group: 'Text', name: 'TextField Borders')
-Widget preview() => const _MyStatelessWidget();
-
-class const _MyStatelessWidget() extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => Column(
-    mainAxisAlignment: .spaceEvenly,
-    children: [
-      _createRectangleTextField(),
-      _createRectangleTextField(.none),
-      _createRoundedTextField(.none),
-      // The border width is 0,
-      // but the border style is NOT "BorderStyle.none".
-      _createRoundedTextField(const BorderSide(width: 0)),
-      // The border style is "BorderStyle.none",
-      // but the border width is NOT 0.
-      _createRoundedTextField(const BorderSide(width: 100, style: .none)),
-    ],
-  );
-}
+Widget preview() => Column(
+  mainAxisAlignment: .spaceEvenly,
+  children: [
+    _createRectangleTextField(),
+    _createRectangleTextField(.none),
+    _createRoundedTextField(.none),
+    // The border width is 0,
+    // but the border style is NOT "BorderStyle.none".
+    _createRoundedTextField(const BorderSide(width: 0)),
+    // The border style is "BorderStyle.none",
+    // but the border width is NOT 0.
+    _createRoundedTextField(const BorderSide(width: 100, style: .none)),
+  ],
+);
 
 TextField _createRectangleTextField([InputBorder? border]) => TextField(
   decoration: InputDecoration(

@@ -10,7 +10,7 @@ void main() {
   const listEquality = ListEquality<String>();
 
   stdout
-    ..writeln((list1 == list2).toString()) // false
-    ..writeln(listEquality.equals(list1, list2).toString()) // true
-    ..writeln(listEquality.equals(list1, list3).toString()); // false
+    ..writeln(list1 == list2) // false
+    ..writeln(listEquality.equals(list1, list2)) // true
+    ..writeln(listEquality.equals(list1, list3)); // false
 }

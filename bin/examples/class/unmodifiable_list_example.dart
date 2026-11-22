@@ -40,9 +40,9 @@ void main() {
     ..clear()
     ..addAll(['🍏']);
   stdout
-    ..writeln(myTemplateClass.myList.toString())
+    ..writeln(myTemplateClass.myList)
     // myTemplateClass.myUnmodifiableList = ['🍏']; // causes a build error.
     // myTemplateClass.myUnmodifiableList.clear(); // throws a runtime exception.
     // myTemplateClass.myUnmodifiableList.addAll(['🍏']); // throws a runtime exception.
-    ..writeln(myTemplateClass.myUnmodifiableList.toString());
+    ..writeln(myTemplateClass.myUnmodifiableList);
 }

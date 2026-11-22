@@ -42,5 +42,5 @@ void main() {
 
   // Private classes can only be accessed from the same file.
   final myPrivate = _MyPrivate();
-  stdout.writeln(myPrivate.toString());
+  stdout.writeln(myPrivate);
 }
