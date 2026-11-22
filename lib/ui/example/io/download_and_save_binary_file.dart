@@ -18,7 +18,8 @@ Widget preview() => ExternalStorageActionPreview(
 );
 
 /// Downloads binary data from [url] and saves it to external storage.
-Future<String?> downloadAndSaveBinaryFile(String url) async {
-  final bytes = await downloadBinaryFile(url);
-  return await saveBinaryFileToExternalStorageDirectory(bytes, p.basename(url));
-}
+Future<String?> downloadAndSaveBinaryFile(String url) => downloadBinaryFile(url)
+    .then(
+      (bytes) =>
+          saveBinaryFileToExternalStorageDirectory(bytes, p.basename(url)),
+    );

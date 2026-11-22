@@ -6,13 +6,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_view_model.g.dart';
 
-/// A Riverpod async notifier that manages Firebase authentication state.
+/// A Riverpod notifier that manages Firebase authentication state.
 @Riverpod(keepAlive: true)
 class AuthViewModel extends _$AuthViewModel {
   Future<User?>? _pendingSignIn;
 
   @override
-  Future<User?> build() async => ref.watch(authRepositoryProvider).currentUser;
+  User? build() => ref.watch(authRepositoryProvider).currentUser;
 
   /// Signs in anonymously if no user is currently authenticated.
   ///
@@ -22,27 +22,17 @@ class AuthViewModel extends _$AuthViewModel {
   Future<User?> signInAnonymously() {
     final authRepository = ref.read(authRepositoryProvider);
     if (authRepository.currentUser case final currentUser?) {
-      if (state.value != currentUser) {
-        state = AsyncData(currentUser);
-      }
-      return Future.value(currentUser);
+      return Future.value(state = currentUser);
     }
-    if (_pendingSignIn case final pending?) {
-      return pending;
-    }
-
-    final future = _performSignIn(authRepository);
-    _pendingSignIn = future;
-    return future;
+    return _pendingSignIn ??= _performSignIn(authRepository);
   }
 
   Future<User?> _performSignIn(AuthRepository authRepository) async {
-    state = const AsyncLoading();
     try {
       final credential = await authRepository.signInAnonymously();
       final user = credential.user ?? authRepository.currentUser;
       if (ref.mounted) {
-        state = AsyncData(user);
+        state = user;
       }
       return user;
     } on Exception catch (error, stackTrace) {
@@ -51,9 +41,6 @@ class AuthViewModel extends _$AuthViewModel {
         error: error,
         stackTrace: stackTrace,
       );
-      if (ref.mounted) {
-        state = AsyncError(error, stackTrace);
-      }
       rethrow;
     } finally {
       _pendingSignIn = null;

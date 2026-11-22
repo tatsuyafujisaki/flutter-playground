@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_playground/data/repository/livekit_token_repository.dart';
 import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
@@ -38,19 +39,14 @@ sealed class LiveKitRoomState with _$LiveKitRoomState {
 /// Returns the active unmuted camera [VideoTrack] for [participant], falling
 /// back to any other unmuted video track if no camera track is published.
 VideoTrack? findCameraTrack(Participant<TrackPublication> participant) {
-  VideoTrack? fallback;
-  for (final publication in participant.videoTrackPublications) {
-    if (publication.muted) {
-      continue;
-    }
-    if (publication.track case final VideoTrack track) {
-      if (publication.source == .camera) {
-        return track;
-      }
-      fallback ??= track;
-    }
-  }
-  return fallback;
+  final active = [
+    for (final publication in participant.videoTrackPublications)
+      if (!publication.muted)
+        if (publication.track case final VideoTrack track)
+          (publication.source, track),
+  ];
+  return active.firstWhereOrNull((entry) => entry.$1 == .camera)?.$2 ??
+      active.firstOrNull?.$2;
 }
 
 /// Requests camera, microphone, and (on Android) Bluetooth permissions needed

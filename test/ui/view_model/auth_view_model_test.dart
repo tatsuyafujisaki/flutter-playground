@@ -37,7 +37,7 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        final user = await container.read(authViewModelProvider.future);
+        final user = container.read(authViewModelProvider);
         expect(user, same(persistedUser));
 
         final result = await container
@@ -57,7 +57,6 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      await container.read(authViewModelProvider.future);
       final notifier = container.read(authViewModelProvider.notifier);
 
       final first = notifier.signInAnonymously();
@@ -69,7 +68,7 @@ void main() {
 
       final results = await Future.wait([first, second]);
       expect(results, [same(signedInUser), same(signedInUser)]);
-      expect(container.read(authViewModelProvider).value, same(signedInUser));
+      expect(container.read(authViewModelProvider), same(signedInUser));
     });
 
     test(
@@ -90,17 +89,16 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        await container.read(authViewModelProvider.future);
         final notifier = container.read(authViewModelProvider.notifier);
 
         await expectLater(notifier.signInAnonymously(), throwsException);
-        expect(container.read(authViewModelProvider).hasError, isTrue);
+        expect(container.read(authViewModelProvider), isNull);
 
         shouldFail = false;
         final user = await notifier.signInAnonymously();
         expect(user, same(signedInUser));
         expect(repository.signInCallCount, 2);
-        expect(container.read(authViewModelProvider).value, same(signedInUser));
+        expect(container.read(authViewModelProvider), same(signedInUser));
       },
     );
   });

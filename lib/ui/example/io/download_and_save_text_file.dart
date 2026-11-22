@@ -17,11 +17,10 @@ Widget preview() => ExternalStorageActionPreview(
 );
 
 /// Downloads text content from [url] and saves it to external storage.
-Future<String?> downloadAndSaveTextFile(String url) async {
+Future<String?> downloadAndSaveTextFile(String url) {
   final uri = Uri.parse(url);
-  final contents = await downloadTextFile(uri);
-  return await saveTextFileToExternalStorageDirectory(
-    contents,
-    p.basename(uri.path),
+  return downloadTextFile(uri).then(
+    (contents) =>
+        saveTextFileToExternalStorageDirectory(contents, p.basename(uri.path)),
   );
 }

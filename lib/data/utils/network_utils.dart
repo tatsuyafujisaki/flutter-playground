@@ -20,47 +20,43 @@ Future<bool> get isOnline async {
 
 /// Checks whether [url] responds with a 2xx HTTP status code.
 Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
+  final uri = Uri.tryParse(url);
+  if (uri == null) {
+    return false;
+  }
+
+  const timeout = Duration(seconds: 10);
   final client =
       dio ??
       Dio(
         BaseOptions(
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-          sendTimeout: const Duration(seconds: 10),
+          connectTimeout: timeout,
+          receiveTimeout: timeout,
+          sendTimeout: timeout,
         ),
       );
+  final options = Options(validateStatus: (_) => true);
   try {
-    final uri = Uri.tryParse(url);
-    if (uri == null) {
-      return false;
-    }
-
-    final response = await client.headUri<void>(
-      uri,
-      options: Options(validateStatus: (_) => true),
-    );
-    switch (response.statusCode) {
-      case final statusCode when _isSuccessful(statusCode):
-        return true;
-      case 405:
-        final response2 = await client.getUri<void>(
-          uri,
-          options: Options(validateStatus: (_) => true),
-        );
-        return _isSuccessful(response2.statusCode);
-    }
+    final response = await client.headUri<void>(uri, options: options);
+    return switch (response.statusCode) {
+      final statusCode when _isSuccessful(statusCode) => true,
+      405 => _isSuccessful(
+        (await client.getUri<void>(uri, options: options)).statusCode,
+      ),
+      _ => false,
+    };
   } on Exception catch (error, stackTrace) {
     developer.log(
       'Failed to check URL accessibility: $url',
       error: error,
       stackTrace: stackTrace,
     );
+    return false;
   } finally {
     if (dio == null) {
       client.close();
     }
   }
-  return false;
 }
 
 bool _isSuccessful(int? statusCode) =>
