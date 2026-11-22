@@ -24,7 +24,7 @@ class const WebViewPage({
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  late final WebViewController _controller;
+  final WebViewController _controller = .new();
   final WebViewCookieManager _cookieManager = .new();
   String _title = '';
   bool _canGoBack = false;
@@ -33,7 +33,6 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   void initState() {
     super.initState();
-    _controller = .new();
     unawaited(_initController());
   }
 

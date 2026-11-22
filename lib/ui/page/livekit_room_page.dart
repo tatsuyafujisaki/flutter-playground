@@ -21,13 +21,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     defaultValue: 'test',
   );
 
-  late final TextEditingController _roomController;
-
-  @override
-  void initState() {
-    super.initState();
-    _roomController = TextEditingController(text: _defaultRoomName);
-  }
+  final _roomController = TextEditingController(text: _defaultRoomName);
 
   @override
   void dispose() {

@@ -12,13 +12,7 @@ class const _MyStatefulWidget() extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
-  late final Future<void> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = Future<void>.delayed(const Duration(seconds: 5), () {});
-  }
+  final _future = Future<void>.delayed(const Duration(seconds: 5), () {});
 
   @override
   Widget build(BuildContext context) => createVoidFutureBuilder(

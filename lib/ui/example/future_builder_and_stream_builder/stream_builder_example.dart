@@ -12,16 +12,10 @@ class const _MyStatefulWidget() extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
-  late final Stream<String> _countStream;
-
-  @override
-  void initState() {
-    super.initState();
-    _countStream = Stream<String>.periodic(
-      const Duration(seconds: 1),
-      (count) => '$count!',
-    );
-  }
+  final _countStream = Stream<String>.periodic(
+    const Duration(seconds: 1),
+    (count) => '$count!',
+  );
 
   @override
   Widget build(BuildContext context) => Center(

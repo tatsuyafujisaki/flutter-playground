@@ -41,9 +41,9 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       setState(() {
         _markers.add(
           Marker(
-            markerId: const MarkerId('current_location'),
+            markerId: const .new('current_location'),
             position: latLng,
-            infoWindow: const InfoWindow(title: 'Your location'),
+            infoWindow: const .new(title: 'Your location'),
             icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           ),
         );

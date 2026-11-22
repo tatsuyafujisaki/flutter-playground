@@ -32,6 +32,10 @@ sealed class LiveKitTokenResponse with _$LiveKitTokenResponse {
     /// The Unix timestamp (in seconds) when [token] expires.
     required int expiresAt,
   }) = _LiveKitTokenResponse;
+
+  /// Creates a [LiveKitTokenResponse] from a JSON map.
+  factory fromJson(Map<String, dynamic> json) =>
+      _$LiveKitTokenResponseFromJson(json);
 }
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for
@@ -47,24 +51,8 @@ class const LiveKitTokenRepository(final FirebaseFunctions _functions) {
     final result = await callable.call<Map<Object?, Object?>>({
       'roomName': roomName,
     });
-    return switch (result.data) {
-      {
-        'url': final String url,
-        'roomName': final String resolvedRoomName,
-        'token': final String token,
-        'identity': final String identity,
-        'expiresAt': final num expiresAt,
-      } =>
-        LiveKitTokenResponse(
-          url: url,
-          roomName: resolvedRoomName,
-          token: token,
-          identity: identity,
-          expiresAt: expiresAt.toInt(),
-        ),
-      _ => throw const FormatException(
-        'Unexpected response format from generateLiveKitToken.',
-      ),
-    };
+    return LiveKitTokenResponse.fromJson(
+      Map<String, dynamic>.from(result.data),
+    );
   }
 }
