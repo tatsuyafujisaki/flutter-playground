@@ -7,8 +7,8 @@ void main() async {
   final date = DateTime.now();
 
   developer.log(
-    DateFormat('yyyy-MM-dd hh:mm:ss').format(date),
-  ); // 2050年1月31日(月)
+    DateFormat('yyyy-MM-dd HH:mm:ss').format(date),
+  ); // 2050-01-31 12:34:56
 
   developer.log('--');
 

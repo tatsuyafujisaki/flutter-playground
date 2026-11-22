@@ -17,7 +17,7 @@ class const _MyStatelessWidget() extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: .spaceEvenly,
     children: <Widget>[
-      const Text('displayes all the text.'),
+      const Text('↓Displays all the text.'),
       Text(_data),
       const Text(
         '''↓Truncates text if it does not fit on a single line because of `softWrap: false`.''',

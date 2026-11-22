@@ -8,7 +8,7 @@ class _Person(final String name, final int age) {
   };
 
   // jsonEncode() implicitly calls toJson().
-  Map<String, dynamic> toJson() => {'name': name, 'age': 10};
+  Map<String, dynamic> toJson() => {'name': name, 'age': age};
 }
 
 void main() {
