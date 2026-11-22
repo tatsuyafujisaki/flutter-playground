@@ -17,9 +17,9 @@ Widget preview() => ExternalStorageActionPreview(
 );
 
 Future<String?> _downloadAndSaveTextFile(String url) async {
-  final Uri uri = .parse(url);
+  final uri = Uri.parse(url);
   final contents = await downloadTextFile(uri);
-  return saveTextFileToExternalStorageDirectory(
+  return await saveTextFileToExternalStorageDirectory(
     contents,
     p.basename(uri.path),
   );

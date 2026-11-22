@@ -50,7 +50,14 @@ class _MyAppState extends ConsumerState<MyApp> {
       navigatorKey: _navigatorKey,
       home: const HomePage(),
       navigatorObservers: _navigatorObservers,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // AppLocalizations.localizationsDelegates registers the
+      // flutter_localizations delegates, whose MaterialLocalizations type
+      // differs from the one that material_ui widgets look up. Use the
+      // material_ui delegates instead.
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
     );
   }

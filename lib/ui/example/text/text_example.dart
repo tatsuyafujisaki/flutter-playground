@@ -20,23 +20,28 @@ class const _MyStatelessWidget() extends StatelessWidget {
       const Text('↓Displays all the text.'),
       Text(_data),
       const Text(
-        '↓Truncates text if it does not fit on a single line because of `softWrap: false`.',
+        '↓Truncates text if it does not fit on a single line because '
+        'of `softWrap: false`.',
       ),
       Text(_data, softWrap: false),
       const Text(
-        '↓Truncates text if it does not fit on a single line because of `softWrap: false`. `maxLines: 2` is ignored.',
+        '↓Truncates text if it does not fit on a single line because '
+        'of `softWrap: false`. `maxLines: 2` is ignored.',
       ),
       Text(_data, softWrap: false, maxLines: 2),
       const Text(
-        '↓Ellipsizes text if it does not fit on a single line because of `TextOverflow.ellipsis`.',
+        '↓Ellipsizes text if it does not fit on a single line because '
+        'of `TextOverflow.ellipsis`.',
       ),
       Text(_data, overflow: .ellipsis),
       const Text(
-        '↓Ellipsizes text if it does not fit on a single line because of `TextOverflow.ellipsis` again.',
+        '↓Ellipsizes text if it does not fit on a single line because '
+        'of `TextOverflow.ellipsis` again.',
       ),
       Text(_data, softWrap: false, overflow: .ellipsis),
       const Text(
-        '↓Ellipsizes text if it does not fit on `maxLines` lines. `softWrap: false` is ignored.',
+        '↓Ellipsizes text if it does not fit on `maxLines` lines. '
+        '`softWrap: false` is ignored.',
       ),
       Text(_data, softWrap: false, overflow: .ellipsis, maxLines: 2),
     ],
