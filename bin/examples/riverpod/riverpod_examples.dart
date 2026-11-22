@@ -9,7 +9,6 @@ part 'riverpod_examples.g.dart';
 String myGeneratedOptionalParameter(Ref ref, [String name = 'Anonymous']) =>
     'Hello, $name!';
 
-// Generates AutoDisposeProvider<bool>
 /// Returns a parameterless greeting.
 @riverpod
 String myGeneratedParameterless(Ref ref) => 'Hello!';
@@ -24,44 +23,54 @@ String myGeneratedRequiredParameters(Ref ref, String name, int age) =>
     'Hello, $age-year-old $name!';
 
 /// Demonstrates using a generated boolean notifier provider.
-void showGeneratedBoolNotifirerProviderExamples() {
+void showGeneratedBoolNotifierProviderExamples() {
   final container = ProviderContainer();
-  developer.log(container.read(myBoolProvider).toString()); // false
-  container.read(myBoolProvider.notifier).toggle();
-  developer.log(container.read(myBoolProvider).toString()); // true
+  try {
+    developer.log(container.read(myBoolProvider).toString()); // false
+    container.read(myBoolProvider.notifier).toggle();
+    developer.log(container.read(myBoolProvider).toString()); // true
+  } finally {
+    container.dispose();
+  }
 }
 
 /// Demonstrates using generated function providers.
 void showGeneratedFunctionProviderExamples() {
   final container = ProviderContainer();
-  developer.log(container.read(myGeneratedParameterlessProvider)); // Hello!
-  developer.log(
-    container.read(myGeneratedRequiredParameterProvider('Minnie')),
-  ); // Hello, Minnie!
-  developer.log(
-    container.read(myGeneratedOptionalParameterProvider()),
-  ); // Hello, Anonymous!
-  developer.log(
-    container.read(myGeneratedOptionalParameterProvider('Donald')),
-  ); // Hello, Donald!
-
-  developer.log(
-    container.read(myGeneratedRequiredParametersProvider('Goofy', 18)),
-  ); // Hello, Donald!
+  try {
+    developer.log(container.read(myGeneratedParameterlessProvider)); // Hello!
+    developer.log(
+      container.read(myGeneratedRequiredParameterProvider('Minnie')),
+    ); // Hello, Minnie!
+    developer.log(
+      container.read(myGeneratedOptionalParameterProvider()),
+    ); // Hello, Anonymous!
+    developer.log(
+      container.read(myGeneratedOptionalParameterProvider('Donald')),
+    ); // Hello, Donald!
+    developer.log(
+      container.read(myGeneratedRequiredParametersProvider('Goofy', 18)),
+    ); // Hello, 18-year-old Goofy!
+  } finally {
+    container.dispose();
+  }
 }
 
 /// Demonstrates using a generated set notifier provider.
-void showGeneratedSetNotifirerProviderExamples() {
+void showGeneratedSetNotifierProviderExamples() {
   final container = ProviderContainer();
-  developer.log(container.read(mySetProvider).toString()); // {}
-  container.read(mySetProvider.notifier).add('a');
-  developer.log(container.read(mySetProvider).toString()); // {'a'}
-  container.read(mySetProvider.notifier).add('b');
-  container.read(mySetProvider.notifier).remove('a');
-  developer.log(container.read(mySetProvider).toString()); // {'b'}
+  try {
+    developer.log(container.read(mySetProvider).toString()); // {}
+    container.read(mySetProvider.notifier).add('a');
+    developer.log(container.read(mySetProvider).toString()); // {'a'}
+    container.read(mySetProvider.notifier).add('b');
+    container.read(mySetProvider.notifier).remove('a');
+    developer.log(container.read(mySetProvider).toString()); // {'b'}
+  } finally {
+    container.dispose();
+  }
 }
 
-// Generates AutoDisposeNotifierProviderImpl<MyBool, bool>
 /// A notifier that manages a boolean flag.
 @riverpod
 class MyBool extends _$MyBool {
@@ -89,4 +98,10 @@ class MySet extends _$MySet {
   void remove(String s) {
     state = {...state}..remove(s);
   }
+}
+
+void main() {
+  showGeneratedBoolNotifierProviderExamples();
+  showGeneratedFunctionProviderExamples();
+  showGeneratedSetNotifierProviderExamples();
 }

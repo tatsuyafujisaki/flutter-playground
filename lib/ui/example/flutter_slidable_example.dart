@@ -4,16 +4,16 @@ import 'package:material_ui/material_ui.dart';
 
 /// Previews a [Slidable] list example with swipe-to-delete actions.
 @Preview()
-Widget preview() => const _MyStatelessWidget();
+Widget preview() => const _MyStatefulWidget();
 
-class _MyStatelessWidget extends StatefulWidget {
+class _MyStatefulWidget extends StatefulWidget {
   const new();
 
   @override
-  State<_MyStatelessWidget> createState() => _MyStatelessWidgetState();
+  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
-class _MyStatelessWidgetState extends State<_MyStatelessWidget> {
+class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
   final List<_MyData> _list = List<_MyData>.generate(
     20,
     (index) => _MyData(id: index, text: index.toString()),

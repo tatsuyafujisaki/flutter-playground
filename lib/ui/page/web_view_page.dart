@@ -4,8 +4,8 @@ import 'dart:developer' as developer;
 import 'package:material_ui/material_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-/// A screen that displays web content using a [WebViewWidget].
-class const WebViewScreen({
+/// A page that displays web content using a [WebViewWidget].
+class const WebViewPage({
   /// The initial URL to load in the web view.
   required final String url,
 
@@ -16,14 +16,14 @@ class const WebViewScreen({
   /// An optional cookie to set before loading [url].
   final WebViewCookie? cookie,
 }) extends StatefulWidget {
-  /// Creates a [WebViewScreen] that loads [url].
+  /// Creates a [WebViewPage] that loads [url].
   this;
 
   @override
-  State<StatefulWidget> createState() => _WebViewScreenState();
+  State<WebViewPage> createState() => _WebViewPageState();
 }
 
-class _WebViewScreenState extends State<WebViewScreen> {
+class _WebViewPageState extends State<WebViewPage> {
   late final WebViewController controller;
   final WebViewCookieManager cookieManager = .new();
   String title = '';

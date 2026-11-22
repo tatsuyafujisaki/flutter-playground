@@ -15,13 +15,15 @@ class const HomePage({super.key}) extends StatelessWidget {
         spacing: 16,
         children: [
           FilledButton(
-            onPressed: () => Navigator.of(context).push(
+            onPressed: () => Navigator.push(
+              context,
               MaterialPageRoute<void>(builder: (_) => const GoogleMapsPage()),
             ),
             child: const Text('Google Maps'),
           ),
           FilledButton(
-            onPressed: () => Navigator.of(context).push(
+            onPressed: () => Navigator.push(
+              context,
               MaterialPageRoute<void>(builder: (_) => const LiveKitRoomPage()),
             ),
             child: const Text('LiveKit'),
