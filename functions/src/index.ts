@@ -1,5 +1,5 @@
 import { defineSecret } from "firebase-functions/params";
-import { HttpsError, onCall } from "firebase-functions/v2/https";
+import { HttpsError, onCall } from "firebase-functions/https";
 import { AccessToken } from "livekit-server-sdk";
 
 const livekitUrl = defineSecret("LIVEKIT_URL");
