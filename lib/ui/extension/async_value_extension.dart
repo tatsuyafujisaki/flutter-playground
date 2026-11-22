@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Convenience helpers on [AsyncValue] for debugging Riverpod state.
-extension AsyncValueExtension on AsyncValue<dynamic> {
+extension AsyncValueExtension on AsyncValue<Object?> {
   /// Logs the current data, error, or loading state of this [AsyncValue].
   void debugPrintRiverpod() {
     switch (this) {
