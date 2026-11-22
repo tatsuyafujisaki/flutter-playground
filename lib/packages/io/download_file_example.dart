@@ -10,8 +10,7 @@ Future<Uint8List> downloadBinaryFile(String url, {Dio? dio}) async {
       url,
       options: Options(responseType: .bytes),
     );
-    final data = response.data;
-    if (data != null) {
+    if (response.data case final data?) {
       return Uint8List.fromList(data);
     }
     throw Exception(
@@ -32,8 +31,7 @@ Future<String> downloadTextFile(Uri uri, {Dio? dio}) async {
       uri,
       options: Options(responseType: .plain),
     );
-    final data = response.data;
-    if (data != null) {
+    if (response.data case final data?) {
       return data;
     }
     throw Exception(

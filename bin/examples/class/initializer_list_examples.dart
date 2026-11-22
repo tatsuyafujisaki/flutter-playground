@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-class _Person({
+class const _Person({
   required final String firstName,
   required String middleName,
   required final String lastName,
@@ -9,7 +9,7 @@ class _Person({
 }
 
 void main() {
-  final person = _Person(
+  const person = _Person(
     firstName: 'Christopher',
     middleName: 'Robin',
     lastName: 'Milne',

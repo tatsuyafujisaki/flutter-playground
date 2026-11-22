@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-class _Person(final String name, final int age) {
+class const _Person(final String name, final int age) {
   factory fromJson(Map<String, dynamic> json) => switch (json) {
     {'name': final String name, 'age': final int age} => _Person(name, age),
     _ => throw FormatException('Invalid person JSON: $json'),
@@ -13,8 +13,9 @@ class _Person(final String name, final int age) {
 
 void main() {
   const json = '{"name": "Nobita", "age": 10}';
-  final map = jsonDecode(json) as Map<String, dynamic>;
-  final user = _Person.fromJson(map);
-  final encoded = jsonEncode(user);
-  developer.log(encoded);
+  if (jsonDecode(json) case final Map<String, dynamic> map) {
+    final user = _Person.fromJson(map);
+    final encoded = jsonEncode(user);
+    developer.log(encoded);
+  }
 }

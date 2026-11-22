@@ -5,8 +5,11 @@ import '../freezed/person.dart';
 
 Map<String, dynamic> jsonDecodeToMap(String json) {
   try {
-    return jsonDecode(json) as Map<String, dynamic>;
-  } on Exception catch (error, stackTrace) {
+    if (jsonDecode(json) case final Map<String, dynamic> map) {
+      return map;
+    }
+    developer.log('Decoded JSON is not an object: $json');
+  } on FormatException catch (error, stackTrace) {
     developer.log(
       'Failed to decode JSON to map',
       error: error,
@@ -21,15 +24,24 @@ String minifyJson(String json) => jsonEncode(jsonDecode(json));
 T _parseObject<T>(
   String json,
   T Function(Map<String, dynamic> json) toElement,
-) => toElement(jsonDecode(json) as Map<String, dynamic>);
+) => switch (jsonDecode(json)) {
+  final Map<String, dynamic> map => toElement(map),
+  final decoded => throw FormatException('Expected JSON object: $decoded'),
+};
 
 List<T> _parseArray<T>(
   String json,
   T Function(Map<String, dynamic> json) toElement,
-) =>
-    List<Map<String, dynamic>>.from(jsonDecode(json) as Iterable<dynamic>)
-        .map(toElement)
-        .toList();
+) => switch (jsonDecode(json)) {
+  final List<dynamic> list => [
+    for (final item in list)
+      switch (item) {
+        final Map<String, dynamic> map => toElement(map),
+        _ => throw FormatException('Expected JSON object element: $item'),
+      },
+  ],
+  final decoded => throw FormatException('Expected JSON array: $decoded'),
+};
 
 void _logJsonRootType(String json) {
   developer.log(jsonDecode(json).runtimeType.toString());

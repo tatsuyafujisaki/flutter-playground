@@ -98,7 +98,7 @@ import 'dart:io';
 
 void main() {
   final list1 = <String>['🍎', '🍊'];
-  final list2 = List<String>.from(list1);
+  final list2 = List.of(list1);
   list2[0] = '🍏';
   stdout.writeln(list1); // [🍎, 🍊]
   stdout.writeln(list2); // [🍏, 🍊]
@@ -195,7 +195,7 @@ import 'dart:io';
 
 void main() {
   final set1 = <String>{'🍎', '🍊'};
-  final set2 = Set<String>.from(set1)
+  final set2 = Set.of(set1)
     ..remove('🍎')
     ..add('🍏');
   stdout.writeln(set1); // {🍎, 🍊}
@@ -224,7 +224,7 @@ import 'dart:io';
 
 void main() {
   final map1 = <String, String>{'apple': '🍎', 'orange': '🍊'};
-  final map2 = Map<String, String>.from(map1);
+  final map2 = Map.of(map1);
   map2['apple'] = '🍏';
   stdout.writeln(map1); // {apple: 🍎, orange: 🍊}
   stdout.writeln(map2); // {apple: 🍏, orange: 🍊}

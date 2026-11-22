@@ -8,7 +8,7 @@ part 'person.g.dart';
 // and output JSON whose keys are snake_case.
 // @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @JsonSerializable(explicitToJson: true)
-class _Person({
+class const _Person({
   required final String? firstName,
   required final String lastName,
 }) {

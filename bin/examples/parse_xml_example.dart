@@ -13,10 +13,11 @@ Future<void> main() async {
       options: Options(responseType: .plain, validateStatus: (_) => true),
     );
 
-    if (response.statusCode == 200 && response.data != null) {
-      final document = XmlDocument.parse(response.data!);
+    if (response case Response(statusCode: 200, data: final data?)) {
+      final document = XmlDocument.parse(data);
 
-      final title = document.findAllElements('title').first.innerText;
+      final title =
+          document.findAllElements('title').firstOrNull?.innerText ?? '';
       stdout
         ..writeln('\nFeed Title: $title')
         ..writeln('--- Recent News ---');
@@ -24,9 +25,9 @@ Future<void> main() async {
       final items = document.findAllElements('item');
 
       for (final item in items.take(10)) {
-        final itemTitle = item.findElements('title').first.innerText;
-        final pubDate = item.findElements('pubDate').first.innerText;
-        final link = item.findElements('link').first.innerText;
+        final itemTitle = item.getElement('title')?.innerText ?? '';
+        final pubDate = item.getElement('pubDate')?.innerText ?? '';
+        final link = item.getElement('link')?.innerText ?? '';
 
         stdout
           ..writeln('Title: $itemTitle')

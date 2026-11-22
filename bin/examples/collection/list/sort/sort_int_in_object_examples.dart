@@ -8,15 +8,15 @@ void main() {
   _sortIntInObjectDescending2();
 }
 
-class _Person({required final String name, required final int age}) {
+class const _Person({required final String name, required final int age}) {
   @override
   String toString() => 'Person(name: $name, age: $age)';
 }
 
 List<_Person> _createPersonList() => <_Person>[
-  _Person(name: 'c', age: 3),
-  _Person(name: 'a', age: 1),
-  _Person(name: 'b', age: 2),
+  const _Person(name: 'c', age: 3),
+  const _Person(name: 'a', age: 1),
+  const _Person(name: 'b', age: 2),
 ];
 
 void _sortIntInObject() {

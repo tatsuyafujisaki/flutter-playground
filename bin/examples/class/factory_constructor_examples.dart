@@ -1,8 +1,10 @@
 import 'dart:developer' as developer;
 
-class _Person1(final String name, final int age) {
-  factory fromJson(Map<String, dynamic> map) =>
-      _Person1(map['name'] as String, map['age'] as int);
+class const _Person1(final String name, final int age) {
+  factory fromJson(Map<String, dynamic> map) => switch (map) {
+    {'name': final String name, 'age': final int age} => _Person1(name, age),
+    _ => throw FormatException('Invalid person JSON: $map'),
+  };
 }
 
 class _Person2(Map<String, dynamic> map) {

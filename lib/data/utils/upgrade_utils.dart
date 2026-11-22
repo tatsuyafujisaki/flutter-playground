@@ -45,7 +45,7 @@ Version? tryParse(String version) {
     return null;
   }
   try {
-    return Version.parse(version);
+    return .parse(version);
   } on Exception catch (error, stackTrace) {
     developer.log('', error: error, stackTrace: stackTrace);
     return null;
@@ -67,8 +67,8 @@ Uri? _storeUri(String packageName) {
   }
   return switch (defaultTargetPlatform) {
     // Replace with your actual App Store ID.
-    .iOS => Uri.parse('https://apps.apple.com/app/id544007664'),
-    .android => Uri.parse(
+    .iOS => .parse('https://apps.apple.com/app/id544007664'),
+    .android => .parse(
       'https://play.google.com/store/apps/details?id=$packageName',
     ),
     .fuchsia || .linux || .macOS || .windows => null,
