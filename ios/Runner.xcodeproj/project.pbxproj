@@ -39,14 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0530E4092F357ACE008E6268 /* Debug-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Debug-dev.xcconfig"; path = "Flutter/Debug-dev.xcconfig"; sourceTree = "<group>"; };
-		0530E40A2F357ACE008E6268 /* Release-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Release-dev.xcconfig"; path = "Flutter/Release-dev.xcconfig"; sourceTree = "<group>"; };
-		0530E40B2F357ACE008E6268 /* Profile-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Profile-dev.xcconfig"; path = "Flutter/Profile-dev.xcconfig"; sourceTree = "<group>"; };
-		0530E40C2F357ACE008E6268 /* Debug-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Debug-prod.xcconfig"; path = "Flutter/Debug-prod.xcconfig"; sourceTree = "<group>"; };
-		0530E40D2F357ACE008E6268 /* Release-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Release-prod.xcconfig"; path = "Flutter/Release-prod.xcconfig"; sourceTree = "<group>"; };
-		0530E40E2F357ACE008E6268 /* Profile-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "Profile-prod.xcconfig"; path = "Flutter/Profile-prod.xcconfig"; sourceTree = "<group>"; };
-		05681E2C2F357ED9003CDE7C /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Dev.xcconfig; sourceTree = "<group>"; };
-		05681E2D2F357ED9003CDE7C /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Prod.xcconfig; sourceTree = "<group>"; };
+		05681E2C2F357ED9003CDE7C /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Dev.xcconfig; path = Flutter/Dev.xcconfig; sourceTree = "<group>"; };
+		05681E2D2F357ED9003CDE7C /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Prod.xcconfig; path = Flutter/Prod.xcconfig; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
@@ -95,12 +89,6 @@
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
 				05681E2C2F357ED9003CDE7C /* Dev.xcconfig */,
 				05681E2D2F357ED9003CDE7C /* Prod.xcconfig */,
-				0530E4092F357ACE008E6268 /* Debug-dev.xcconfig */,
-				0530E40A2F357ACE008E6268 /* Release-dev.xcconfig */,
-				0530E40B2F357ACE008E6268 /* Profile-dev.xcconfig */,
-				0530E40C2F357ACE008E6268 /* Debug-prod.xcconfig */,
-				0530E40D2F357ACE008E6268 /* Release-prod.xcconfig */,
-				0530E40E2F357ACE008E6268 /* Profile-prod.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -112,7 +100,6 @@
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
-				DE751351069D5B4D57D21AD2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -139,13 +126,6 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
-			sourceTree = "<group>";
-		};
-		DE751351069D5B4D57D21AD2 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,7 +182,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 2640;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					331C8080294A63A400263BE5 = {
@@ -351,7 +331,7 @@
 /* Begin XCBuildConfiguration section */
 		0530E3FA2F357A98008E6268 /* Debug-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E4092F357ACE008E6268 /* Debug-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -409,7 +389,7 @@
 		};
 		0530E3FB2F357A98008E6268 /* Debug-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E4092F357ACE008E6268 /* Debug-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -448,7 +428,7 @@
 		};
 		0530E3FD2F357AAA008E6268 /* Debug-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40C2F357ACE008E6268 /* Debug-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -506,7 +486,7 @@
 		};
 		0530E3FE2F357AAA008E6268 /* Debug-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40C2F357ACE008E6268 /* Debug-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -545,7 +525,7 @@
 		};
 		0530E4002F357ACE008E6268 /* Release-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40D2F357ACE008E6268 /* Release-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -601,7 +581,7 @@
 		};
 		0530E4012F357ACE008E6268 /* Release-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40D2F357ACE008E6268 /* Release-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -637,7 +617,7 @@
 		};
 		0530E4032F357ACE008E6268 /* Profile-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40B2F357ACE008E6268 /* Profile-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -693,7 +673,7 @@
 		};
 		0530E4042F357ACE008E6268 /* Profile-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40E2F357ACE008E6268 /* Profile-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -749,7 +729,7 @@
 		};
 		0530E4052F357ACE008E6268 /* Profile-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40B2F357ACE008E6268 /* Profile-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -770,7 +750,7 @@
 		};
 		0530E4062F357ACE008E6268 /* Profile-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40E2F357ACE008E6268 /* Profile-prod.xcconfig */;
+			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -836,7 +816,7 @@
 		};
 		97C147041CF9000F007C117D /* Release-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40A2F357ACE008E6268 /* Release-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon;
@@ -892,7 +872,7 @@
 		};
 		97C147071CF9000F007C117D /* Release-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0530E40A2F357ACE008E6268 /* Release-dev.xcconfig */;
+			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
