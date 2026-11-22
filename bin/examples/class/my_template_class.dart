@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
-class _MyTemplateClass(final List<String> _myList, [DateTime? dateTime]) {
-  List<String> get myList => .unmodifiable(_myList);
+class _MyTemplateClass(List<String> myList, [DateTime? dateTime]) {
+  final List<String> myList = .unmodifiable(myList);
 
   final DateTime myDateTime = dateTime ?? .now();
 }

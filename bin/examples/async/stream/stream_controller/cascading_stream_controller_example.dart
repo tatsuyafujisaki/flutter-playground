@@ -10,6 +10,8 @@ class _MyParentClass {
   void parentNotify() {
     streamController.add('parentNotify is called.');
   }
+
+  Future<void> dispose() => streamController.close();
 }
 
 class _MyChildClass extends _MyParentClass {
@@ -18,14 +20,18 @@ class _MyChildClass extends _MyParentClass {
   }
 }
 
-void main() {
+Future<void> main() async {
   final myChildClass = _MyChildClass();
-
-  myChildClass.streamController.stream.listen(
+  final subscription = myChildClass.streamController.stream.listen(
     (event) => developer.log('onData: $event'),
   );
 
-  myChildClass
-    ..parentNotify()
-    ..childNotify();
+  try {
+    myChildClass
+      ..parentNotify()
+      ..childNotify();
+  } finally {
+    await myChildClass.dispose();
+    await subscription.cancel();
+  }
 }
