@@ -7,9 +7,9 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 /// Returns whether a file exists at [path].
-bool exists(String path) {
+Future<bool> exists(String path) async {
   try {
-    return File(path).existsSync();
+    return await File(path).exists();
   } on Exception catch (error, stackTrace) {
     developer.log('', error: error, stackTrace: stackTrace);
     return false;
@@ -26,7 +26,7 @@ String replaceExtension(String path, String extension) => p.setExtension(
 Future<void> deleteIfExists(String path) async {
   final file = File(path);
   try {
-    if (!file.existsSync()) {
+    if (!await file.exists()) {
       return;
     }
     await file.delete(recursive: true);
