@@ -9,13 +9,6 @@
   ],
   "flutter": {
     "platforms": {
-      "android": {
-        "default": {
-          "projectId": "tatsuyafujisaki-poc-prod",
-          "appId": "1:5550671492:android:0160905bd629556d29a4d1",
-          "fileOutput": "android/app/google-services.json"
-        }
-      },
       "dart": {
         "lib/firebase_options_dev.dart": {
           "projectId": "tatsuyafujisaki-poc-dev",

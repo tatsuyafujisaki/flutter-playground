@@ -40,15 +40,14 @@ Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
       options: Options(validateStatus: (_) => true),
     );
     switch (response.statusCode) {
-      case final int statusCode when statusCode >= 200 && statusCode < 300:
+      case final statusCode when _isSuccessful(statusCode):
         return true;
       case 405:
         final response2 = await client.getUri<void>(
           uri,
           options: Options(validateStatus: (_) => true),
         );
-        final statusCode = response2.statusCode;
-        return statusCode != null && statusCode >= 200 && statusCode < 300;
+        return _isSuccessful(response2.statusCode);
     }
   } on Exception catch (error, stackTrace) {
     developer.log(
@@ -63,3 +62,6 @@ Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
   }
   return false;
 }
+
+bool _isSuccessful(int? statusCode) =>
+    statusCode != null && statusCode >= 200 && statusCode < 300;
