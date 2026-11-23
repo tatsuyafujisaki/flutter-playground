@@ -4,7 +4,7 @@ import OSLog
 import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+@objc class AppDelegate: FlutterAppDelegate, @MainActor FlutterImplicitEngineDelegate {
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier ?? "com.tatsuyafujisaki.poc",
         category: "AppDelegate"
