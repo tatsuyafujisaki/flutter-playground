@@ -23,15 +23,12 @@ class _FakeParticipant(
 ) extends Fake implements Participant<TrackPublication<Track>>;
 
 class _FakeAuthRepository(@override final User? currentUser)
-    implements AuthRepository {
-  @override
-  Future<UserCredential> signInAnonymously() =>
-      throw UnimplementedError('Not expected to sign in.');
-}
+    extends Fake
+    implements AuthRepository;
 
 class _FakeLiveKitTokenRepository(
   final Future<LiveKitTokenResponse> Function(String roomName) onFetchToken,
-) implements LiveKitTokenRepository {
+) extends Fake implements LiveKitTokenRepository {
   @override
   Future<LiveKitTokenResponse> fetchToken({required String roomName}) =>
       onFetchToken(roomName);

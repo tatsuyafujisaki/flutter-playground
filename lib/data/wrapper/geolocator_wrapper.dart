@@ -40,10 +40,7 @@ class GeolocatorWrapper {
     if (permission == .denied) {
       permission = await Geolocator.requestPermission();
     }
-    if (permission == .denied || permission == .deniedForever) {
-      return false;
-    }
-    return true;
+    return permission != .denied && permission != .deniedForever;
   }
 
   /// The current device [Position], or `null` if location access is denied.

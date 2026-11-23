@@ -73,8 +73,8 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     appBar: AppBar(title: const Text('Google Maps')),
     body: SafeArea(
       child: GoogleMap(
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(35.6812, 139.7671), // Default: Tokyo Station.
+        initialCameraPosition: const .new(
+          target: .new(35.6812, 139.7671), // Default: Tokyo Station.
           zoom: 15, // Street level.
         ),
         onMapCreated: _controller.complete,

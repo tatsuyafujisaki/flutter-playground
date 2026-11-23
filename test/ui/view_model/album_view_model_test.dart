@@ -4,7 +4,7 @@ import 'package:flutter_playground/ui/view_model/album_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _FakeAlbumRepository implements AlbumRepository {
+class _FakeAlbumRepository() extends Fake implements AlbumRepository {
   List<Album> albums = const [
     Album(userId: 1, id: 1, title: 'Initial 1'),
     Album(userId: 1, id: 2, title: 'Initial 2'),

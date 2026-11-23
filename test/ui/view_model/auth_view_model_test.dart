@@ -15,7 +15,7 @@ class _FakeUserCredential(@override final User? user)
 class _FakeAuthRepository({
   @override var User? currentUser,
   var Future<UserCredential> Function()? onSignIn,
-}) implements AuthRepository {
+}) extends Fake implements AuthRepository {
   int signInCallCount = 0;
 
   @override

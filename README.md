@@ -80,8 +80,10 @@ Firebase options files:
 | `lib/ui/example/` | Flutter widget and package examples, mostly viewed as widget previews. |
 
 Some code isn't used by the app and is kept as standalone snippets:
-`StreamExtension`, `isDialogShowing`, `printLocales`, `Debouncer`, and
-`createTemporaryFilePath`.
+`AsyncValueExtension`, `BuildContextExtension` (`isCurrentLocale`,
+`screenHeight`, and `screenWidth`), `createTemporaryFilePath`, `Debouncer`,
+`deleteIfExists`, `exists`, `isDialogShowing`, `isOnline`, `isUrlAccessible`,
+`printLocales`, and `StreamExtension`.
 
 ## Distribute an iOS app
 
