@@ -41,13 +41,11 @@ void main() {
               {
                 'id': 'place_1',
                 'displayName': {'text': 'Starbucks Tokyo Station'},
-                'formattedAddress': '1-9-1 Marunouchi',
                 'location': {'latitude': 35.6812, 'longitude': 139.7671},
               },
               {
                 'id': 'place_shared',
                 'displayName': {'text': 'Shared Cafe'},
-                'formattedAddress': '1-9-2 Marunouchi',
                 'location': {'latitude': 35.6815, 'longitude': 139.7675},
               },
             ],
@@ -59,13 +57,11 @@ void main() {
             {
               'id': 'place_shared',
               'displayName': {'text': 'Shared Cafe'},
-              'formattedAddress': '1-9-2 Marunouchi',
               'location': {'latitude': 35.6815, 'longitude': 139.7675},
             },
             {
               'id': 'place_2',
               'displayName': {'text': 'Doutor Coffee'},
-              'formattedAddress': '1-9-3 Marunouchi',
               'location': {'latitude': 35.6820, 'longitude': 139.7680},
             },
           ],

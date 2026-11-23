@@ -18,11 +18,11 @@ const _metersPerDegreeLatitude = 111320.0;
 
 // Pro-tier Text Search fields only, keeping payload size and billing minimal.
 const _chainCafeFields =
-    'places.id,places.displayName,places.formattedAddress,places.location,'
-    'places.googleMapsUri';
+    'places.id,places.displayName,places.location,places.googleMapsUri';
 
 // Enterprise-tier Place Details field fetched lazily only when a user taps a
-// marker, avoiding Enterprise billing on every Text Search request.
+// marker's info window, avoiding Enterprise billing on every Text Search
+// request.
 const _placeUriFields = 'websiteUri,googleMapsUri';
 
 /// Default list of major cafe chains searched by

@@ -136,7 +136,6 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       position: .new(latitude, longitude),
       infoWindow: .new(
         title: place.displayName?.text ?? 'Cafe',
-        snippet: place.formattedAddress,
         // Tapping the marker only shows the info window; tapping the info
         // window opens the cafe's website.
         onTap: () => unawaited(_openCafeUrl(place)),
