@@ -37,9 +37,9 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        manifestPlaceholders["GOOGLE_MAPS_PLATFORM_API_KEY"] = getDartDefine("GOOGLE_MAPS_PLATFORM_API_KEY")
+        manifestPlaceholders["GOOGLE_MAPS_ANDROID_API_KEY"] = getDartDefine("GOOGLE_MAPS_ANDROID_API_KEY")
             ?: throw GradleException(
-                "GOOGLE_MAPS_PLATFORM_API_KEY is not set. Pass --dart-define-from-file=dart_defines.json.",
+                "GOOGLE_MAPS_ANDROID_API_KEY is not set. Pass --dart-define-from-file=dart_defines.json.",
             )
     }
 

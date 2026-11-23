@@ -16,7 +16,8 @@ LiveKit, and WebView) backed by Firebase.
 
    ```json
    {
-     "GOOGLE_MAPS_PLATFORM_API_KEY": "<your-api-key>",
+     "GOOGLE_MAPS_ANDROID_API_KEY": "<your-android-api-key>",
+     "GOOGLE_MAPS_IOS_API_KEY": "<your-ios-api-key>",
      "LIVEKIT_ROOM_NAME": "test",
      "APP_STORE_ID": "<numeric-app-store-id>"
    }
@@ -24,7 +25,8 @@ LiveKit, and WebView) backed by Firebase.
 
    | Key | Required | Description |
    |---|---|---|
-   | `GOOGLE_MAPS_PLATFORM_API_KEY` | Yes | Google Maps API key. The Android build fails without it. |
+   | `GOOGLE_MAPS_ANDROID_API_KEY` | Yes (Android) | Google Maps API key restricted to Android (Maps SDK for Android + Places API (New)). The Android build fails without it. |
+   | `GOOGLE_MAPS_IOS_API_KEY` | Yes (iOS) | Google Maps API key restricted to iOS Bundle IDs (Maps SDK for iOS + Places API (New)). |
    | `LIVEKIT_ROOM_NAME` | No | The default room name on the LiveKit page. Defaults to `test`. |
    | `APP_STORE_ID` | No | The App Store ID for the iOS force-update dialog. If it's not set, the dialog isn't shown on iOS. |
 

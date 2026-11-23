@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:flutter_playground/data/repository/places_repository.dart';
 import 'package:flutter_playground/data/wrapper/geolocator_wrapper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:googleapis/places/v1.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A page that displays Google Maps with the user's location.
+/// A page that displays Google Maps with the user's location and nearby cafes.
 class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [GoogleMapsPage].
   this;
@@ -19,15 +21,22 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   // The GoogleMap widget disposes this controller itself.
   final _controller = Completer<GoogleMapController>();
 
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
+  var _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getCurrentLocation());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadNearbyCafes());
   }
 
-  Future<void> _getCurrentLocation() async {
+  Future<void> _loadNearbyCafes() async {
+    if (_isLoading) {
+      return;
+    }
+    final languageCode = Localizations.localeOf(context).languageCode;
+    setState(() => _isLoading = true);
+
     try {
       final position = await ref
           .read(geolocatorWrapperProvider)
@@ -37,16 +46,15 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       }
 
       final latLng = LatLng(position.latitude, position.longitude);
+      final currentLocationMarker = Marker(
+        markerId: const .new('current_location'),
+        position: latLng,
+        infoWindow: const .new(title: 'Your location'),
+        icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      );
 
       setState(() {
-        _markers.add(
-          Marker(
-            markerId: const .new('current_location'),
-            position: latLng,
-            infoWindow: const .new(title: 'Your location'),
-            icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          ),
-        );
+        _markers = {currentLocationMarker};
       });
 
       final controller = await _controller.future;
@@ -59,18 +67,82 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       developer.log(
         'Current location: ${position.latitude}, ${position.longitude}',
       );
-    } on Exception catch (error, stackTrace) {
+
+      final cafes = await ref
+          .read(placesRepositoryProvider)
+          .searchNearbyCafes(
+            latitude: position.latitude,
+            longitude: position.longitude,
+            languageCode: languageCode,
+          );
+      if (!mounted) {
+        return;
+      }
+
+      final cafeMarkers = cafes.map(_toCafeMarker).nonNulls;
+      setState(() {
+        _markers = {currentLocationMarker, ...cafeMarkers};
+      });
+
+      developer.log('Found ${cafeMarkers.length} nearby cafes');
+    } on Object catch (error, stackTrace) {
       developer.log(
-        'Failed to get current location',
+        'Failed to load current location or nearby cafes',
         error: error,
         stackTrace: stackTrace,
       );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load nearby cafes: $error')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
+  }
+
+  Marker? _toCafeMarker(GoogleMapsPlacesV1Place place) {
+    final latitude = place.location?.latitude;
+    final longitude = place.location?.longitude;
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+
+    final markerId = place.id ?? '${latitude}_$longitude';
+    return Marker(
+      markerId: .new(markerId),
+      position: .new(latitude, longitude),
+      infoWindow: .new(
+        title: place.displayName?.text ?? 'Cafe',
+        snippet: place.formattedAddress,
+      ),
+      icon: .defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+    );
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Google Maps')),
+    appBar: AppBar(
+      title: const Text('Google Maps'),
+      actions: [
+        if (_isLoading)
+          const Padding(
+            padding: .all(16),
+            child: SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          )
+        else
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reload nearby cafes',
+            onPressed: _loadNearbyCafes,
+          ),
+      ],
+    ),
     body: SafeArea(
       child: GoogleMap(
         initialCameraPosition: const .new(
