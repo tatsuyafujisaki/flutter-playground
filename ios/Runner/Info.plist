@@ -74,10 +74,6 @@
 		<true />
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>https</string>
-		</array>
 		<!-- https://pub.dev/packages/geolocator#usage -->
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>
