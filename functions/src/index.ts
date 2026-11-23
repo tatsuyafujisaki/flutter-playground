@@ -2,7 +2,9 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall } from "firebase-functions/https";
 import { AccessToken } from "livekit-server-sdk";
 
-const livekitUrl = defineSecret("LIVEKIT_URL");
+export { searchNearbyChainCafes } from "./chain_cafes";
+
+const livekitUrl =defineSecret("LIVEKIT_URL");
 const livekitApiKey = defineSecret("LIVEKIT_API_KEY");
 const livekitApiSecret = defineSecret("LIVEKIT_API_SECRET");
 

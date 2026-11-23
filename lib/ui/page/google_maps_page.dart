@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_playground/data/model/chain_cafe.dart';
 import 'package:flutter_playground/data/repository/places_repository.dart';
 import 'package:flutter_playground/data/utils/debouncer.dart';
 import 'package:flutter_playground/data/wrapper/geolocator_wrapper.dart';
+import 'package:flutter_playground/ui/view_model/auth_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:googleapis/places/v1.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,7 +32,8 @@ const _defaultCameraTarget = LatLng(35.6812, 139.7671);
 const _cameraIdleDebounceDuration = Duration(milliseconds: 500);
 
 // The minimum distance the map center must move from the last search center
-// before cafes are searched again. Limits billed Places API requests.
+// before cafes are searched again. Limits billed Places API requests made by
+// the `searchNearbyChainCafes` Cloud Function.
 const _minSearchDistanceInMeters = 100;
 
 /// A page that displays Google Maps with the user's location and nearby chain
@@ -46,7 +49,6 @@ class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
 class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   // The GoogleMap widget disposes this controller itself.
   final _controller = Completer<GoogleMapController>();
-  final _resolvedPlaceUris = <String, Uri?>{};
   final _cameraIdleDebouncer = Debouncer(_cameraIdleDebounceDuration);
 
   Marker? _currentLocationMarker;
@@ -94,15 +96,14 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
 
       final latLng = LatLng(position.latitude, position.longitude);
-      setState(() {
-        _resolvedPlaceUris.clear();
-        _currentLocationMarker = Marker(
+      setState(
+        () => _currentLocationMarker = Marker(
           markerId: const .new('current_location'),
           position: latLng,
           infoWindow: const .new(title: 'Your location'),
           icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        );
-      });
+        ),
+      );
 
       // Starts the search before moving the camera so that the camera idle
       // event fired by the animation doesn't trigger a duplicate search.
@@ -121,7 +122,11 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load current location: $error')),
+          SnackBar(
+            content: Text(
+              'Failed to load current location: ${_describeError(error)}',
+            ),
+          ),
         );
       }
     } finally {
@@ -161,6 +166,8 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     setState(() => _isSearching = true);
 
     try {
+      // The Cloud Function rejects unauthenticated calls.
+      await ref.read(authViewModelProvider.notifier).signInAnonymously();
       final cafes = await ref
           .read(placesRepositoryProvider)
           .searchNearbyChainCafes(
@@ -172,7 +179,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
         return;
       }
 
-      final cafeMarkers = cafes.map(_toCafeMarker).nonNulls.toSet();
+      final cafeMarkers = cafes.map(_toCafeMarker).toSet();
       setState(() => _cafeMarkers = cafeMarkers);
 
       developer.log('Found ${cafeMarkers.length} nearby chain cafes');
@@ -186,7 +193,11 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
         // Lets the next camera move retry the search at the same place.
         _lastSearchCenter = null;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load nearby chain cafes: $error')),
+          SnackBar(
+            content: Text(
+              'Failed to load nearby chain cafes: ${_describeError(error)}',
+            ),
+          ),
         );
       }
     } finally {
@@ -196,44 +207,31 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     }
   }
 
-  Marker? _toCafeMarker(GoogleMapsPlacesV1Place place) {
-    final latitude = place.location?.latitude;
-    final longitude = place.location?.longitude;
-    if (latitude == null || longitude == null) {
-      return null;
-    }
+  Marker _toCafeMarker(ChainCafe cafe) => Marker(
+    markerId: .new(cafe.id),
+    position: .new(cafe.latitude, cafe.longitude),
+    infoWindow: .new(
+      title: cafe.name,
+      // Tapping the marker only shows the info window; tapping the info
+      // window opens the cafe's website.
+      onTap: () => unawaited(_openCafeUrl(cafe)),
+    ),
+    icon: .defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+  );
 
-    final markerId = place.id ?? '${latitude}_$longitude';
-    return Marker(
-      markerId: .new(markerId),
-      position: .new(latitude, longitude),
-      infoWindow: .new(
-        title: place.displayName?.text ?? 'Cafe',
-        // Tapping the marker only shows the info window; tapping the info
-        // window opens the cafe's website.
-        onTap: () => unawaited(_openCafeUrl(place)),
-      ),
-      icon: .defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-    );
-  }
-
-  Future<void> _openCafeUrl(GoogleMapsPlacesV1Place place) async {
+  Future<void> _openCafeUrl(ChainCafe cafe) async {
     if (_isOpeningUrl) {
       return;
     }
     setState(() => _isOpeningUrl = true);
 
     try {
-      final uri = await _resolveCafeUri(place);
-      if (!mounted) {
-        return;
-      }
-
+      final uri =
+          _parseHttpUri(cafe.websiteUri) ?? _parseHttpUri(cafe.googleMapsUri);
       if (uri == null) {
-        final name = place.displayName?.text ?? 'this cafe';
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('No URL available for $name')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No URL available for ${cafe.name}')),
+        );
         return;
       }
 
@@ -250,7 +248,9 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to open cafe URL: $error')),
+          SnackBar(
+            content: Text('Failed to open cafe URL: ${_describeError(error)}'),
+          ),
         );
       }
     } finally {
@@ -260,38 +260,13 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     }
   }
 
-  Future<Uri?> _resolveCafeUri(GoogleMapsPlacesV1Place place) async {
-    final websiteUri = _parseHttpUri(place.websiteUri);
-    if (websiteUri != null) {
-      return websiteUri;
-    }
-
-    final placeId = place.id;
-    if (placeId != null && placeId.isNotEmpty) {
-      if (_resolvedPlaceUris.containsKey(placeId)) {
-        return _resolvedPlaceUris[placeId] ??
-            _parseHttpUri(place.googleMapsUri);
-      }
-
-      try {
-        final uri = await ref
-            .read(placesRepositoryProvider)
-            .getPlaceUri(placeId);
-        _resolvedPlaceUris[placeId] = uri;
-        if (uri != null) {
-          return uri;
-        }
-      } on Object catch (error, stackTrace) {
-        developer.log(
-          'Failed to fetch Place Details URI for $placeId; falling back to '
-          'googleMapsUri',
-          error: error,
-          stackTrace: stackTrace,
-        );
-      }
-    }
-    return _parseHttpUri(place.googleMapsUri);
-  }
+  // Firebase exceptions include their stack trace in `toString()`, which is
+  // too long for a snackbar.
+  String _describeError(Object error) => switch (error) {
+    FirebaseException(:final message?) => message,
+    FirebaseException(:final code) => code,
+    _ => '$error',
+  };
 
   Uri? _parseHttpUri(String? raw) {
     if (raw == null || raw.isEmpty) {

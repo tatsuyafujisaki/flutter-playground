@@ -1,248 +1,125 @@
-import 'package:dio/dio.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter_playground/data/model/chain_cafe.dart';
 import 'package:flutter_playground/data/repository/places_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../testing/fake_dio.dart';
+class _FakeHttpsCallableResult<T>(@override final T data)
+    extends Fake
+    implements HttpsCallableResult<T>;
 
-Response<T> _response<T>(String path, T? data, {int statusCode = 200}) =>
-    Response<T>(
-      requestOptions: RequestOptions(path: path),
-      data: data,
-      statusCode: statusCode,
-    );
+class _FakeHttpsCallable(
+  final Future<Map<Object?, Object?>> Function(Object? parameters) onCall,
+) extends Fake implements HttpsCallable {
+  @override
+  Future<HttpsCallableResult<T>> call<T>([Object? parameters]) async {
+    final data = await onCall(parameters);
+    return _FakeHttpsCallableResult<T>(data as T);
+  }
+}
+
+class _FakeFirebaseFunctions(
+  final HttpsCallable Function(String name) onHttpsCallable,
+) extends Fake implements FirebaseFunctions {
+  @override
+  HttpsCallable httpsCallable(String name, {HttpsCallableOptions? options}) =>
+      onHttpsCallable(name);
+}
 
 void main() {
   group('PlacesRepository', () {
-    late FakeDio dio;
-    late PlacesRepository repository;
+    test('searchNearbyChainCafes calls searchNearbyChainCafes and parses the '
+        'response', () async {
+      String? calledFunctionName;
+      Object? calledParameters;
 
-    setUp(() {
-      dio = FakeDio();
-      repository = PlacesRepository(
-        dio,
-        true,
-        appRestrictionHeaders: () async => const {},
-      );
-    });
-
-    test('searchNearbyChainCafes queries Text Search per chain, filters by '
-        'official website domain, and deduplicates results', () async {
-      final capturedBodies = <Map<String, dynamic>>[];
-
-      dio.onPost = (path, data) async {
-        expect(path, '/v1/places:searchText');
-        final body = data! as Map<String, dynamic>;
-        capturedBodies.add(body);
-        final query = body['textQuery'] as String;
-
-        if (query == 'Starbucks') {
-          return _response<Map<String, dynamic>>(path, const {
-            'places': [
-              {
+      final functions = _FakeFirebaseFunctions((name) {
+        calledFunctionName = name;
+        return _FakeHttpsCallable((parameters) async {
+          calledParameters = parameters;
+          // The platform channel returns untyped nested maps and may decode
+          // whole-number doubles as integers.
+          return <Object?, Object?>{
+            'places': <Object?>[
+              <Object?, Object?>{
                 'id': 'place_1',
-                'displayName': {'text': 'Starbucks Tokyo Station'},
-                'location': {'latitude': 35.6812, 'longitude': 139.7671},
+                'name': 'Starbucks Tokyo Station',
+                'latitude': 35.6812,
+                'longitude': 139.7671,
                 'websiteUri': 'https://store.starbucks.co.jp/detail-123/',
+                'googleMapsUri': 'https://maps.google.com/?cid=12345',
               },
-              {
-                'id': 'place_unrelated',
-                'displayName': {'text': 'Cafe near Starbucks'},
-                'location': {'latitude': 35.6813, 'longitude': 139.7672},
-                'websiteUri': 'https://example.com/starbucks.co.jp',
-              },
-              {
-                'id': 'place_no_website',
-                'displayName': {'text': 'Unknown Cafe'},
-                'location': {'latitude': 35.6814, 'longitude': 139.7673},
-              },
-              {
-                'id': 'place_shared',
-                'displayName': {'text': 'Starbucks Shared'},
-                'location': {'latitude': 35.6815, 'longitude': 139.7675},
-                'websiteUri': 'https://starbucks.co.jp/',
+              <Object?, Object?>{
+                'id': 'place_2',
+                'name': 'Doutor Coffee',
+                'latitude': 35,
+                'longitude': 139,
+                'websiteUri': 'https://shop.doutor.co.jp/detail/1',
               },
             ],
-          });
-        }
-
-        return _response<Map<String, dynamic>>(path, const {
-          'places': [
-            {
-              'id': 'place_shared',
-              'displayName': {'text': 'Doutor Shared'},
-              'location': {'latitude': 35.6815, 'longitude': 139.7675},
-              'websiteUri': 'https://shop.doutor.co.jp/shared',
-            },
-            {
-              'id': 'place_2',
-              'displayName': {'text': 'Doutor Coffee'},
-              'location': {'latitude': 35.6820, 'longitude': 139.7680},
-              'websiteUri': 'https://shop.doutor.co.jp/detail/1',
-            },
-          ],
+          };
         });
-      };
+      });
 
-      final places = await repository.searchNearbyChainCafes(
+      final cafes = await PlacesRepository(functions).searchNearbyChainCafes(
         latitude: 35.6812,
         longitude: 139.7671,
-        chains: const [
-          ChainCafe(query: 'Starbucks', domains: ['starbucks.co.jp']),
-          ChainCafe(query: 'Doutor Coffee', domains: ['doutor.co.jp']),
-        ],
         languageCode: 'ja',
       );
 
-      expect(capturedBodies, hasLength(2));
-      for (final body in capturedBodies) {
-        expect(body['includedType'], 'cafe');
-        expect(body['strictTypeFiltering'], isTrue);
-        expect(body['languageCode'], 'ja');
-        expect(body['pageSize'], 20);
-        expect(body['locationRestriction'], isNotNull);
-      }
-
-      expect(places.map((p) => p.id), ['place_1', 'place_shared', 'place_2']);
-    });
-
-    test(
-      'ChainCafe.matchesWebsiteUri matches exact hosts and subdomains only',
-      () {
-        const starbucks = ChainCafe(
-          query: 'Starbucks',
-          domains: ['starbucks.co.jp'],
-        );
-
-        expect(starbucks.matchesWebsiteUri('https://starbucks.co.jp/'), isTrue);
-        expect(
-          starbucks.matchesWebsiteUri(
-            'https://STORE.STARBUCKS.CO.JP/detail-1/',
-          ),
-          isTrue,
-        );
-        expect(
-          starbucks.matchesWebsiteUri('https://notstarbucks.co.jp/'),
-          isFalse,
-        );
-        expect(
-          starbucks.matchesWebsiteUri('https://example.com/?q=starbucks.co.jp'),
-          isFalse,
-        );
-        expect(
-          starbucks.matchesWebsiteUri('javascript:starbucks.co.jp'),
-          isFalse,
-        );
-        expect(starbucks.matchesWebsiteUri(null), isFalse);
-        expect(starbucks.matchesWebsiteUri(''), isFalse);
-      },
-    );
-
-    test(
-      'searchNearbyChainCafes returns empty list when chains is empty',
-      () async {
-        var called = false;
-        dio.onPost = (path, data) async {
-          called = true;
-          return _response<Map<String, dynamic>>(path, const {});
-        };
-
-        final places = await repository.searchNearbyChainCafes(
+      expect(calledFunctionName, 'searchNearbyChainCafes');
+      expect(calledParameters, {
+        'latitude': 35.6812,
+        'longitude': 139.7671,
+        'languageCode': 'ja',
+      });
+      expect(cafes, const [
+        ChainCafe(
+          id: 'place_1',
+          name: 'Starbucks Tokyo Station',
           latitude: 35.6812,
           longitude: 139.7671,
-          chains: const [],
-        );
+          websiteUri: 'https://store.starbucks.co.jp/detail-123/',
+          googleMapsUri: 'https://maps.google.com/?cid=12345',
+        ),
+        ChainCafe(
+          id: 'place_2',
+          name: 'Doutor Coffee',
+          latitude: 35,
+          longitude: 139,
+          websiteUri: 'https://shop.doutor.co.jp/detail/1',
+        ),
+      ]);
+    });
 
-        expect(places, isEmpty);
-        expect(called, isFalse);
-      },
-    );
+    test('searchNearbyChainCafes omits languageCode when it is null', () async {
+      Object? calledParameters;
 
-    test(
-      'searchNearbyChainCafes throws StateError when API key is missing',
-      () async {
-        final repoWithoutKey = PlacesRepository(
-          dio,
-          false,
-          appRestrictionHeaders: () async => const {},
-        );
-
-        await expectLater(
-          repoWithoutKey.searchNearbyChainCafes(
-            latitude: 35.6812,
-            longitude: 139.7671,
-          ),
-          throwsStateError,
-        );
-      },
-    );
-
-    test('getPlaceUri returns websiteUri when available', () async {
-      String? capturedPath;
-      Options? capturedOptions;
-
-      dio.onGet = (path, options) async {
-        capturedPath = path;
-        capturedOptions = options;
-        return _response<Map<String, dynamic>>(path, const {
-          'websiteUri': 'https://store.starbucks.co.jp/detail-123/',
-          'googleMapsUri': 'https://maps.google.com/?cid=12345',
-        });
-      };
-
-      final uri = await repository.getPlaceUri('ChIJ_test_id');
-
-      expect(capturedPath, '/v1/places/ChIJ_test_id');
-      expect(
-        capturedOptions?.headers?['X-Goog-FieldMask'],
-        'websiteUri,googleMapsUri',
+      final functions = _FakeFirebaseFunctions(
+        (name) => _FakeHttpsCallable((parameters) async {
+          calledParameters = parameters;
+          return <Object?, Object?>{'places': <Object?>[]};
+        }),
       );
-      expect(uri, Uri.parse('https://store.starbucks.co.jp/detail-123/'));
+
+      final cafes = await PlacesRepository(functions)
+          .searchNearbyChainCafes(latitude: 35.6812, longitude: 139.7671);
+
+      expect(calledParameters, {'latitude': 35.6812, 'longitude': 139.7671});
+      expect(cafes, isEmpty);
     });
 
     test(
-      'getPlaceUri falls back to googleMapsUri when websiteUri is missing',
+      'searchNearbyChainCafes returns an empty list when places is missing',
       () async {
-        dio.onGet = (path, options) async => _response<Map<String, dynamic>>(
-          path,
-          const {'googleMapsUri': 'https://maps.google.com/?cid=12345'},
+        final functions = _FakeFirebaseFunctions(
+          (name) => _FakeHttpsCallable((parameters) async => {}),
         );
 
-        final uri = await repository.getPlaceUri('ChIJ_no_website');
+        final cafes = await PlacesRepository(functions)
+            .searchNearbyChainCafes(latitude: 35.6812, longitude: 139.7671);
 
-        expect(uri, Uri.parse('https://maps.google.com/?cid=12345'));
+        expect(cafes, isEmpty);
       },
     );
-
-    test(
-      'getPlaceUri returns null for empty placeId or non-HTTP URIs',
-      () async {
-        var called = false;
-        dio.onGet = (path, options) async {
-          called = true;
-          return _response<Map<String, dynamic>>(path, const {
-            'websiteUri': 'javascript:alert(1)',
-          });
-        };
-
-        expect(await repository.getPlaceUri(''), isNull);
-        expect(called, isFalse);
-
-        expect(await repository.getPlaceUri('ChIJ_invalid_scheme'), isNull);
-        expect(called, isTrue);
-      },
-    );
-
-    test('getPlaceUri throws StateError when API key is missing', () async {
-      final repoWithoutKey = PlacesRepository(
-        dio,
-        false,
-        appRestrictionHeaders: () async => const {},
-      );
-
-      await expectLater(
-        repoWithoutKey.getPlaceUri('ChIJ_test_id'),
-        throwsStateError,
-      );
-    });
   });
 }

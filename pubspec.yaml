@@ -10,6 +10,7 @@ dependencies:
   collection: any
   dio: any
   firebase_analytics: any
+  firebase_app_check: any
   firebase_auth: any
   firebase_core: any
   firebase_crashlytics: any
@@ -24,7 +25,6 @@ dependencies:
   geolocator: any
   google_maps_flutter: any
   google_maps_flutter_ios_sdk10: any
-  googleapis: any
   image_picker: any
   intl: any
   json_annotation: any
