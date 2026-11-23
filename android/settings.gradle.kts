@@ -7,6 +7,9 @@ pluginManagement {
             require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
             flutterSdkPath
         }
+    // Lets dev.flutter.flutter-plugin-loader reuse the path instead of reading
+    // local.properties again.
+    settings.extra["flutterSdkPath"] = flutterSdkPath
 
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
@@ -28,7 +31,7 @@ dependencyResolutionManagement {
 // that the latest plugin versions are always used, at the cost of
 // reproducible builds.
 plugins {
-    id("com.android.application") version "9.5.1" apply false
+    id("com.android.application") version "+" apply false
     id("com.google.firebase.crashlytics") version "+" apply false
     id("com.google.gms.google-services") version "+" apply false
     id("dev.flutter.flutter-plugin-loader") version "+"
