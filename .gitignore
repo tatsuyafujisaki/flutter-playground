@@ -60,7 +60,6 @@ functions/node_modules/
 functions/.env
 functions/package-lock.json
 lib/firebase_options*.dart
-ios/Runner/GoogleService-Info.plist
 
 # API keys & environment files
 .env*
@@ -73,7 +72,7 @@ xcuserdata/
 *.dSYM
 *.dSYM.zip
 .build/
-**/Pods/
+**/Package.resolved
 **/ios/**/.symlinks/
 **/ios/**/DerivedData/
 **/ios/**/Icon?
@@ -81,7 +80,6 @@ xcuserdata/
 **/ios/Flutter/.last_build_id
 **/ios/Flutter/App.framework
 **/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/DartDefines.xcconfig
 **/ios/Flutter/ephemeral
