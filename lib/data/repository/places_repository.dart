@@ -16,26 +16,62 @@ const _solutionId = 'gmp_git_agentskills_v1';
 const _signingChannel = MethodChannel('com.tatsuyafujisaki.poc/signing');
 const _metersPerDegreeLatitude = 111320.0;
 
-// Pro-tier Text Search fields only, keeping payload size and billing minimal.
+// Includes Enterprise-tier `places.websiteUri` so Text Search results can be
+// filtered strictly by official chain domain and opened without an extra Place
+// Details request.
 const _chainCafeFields =
-    'places.id,places.displayName,places.location,places.googleMapsUri';
+    'places.id,places.displayName,places.location,places.websiteUri,'
+    'places.googleMapsUri';
 
-// Enterprise-tier Place Details field fetched lazily only when a user taps a
-// marker's info window, avoiding Enterprise billing on every Text Search
-// request.
+// Enterprise-tier Place Details field used as a fallback when `websiteUri` was
+// not already fetched.
 const _placeUriFields = 'websiteUri,googleMapsUri';
 
-/// Default list of major cafe chains searched by
+/// A cafe chain definition pairing a Text Search [query] with its official
+/// website [domains].
+class const ChainCafe({
+  /// The Text Search query used to discover nearby locations of this chain.
+  required final String query,
+
+  /// Official website domains (exact host or subdomain) accepted for this
+  /// chain.
+  required final List<String> domains,
+}) {
+  /// Creates a [ChainCafe].
+  this;
+
+  /// Returns whether [websiteUri] is an HTTP(S) URL whose host matches one of
+  /// [domains] (exact match or subdomain).
+  bool matchesWebsiteUri(String? websiteUri) {
+    if (websiteUri == null || websiteUri.isEmpty) {
+      return false;
+    }
+    final uri = Uri.tryParse(websiteUri);
+    if (uri == null || (uri.scheme != 'http' && uri.scheme != 'https')) {
+      return false;
+    }
+    final host = uri.host.toLowerCase();
+    if (host.isEmpty) {
+      return false;
+    }
+    return domains.any((domain) {
+      final normalized = domain.toLowerCase();
+      return host == normalized || host.endsWith('.$normalized');
+    });
+  }
+}
+
+/// Default list of major cafe chains searched and domain-filtered by
 /// [PlacesRepository.searchNearbyChainCafes].
-const defaultChainCafeNames = [
-  'Starbucks',
-  'Doutor Coffee',
-  "Tully's Coffee",
-  "Komeda's Coffee",
-  'St. Marc Cafe',
-  'Excelsior Caffe',
-  'Caffe Veloce',
-  'Pronto',
+const defaultChainCafes = [
+  ChainCafe(query: 'Starbucks', domains: ['starbucks.co.jp', 'starbucks.com']),
+  ChainCafe(query: 'Doutor Coffee', domains: ['doutor.co.jp']),
+  ChainCafe(query: "Tully's Coffee", domains: ['tullys.co.jp']),
+  ChainCafe(query: "Komeda's Coffee", domains: ['komeda.co.jp']),
+  ChainCafe(query: 'St. Marc Cafe', domains: ['saint-marc-hd.com']),
+  ChainCafe(query: 'Excelsior Caffe', domains: ['doutor.co.jp']),
+  ChainCafe(query: 'Caffe Veloce', domains: ['c-united.co.jp']),
+  ChainCafe(query: 'Pronto', domains: ['pronto.co.jp']),
 ];
 
 String get _platformApiKey => switch (defaultTargetPlatform) {
@@ -93,13 +129,14 @@ class const PlacesRepository(
   /// Creates a [PlacesRepository] backed by [_dio].
   this;
 
-  /// Searches for chain cafes in [chainNames] within [radius] meters of
-  /// ([latitude], [longitude]) using Places API (New) Text Search.
+  /// Searches for chain cafes in [chains] within [radius] meters of
+  /// ([latitude], [longitude]) using Places API (New) Text Search, and filters
+  /// results to places whose `websiteUri` matches the chain's official domains.
   Future<List<GoogleMapsPlacesV1Place>> searchNearbyChainCafes({
     required double latitude,
     required double longitude,
     double radius = 500,
-    List<String> chainNames = defaultChainCafeNames,
+    List<ChainCafe> chains = defaultChainCafes,
     int pageSize = 20,
     String? languageCode,
   }) async {
@@ -110,7 +147,7 @@ class const PlacesRepository(
       );
     }
 
-    if (chainNames.isEmpty) {
+    if (chains.isEmpty) {
       return const [];
     }
 
@@ -122,9 +159,9 @@ class const PlacesRepository(
     );
 
     final responses = await Future.wait(
-      chainNames.map(
-        (chainName) => _searchChainCafe(
-          chainName: chainName,
+      chains.map(
+        (chain) => _searchChainCafe(
+          chain: chain,
           locationRestriction: locationRestriction,
           pageSize: pageSize,
           languageCode: languageCode,
@@ -190,7 +227,7 @@ class const PlacesRepository(
   }
 
   Future<List<GoogleMapsPlacesV1Place>> _searchChainCafe({
-    required String chainName,
+    required ChainCafe chain,
     required GoogleMapsPlacesV1SearchTextRequestLocationRestriction
     locationRestriction,
     required int pageSize,
@@ -198,7 +235,7 @@ class const PlacesRepository(
     String? languageCode,
   }) async {
     final request = GoogleMapsPlacesV1SearchTextRequest(
-      textQuery: chainName,
+      textQuery: chain.query,
       includedType: 'cafe',
       strictTypeFiltering: true,
       pageSize: pageSize,
@@ -221,8 +258,11 @@ class const PlacesRepository(
     if (data == null) {
       return const [];
     }
-    return GoogleMapsPlacesV1SearchTextResponse.fromJson(data).places ??
-        const [];
+    final places =
+        GoogleMapsPlacesV1SearchTextResponse.fromJson(data).places ?? const [];
+    return places
+        .where((place) => chain.matchesWebsiteUri(place.websiteUri))
+        .toList();
   }
 
   GoogleMapsPlacesV1SearchTextRequestLocationRestriction

@@ -25,8 +25,8 @@ void main() {
       );
     });
 
-    test('searchNearbyChainCafes queries Text Search per chain and '
-        'deduplicates results', () async {
+    test('searchNearbyChainCafes queries Text Search per chain, filters by '
+        'official website domain, and deduplicates results', () async {
       final capturedBodies = <Map<String, dynamic>>[];
 
       dio.onPost = (path, data) async {
@@ -42,11 +42,24 @@ void main() {
                 'id': 'place_1',
                 'displayName': {'text': 'Starbucks Tokyo Station'},
                 'location': {'latitude': 35.6812, 'longitude': 139.7671},
+                'websiteUri': 'https://store.starbucks.co.jp/detail-123/',
+              },
+              {
+                'id': 'place_unrelated',
+                'displayName': {'text': 'Cafe near Starbucks'},
+                'location': {'latitude': 35.6813, 'longitude': 139.7672},
+                'websiteUri': 'https://example.com/starbucks.co.jp',
+              },
+              {
+                'id': 'place_no_website',
+                'displayName': {'text': 'Unknown Cafe'},
+                'location': {'latitude': 35.6814, 'longitude': 139.7673},
               },
               {
                 'id': 'place_shared',
-                'displayName': {'text': 'Shared Cafe'},
+                'displayName': {'text': 'Starbucks Shared'},
                 'location': {'latitude': 35.6815, 'longitude': 139.7675},
+                'websiteUri': 'https://starbucks.co.jp/',
               },
             ],
           });
@@ -56,13 +69,15 @@ void main() {
           'places': [
             {
               'id': 'place_shared',
-              'displayName': {'text': 'Shared Cafe'},
+              'displayName': {'text': 'Doutor Shared'},
               'location': {'latitude': 35.6815, 'longitude': 139.7675},
+              'websiteUri': 'https://shop.doutor.co.jp/shared',
             },
             {
               'id': 'place_2',
               'displayName': {'text': 'Doutor Coffee'},
               'location': {'latitude': 35.6820, 'longitude': 139.7680},
+              'websiteUri': 'https://shop.doutor.co.jp/detail/1',
             },
           ],
         });
@@ -71,7 +86,10 @@ void main() {
       final places = await repository.searchNearbyChainCafes(
         latitude: 35.6812,
         longitude: 139.7671,
-        chainNames: const ['Starbucks', 'Doutor Coffee'],
+        chains: const [
+          ChainCafe(query: 'Starbucks', domains: ['starbucks.co.jp']),
+          ChainCafe(query: 'Doutor Coffee', domains: ['doutor.co.jp']),
+        ],
         languageCode: 'ja',
       );
 
@@ -88,7 +106,39 @@ void main() {
     });
 
     test(
-      'searchNearbyChainCafes returns empty list when chainNames is empty',
+      'ChainCafe.matchesWebsiteUri matches exact hosts and subdomains only',
+      () {
+        const starbucks = ChainCafe(
+          query: 'Starbucks',
+          domains: ['starbucks.co.jp'],
+        );
+
+        expect(starbucks.matchesWebsiteUri('https://starbucks.co.jp/'), isTrue);
+        expect(
+          starbucks.matchesWebsiteUri(
+            'https://STORE.STARBUCKS.CO.JP/detail-1/',
+          ),
+          isTrue,
+        );
+        expect(
+          starbucks.matchesWebsiteUri('https://notstarbucks.co.jp/'),
+          isFalse,
+        );
+        expect(
+          starbucks.matchesWebsiteUri('https://example.com/?q=starbucks.co.jp'),
+          isFalse,
+        );
+        expect(
+          starbucks.matchesWebsiteUri('javascript:starbucks.co.jp'),
+          isFalse,
+        );
+        expect(starbucks.matchesWebsiteUri(null), isFalse);
+        expect(starbucks.matchesWebsiteUri(''), isFalse);
+      },
+    );
+
+    test(
+      'searchNearbyChainCafes returns empty list when chains is empty',
       () async {
         var called = false;
         dio.onPost = (path, data) async {
@@ -99,7 +149,7 @@ void main() {
         final places = await repository.searchNearbyChainCafes(
           latitude: 35.6812,
           longitude: 139.7671,
-          chainNames: const [],
+          chains: const [],
         );
 
         expect(places, isEmpty);

@@ -188,6 +188,11 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   }
 
   Future<Uri?> _resolveCafeUri(GoogleMapsPlacesV1Place place) async {
+    final websiteUri = _parseHttpUri(place.websiteUri);
+    if (websiteUri != null) {
+      return websiteUri;
+    }
+
     final placeId = place.id;
     if (placeId != null && placeId.isNotEmpty) {
       if (_resolvedPlaceUris.containsKey(placeId)) {
