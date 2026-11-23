@@ -129,5 +129,74 @@ void main() {
         );
       },
     );
+
+    test('getPlaceUri returns websiteUri when available', () async {
+      String? capturedPath;
+      Options? capturedOptions;
+
+      dio.onGet = (path, options) async {
+        capturedPath = path;
+        capturedOptions = options;
+        return _response<Map<String, dynamic>>(path, const {
+          'websiteUri': 'https://store.starbucks.co.jp/detail-123/',
+          'googleMapsUri': 'https://maps.google.com/?cid=12345',
+        });
+      };
+
+      final uri = await repository.getPlaceUri('ChIJ_test_id');
+
+      expect(capturedPath, '/v1/places/ChIJ_test_id');
+      expect(
+        capturedOptions?.headers?['X-Goog-FieldMask'],
+        'websiteUri,googleMapsUri',
+      );
+      expect(uri, Uri.parse('https://store.starbucks.co.jp/detail-123/'));
+    });
+
+    test(
+      'getPlaceUri falls back to googleMapsUri when websiteUri is missing',
+      () async {
+        dio.onGet = (path, options) async => _response<Map<String, dynamic>>(
+          path,
+          const {'googleMapsUri': 'https://maps.google.com/?cid=12345'},
+        );
+
+        final uri = await repository.getPlaceUri('ChIJ_no_website');
+
+        expect(uri, Uri.parse('https://maps.google.com/?cid=12345'));
+      },
+    );
+
+    test(
+      'getPlaceUri returns null for empty placeId or non-HTTP URIs',
+      () async {
+        var called = false;
+        dio.onGet = (path, options) async {
+          called = true;
+          return _response<Map<String, dynamic>>(path, const {
+            'websiteUri': 'javascript:alert(1)',
+          });
+        };
+
+        expect(await repository.getPlaceUri(''), isNull);
+        expect(called, isFalse);
+
+        expect(await repository.getPlaceUri('ChIJ_invalid_scheme'), isNull);
+        expect(called, isTrue);
+      },
+    );
+
+    test('getPlaceUri throws StateError when API key is missing', () async {
+      final repoWithoutKey = PlacesRepository(
+        dio,
+        false,
+        appRestrictionHeaders: () async => const {},
+      );
+
+      await expectLater(
+        repoWithoutKey.getPlaceUri('ChIJ_test_id'),
+        throwsStateError,
+      );
+    });
   });
 }

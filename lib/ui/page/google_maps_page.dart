@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googleapis/places/v1.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Hides default business POIs (including independent cafes) so only chain cafe
 // markers stand out on the map.
@@ -34,9 +35,11 @@ class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
 class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   // The GoogleMap widget disposes this controller itself.
   final _controller = Completer<GoogleMapController>();
+  final _resolvedPlaceUris = <String, Uri?>{};
 
   Set<Marker> _markers = {};
   var _isLoading = false;
+  var _isOpeningUrl = false;
 
   @override
   void initState() {
@@ -70,6 +73,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
 
       setState(() {
+        _resolvedPlaceUris.clear();
         _markers = {currentLocationMarker};
       });
 
@@ -133,9 +137,94 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       infoWindow: .new(
         title: place.displayName?.text ?? 'Cafe',
         snippet: place.formattedAddress,
+        // Tapping the marker only shows the info window; tapping the info
+        // window opens the cafe's website.
+        onTap: () => unawaited(_openCafeUrl(place)),
       ),
       icon: .defaultMarkerWithHue(BitmapDescriptor.hueOrange),
     );
+  }
+
+  Future<void> _openCafeUrl(GoogleMapsPlacesV1Place place) async {
+    if (_isOpeningUrl) {
+      return;
+    }
+    setState(() => _isOpeningUrl = true);
+
+    try {
+      final uri = await _resolveCafeUri(place);
+      if (!mounted) {
+        return;
+      }
+
+      if (uri == null) {
+        final name = place.displayName?.text ?? 'this cafe';
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No URL available for $name')));
+        return;
+      }
+
+      final launched = await launchUrl(uri, mode: .externalApplication);
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Could not open $uri')));
+      }
+    } on Object catch (error, stackTrace) {
+      developer.log(
+        'Failed to open cafe URL',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to open cafe URL: $error')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isOpeningUrl = false);
+      }
+    }
+  }
+
+  Future<Uri?> _resolveCafeUri(GoogleMapsPlacesV1Place place) async {
+    final placeId = place.id;
+    if (placeId != null && placeId.isNotEmpty) {
+      if (_resolvedPlaceUris.containsKey(placeId)) {
+        return _resolvedPlaceUris[placeId] ??
+            _parseHttpUri(place.googleMapsUri);
+      }
+
+      try {
+        final uri = await ref
+            .read(placesRepositoryProvider)
+            .getPlaceUri(placeId);
+        _resolvedPlaceUris[placeId] = uri;
+        if (uri != null) {
+          return uri;
+        }
+      } on Object catch (error, stackTrace) {
+        developer.log(
+          'Failed to fetch Place Details URI for $placeId; falling back to '
+          'googleMapsUri',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      }
+    }
+    return _parseHttpUri(place.googleMapsUri);
+  }
+
+  Uri? _parseHttpUri(String? raw) {
+    if (raw == null || raw.isEmpty) {
+      return null;
+    }
+    final uri = Uri.tryParse(raw);
+    if (uri == null || (uri.scheme != 'http' && uri.scheme != 'https')) {
+      return null;
+    }
+    return uri;
   }
 
   @override
@@ -143,7 +232,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
     appBar: AppBar(
       title: const Text('Google Maps'),
       actions: [
-        if (_isLoading)
+        if (_isLoading || _isOpeningUrl)
           const Padding(
             padding: .all(16),
             child: SizedBox.square(

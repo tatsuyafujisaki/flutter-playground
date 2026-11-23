@@ -18,7 +18,12 @@ const _metersPerDegreeLatitude = 111320.0;
 
 // Pro-tier Text Search fields only, keeping payload size and billing minimal.
 const _chainCafeFields =
-    'places.id,places.displayName,places.formattedAddress,places.location';
+    'places.id,places.displayName,places.formattedAddress,places.location,'
+    'places.googleMapsUri';
+
+// Enterprise-tier Place Details field fetched lazily only when a user taps a
+// marker, avoiding Enterprise billing on every Text Search request.
+const _placeUriFields = 'websiteUri,googleMapsUri';
 
 /// Default list of major cafe chains searched by
 /// [PlacesRepository.searchNearbyChainCafes].
@@ -138,6 +143,50 @@ class const PlacesRepository(
       }
     }
     return deduplicated.values.toList();
+  }
+
+  /// Fetches the website URI for [placeId] using Places API (New) Place
+  /// Details, falling back to its Google Maps URI when no website is
+  /// registered.
+  Future<Uri?> getPlaceUri(String placeId) async {
+    if (!_hasApiKey) {
+      throw StateError(
+        'Google Maps API key is not set for $defaultTargetPlatform. '
+        'Pass --dart-define-from-file=dart_defines.json.',
+      );
+    }
+
+    if (placeId.isEmpty) {
+      return null;
+    }
+
+    final headers = await appRestrictionHeaders();
+    final response = await _dio.get<Map<String, dynamic>>(
+      '/v1/places/${Uri.encodeComponent(placeId)}',
+      options: Options(
+        headers: {'X-Goog-FieldMask': _placeUriFields, ...headers},
+      ),
+    );
+
+    final data = response.data;
+    if (data == null) {
+      return null;
+    }
+
+    final place = GoogleMapsPlacesV1Place.fromJson(data);
+    return _parseHttpUri(place.websiteUri) ??
+        _parseHttpUri(place.googleMapsUri);
+  }
+
+  Uri? _parseHttpUri(String? raw) {
+    if (raw == null || raw.isEmpty) {
+      return null;
+    }
+    final uri = Uri.tryParse(raw);
+    if (uri == null || (uri.scheme != 'http' && uri.scheme != 'https')) {
+      return null;
+    }
+    return uri;
   }
 
   Future<List<GoogleMapsPlacesV1Place>> _searchChainCafe({
