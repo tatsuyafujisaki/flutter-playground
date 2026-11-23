@@ -6,7 +6,10 @@ const _myTopPrivateLevelVariable = '_myTopPrivateLevelVariable';
 const myTopLevelPublicVariable = 'myTopLevelPublicVariable';
 
 /// A public class demonstrating public and private members.
-class MyPublic {
+class MyPublic() {
+  /// Creates a [MyPublic].
+  this;
+
   final _myPrivateVariable = '_myPrivateVariable';
 
   /// A public instance variable.
@@ -22,7 +25,7 @@ class MyPublic {
   }
 }
 
-class _MyPrivate;
+class const _MyPrivate();
 
 void main() {
   // Top-level private variables are only accessible from within the same file.
@@ -41,6 +44,6 @@ void main() {
     ..myPublicMethod();
 
   // Private classes can only be accessed from the same file.
-  final myPrivate = _MyPrivate();
+  const myPrivate = _MyPrivate();
   stdout.writeln(myPrivate);
 }

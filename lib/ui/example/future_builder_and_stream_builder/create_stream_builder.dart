@@ -1,5 +1,4 @@
-import 'dart:developer' as developer;
-
+import 'package:flutter_playground/ui/extension/async_snapshot_extension.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Creates a [StreamBuilder] for a non-nullable [stream] that handles data,
@@ -11,20 +10,10 @@ StreamBuilder<T> createStreamBuilder<T extends Object>({
   Widget Function()? onElse,
 }) => StreamBuilder<T>(
   stream: stream,
-  builder: (context, snapshot) {
-    switch (snapshot) {
-      case AsyncSnapshot(:final data?):
-        return onData(data);
-      case AsyncSnapshot(:final error?, :final stackTrace):
-        developer.log(
-          'StreamBuilder error',
-          error: error,
-          stackTrace: stackTrace,
-        );
-        return onError?.call() ?? const Center(child: Icon(Icons.error));
-      case AsyncSnapshot():
-        return onElse?.call() ??
-            const Center(child: CircularProgressIndicator());
-    }
-  },
+  builder: (context, snapshot) => snapshot.buildWidget(
+    onData: onData,
+    errorLogMessage: 'StreamBuilder error',
+    onError: onError,
+    onElse: onElse,
+  ),
 );

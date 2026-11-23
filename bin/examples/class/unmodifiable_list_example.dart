@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class _MyClass {
+class _MyClass() {
   final _myNonFinalString = '🍎';
   // Trying to replace myNonFinalString itself outside the class will cause a
   // build error.

@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 /// A container that manages and disposes multiple stream subscriptions.
-class CompositeSubscription {
+class CompositeSubscription() {
+  /// Creates a [CompositeSubscription].
+  this;
+
   final _subscriptions = <StreamSubscription<Object?>>{};
   var _isDisposed = false;
 

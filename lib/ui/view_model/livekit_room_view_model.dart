@@ -25,15 +25,17 @@ sealed class LiveKitRoomState with _$LiveKitRoomState {
     /// Whether a join attempt is currently in progress.
     @Default(false) bool isJoining,
 
-    /// Whether the local participant has joined [room].
-    @Default(false) bool isJoined,
-
     /// The active local camera facing direction.
     @Default(CameraPosition.front) CameraPosition cameraPosition,
 
     /// An optional status or error message to show in the UI.
     String? statusMessage,
   }) = _LiveKitRoomState;
+
+  const new _();
+
+  /// Whether the local participant has joined [room].
+  bool get isJoined => room != null && !isJoining;
 }
 
 /// Returns the active unmuted camera [VideoTrack] for [participant], falling
@@ -156,7 +158,6 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
 
       _room = room;
       _roomListener = roomListener;
-      state = state.copyWith(room: room, cameraPosition: .front);
 
       await room.connect(tokenResponse.url, tokenResponse.token);
       if (await _isRoomStale(room)) {
@@ -195,7 +196,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       state = state.copyWith(
         room: room,
         isJoining: false,
-        isJoined: true,
+        cameraPosition: .front,
         statusMessage: publishWarning,
       );
     } on FirebaseFunctionsException catch (error, stackTrace) {

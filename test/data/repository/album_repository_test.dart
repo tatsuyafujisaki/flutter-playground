@@ -3,81 +3,7 @@ import 'package:flutter_playground/data/model/album.dart';
 import 'package:flutter_playground/data/repository/album_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _FakeDio extends Fake implements Dio {
-  Future<Response<dynamic>> Function(String path)? onGet;
-  Future<Response<dynamic>> Function(String path, Object? data)? onPost;
-  Future<Response<dynamic>> Function(String path, Object? data)? onPut;
-  Future<Response<dynamic>> Function(String path)? onDelete;
-
-  @override
-  Future<Response<T>> get<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final response = await onGet!(path);
-    return Response<T>(
-      requestOptions: response.requestOptions,
-      data: response.data as T?,
-      statusCode: response.statusCode,
-    );
-  }
-
-  @override
-  Future<Response<T>> post<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final response = await onPost!(path, data);
-    return Response<T>(
-      requestOptions: response.requestOptions,
-      data: response.data as T?,
-      statusCode: response.statusCode,
-    );
-  }
-
-  @override
-  Future<Response<T>> put<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final response = await onPut!(path, data);
-    return Response<T>(
-      requestOptions: response.requestOptions,
-      data: response.data as T?,
-      statusCode: response.statusCode,
-    );
-  }
-
-  @override
-  Future<Response<T>> delete<T>(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    final response = await onDelete!(path);
-    return Response<T>(
-      requestOptions: response.requestOptions,
-      data: response.data as T?,
-      statusCode: response.statusCode,
-    );
-  }
-}
+import '../../testing/fake_dio.dart';
 
 Response<T> _response<T>(String path, T? data, {int statusCode = 200}) =>
     Response<T>(
@@ -88,16 +14,16 @@ Response<T> _response<T>(String path, T? data, {int statusCode = 200}) =>
 
 void main() {
   group('AlbumRepository', () {
-    late _FakeDio dio;
+    late FakeDio dio;
     late AlbumRepository repository;
 
     setUp(() {
-      dio = _FakeDio();
+      dio = FakeDio();
       repository = AlbumRepository(dio);
     });
 
     test('getAlbums parses album list from response', () async {
-      dio.onGet = (path) async {
+      dio.onGet = (path, _) async {
         expect(path, '/albums');
         return _response<List<dynamic>>(path, const [
           {'userId': 1, 'id': 1, 'title': 'First'},
@@ -113,7 +39,7 @@ void main() {
     });
 
     test('getAlbum parses single album from response', () async {
-      dio.onGet = (path) async {
+      dio.onGet = (path, _) async {
         expect(path, '/albums/5');
         return _response<Map<String, dynamic>>(path, const {
           'userId': 2,
@@ -171,7 +97,7 @@ void main() {
     });
 
     test('throws Exception when Dio throws DioException', () async {
-      dio.onGet = (path) => Future.error(
+      dio.onGet = (path, _) => Future.error(
         DioException(
           requestOptions: RequestOptions(path: path),
           response: _response<String>(path, 'server error', statusCode: 500),
@@ -182,7 +108,8 @@ void main() {
     });
 
     test('throws Exception when response data is null', () async {
-      dio.onGet = (path) async => _response<Map<String, dynamic>>(path, null);
+      dio.onGet = (path, _) async =>
+          _response<Map<String, dynamic>>(path, null);
 
       await expectLater(repository.getAlbum(id: 1), throwsException);
     });

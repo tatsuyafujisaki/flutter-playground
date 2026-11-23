@@ -38,6 +38,7 @@ jobs:
           echo "$FIREBASE_OPTIONS_DEV_BASE64" | base64 --decode > lib/firebase_options_dev.dart
           echo "$FIREBASE_OPTIONS_PROD_BASE64" | base64 --decode > lib/firebase_options_prod.dart
       - run: fvm flutter pub get
+      - run: test ! -s lib/l10n/untranslated.txt
       - run: fvm dart run build_runner build
       - run: fvm dart format --output none --set-exit-if-changed .
       - run: fvm flutter analyze --fatal-infos

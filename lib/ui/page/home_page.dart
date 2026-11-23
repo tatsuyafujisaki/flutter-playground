@@ -25,10 +25,7 @@ class const HomePage({super.key}) extends StatelessWidget {
           ),
           _PageButton(
             label: 'WebView',
-            builder: (context) => WebViewPage(
-              url: 'https://flutter.dev',
-              onBackPressed: () => Navigator.pop(context),
-            ),
+            builder: (_) => const WebViewPage(url: 'https://flutter.dev'),
           ),
         ],
       ),

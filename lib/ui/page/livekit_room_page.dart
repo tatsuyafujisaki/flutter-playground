@@ -33,28 +33,27 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(liveKitRoomViewModelProvider);
     final notifier = ref.read(liveKitRoomViewModelProvider.notifier);
-    final room = state.room;
 
     return Scaffold(
       appBar: AppBar(title: const Text('LiveKit')),
       body: SafeArea(
-        child: state.isJoined && room != null
-            ? _CallView(
-                room: room,
-                fallbackRoomName: _roomController.text.trim(),
-                statusMessage: state.statusMessage,
-                onToggleAudio: () => unawaited(notifier.toggleAudio()),
-                onToggleVideo: () => unawaited(notifier.toggleVideo()),
-                onSwitchCamera: () => unawaited(notifier.switchCamera()),
-                onLeave: () => unawaited(notifier.leaveRoom()),
-              )
-            : _SetupView(
-                roomController: _roomController,
-                isJoining: state.isJoining,
-                statusMessage: state.statusMessage,
-                onJoin: () =>
-                    unawaited(notifier.joinRoom(_roomController.text)),
-              ),
+        child: switch (state.room) {
+          final room? when state.isJoined => _CallView(
+            room: room,
+            fallbackRoomName: _roomController.text.trim(),
+            statusMessage: state.statusMessage,
+            onToggleAudio: () => unawaited(notifier.toggleAudio()),
+            onToggleVideo: () => unawaited(notifier.toggleVideo()),
+            onSwitchCamera: () => unawaited(notifier.switchCamera()),
+            onLeave: () => unawaited(notifier.leaveRoom()),
+          ),
+          _ => _SetupView(
+            roomController: _roomController,
+            isJoining: state.isJoining,
+            statusMessage: state.statusMessage,
+            onJoin: () => unawaited(notifier.joinRoom(_roomController.text)),
+          ),
+        },
       ),
     );
   }

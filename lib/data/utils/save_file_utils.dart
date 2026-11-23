@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'package:flutter_playground/ui/example/io/directories.dart';
+import 'package:flutter_playground/data/utils/directories.dart';
 
 /// Writes [bytes] to [filename] in external storage and returns the path.
 Future<String?> saveBinaryFileToExternalStorageDirectory(

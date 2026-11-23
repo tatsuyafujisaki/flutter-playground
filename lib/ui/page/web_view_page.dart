@@ -8,10 +8,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 class const WebViewPage({
   /// The initial URL to load in the web view.
   required final String url,
-
-  /// The callback invoked when the back button is pressed.
-  required final VoidCallback onBackPressed,
   super.key,
+
+  /// An optional callback invoked when a custom back button is pressed.
+  ///
+  /// When omitted, [AppBar] uses its default back button.
+  final VoidCallback? onBackPressed,
 
   /// An optional cookie to set before loading [url].
   final WebViewCookie? cookie,
@@ -74,13 +76,15 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      leading: TextButton(
-        onPressed: widget.onBackPressed,
-        child: const FittedBox(child: Text('Back')),
-      ),
+      leading: widget.onBackPressed != null
+          ? TextButton(
+              onPressed: widget.onBackPressed,
+              child: const FittedBox(child: Text('Back')),
+            )
+          : null,
       title: Text(_title),
       centerTitle: true,
-      leadingWidth: 70,
+      leadingWidth: widget.onBackPressed != null ? 70 : null,
     ),
     body: Column(
       children: [
