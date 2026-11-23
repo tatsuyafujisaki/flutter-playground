@@ -8,7 +8,21 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:googleapis/places/v1.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A page that displays Google Maps with the user's location and nearby cafes.
+// Hides default business POIs (including independent cafes) so only chain cafe
+// markers stand out on the map.
+const _hideBusinessPoisMapStyle = '''
+[
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {"visibility": "off"}
+    ]
+  }
+]
+''';
+
+/// A page that displays Google Maps with the user's location and nearby chain
+/// cafes.
 class const GoogleMapsPage({super.key}) extends ConsumerStatefulWidget {
   /// Creates a [GoogleMapsPage].
   this;
@@ -27,10 +41,12 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadNearbyCafes());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _loadNearbyChainCafes(),
+    );
   }
 
-  Future<void> _loadNearbyCafes() async {
+  Future<void> _loadNearbyChainCafes() async {
     if (_isLoading) {
       return;
     }
@@ -70,7 +86,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
 
       final cafes = await ref
           .read(placesRepositoryProvider)
-          .searchNearbyCafes(
+          .searchNearbyChainCafes(
             latitude: position.latitude,
             longitude: position.longitude,
             languageCode: languageCode,
@@ -84,16 +100,16 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
         _markers = {currentLocationMarker, ...cafeMarkers};
       });
 
-      developer.log('Found ${cafeMarkers.length} nearby cafes');
+      developer.log('Found ${cafeMarkers.length} nearby chain cafes');
     } on Object catch (error, stackTrace) {
       developer.log(
-        'Failed to load current location or nearby cafes',
+        'Failed to load current location or nearby chain cafes',
         error: error,
         stackTrace: stackTrace,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load nearby cafes: $error')),
+          SnackBar(content: Text('Failed to load nearby chain cafes: $error')),
         );
       }
     } finally {
@@ -138,8 +154,8 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
         else
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Reload nearby cafes',
-            onPressed: _loadNearbyCafes,
+            tooltip: 'Reload nearby chain cafes',
+            onPressed: _loadNearbyChainCafes,
           ),
       ],
     ),
@@ -149,6 +165,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
           target: .new(35.6812, 139.7671), // Default: Tokyo Station.
           zoom: 15, // Street level.
         ),
+        style: _hideBusinessPoisMapStyle,
         onMapCreated: _controller.complete,
         markers: _markers,
       ),
