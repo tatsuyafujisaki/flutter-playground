@@ -1,4 +1,4 @@
-import { defineSecret } from "firebase-functions/params";
+import { defineBoolean, defineSecret } from "firebase-functions/params";
 import { HttpsError, onCall } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
 
@@ -8,9 +8,7 @@ const googlePlacesApiKey = defineSecret("GOOGLE_PLACES_API_KEY");
 // environment variable is "true". Enable it only after the attestation
 // providers (and debug tokens for debug builds) are registered in the Firebase
 // console; otherwise every call is rejected.
-function enforcesAppCheck(): boolean {
-  return process.env["ENFORCE_APP_CHECK"] === "true";
-}
+const enforceAppCheck = defineBoolean("ENFORCE_APP_CHECK", { default: false });
 
 const TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
 const SOLUTION_ID = "gmp_git_agentskills_v1";
@@ -195,20 +193,13 @@ export const searchNearbyChainCafes = onCall<
   {
     region: "asia-northeast1",
     secrets: [googlePlacesApiKey],
+    enforceAppCheck,
   },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError(
         "unauthenticated",
         "Authentication is required to search for chain cafes.",
-      );
-    }
-
-    // `request.app` is set only when the App Check token was verified.
-    if (enforcesAppCheck() && !request.app) {
-      throw new HttpsError(
-        "failed-precondition",
-        "A valid App Check token is required to search for chain cafes.",
       );
     }
 
