@@ -1,16 +1,16 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_playground/data/model/chain_cafe.dart';
+import 'package:flutter_playground/data/provider/firebase_functions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'places_repository.g.dart';
 
-const _region = 'asia-northeast1';
 const _searchNearbyChainCafesFunctionName = 'searchNearbyChainCafes';
 
 /// Provides the singleton [PlacesRepository] instance.
 @Riverpod(keepAlive: true)
 PlacesRepository placesRepository(Ref ref) =>
-    PlacesRepository(FirebaseFunctions.instanceFor(region: _region));
+    PlacesRepository(ref.watch(firebaseFunctionsProvider));
 
 /// A repository that searches for places through Cloud Functions for Firebase,
 /// which keeps the Places API key on the server.

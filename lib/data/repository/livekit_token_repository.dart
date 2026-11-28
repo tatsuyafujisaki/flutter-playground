@@ -1,16 +1,16 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_playground/data/model/livekit_token_response.dart';
+import 'package:flutter_playground/data/provider/firebase_functions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'livekit_token_repository.g.dart';
 
-const _region = 'asia-northeast1';
 const _generateTokenFunctionName = 'generateLiveKitToken';
 
 /// Provides the singleton [LiveKitTokenRepository] instance.
 @Riverpod(keepAlive: true)
 LiveKitTokenRepository liveKitTokenRepository(Ref ref) =>
-    LiveKitTokenRepository(FirebaseFunctions.instanceFor(region: _region));
+    LiveKitTokenRepository(ref.watch(firebaseFunctionsProvider));
 
 /// A repository that fetches LiveKit access tokens from Cloud Functions for
 /// Firebase.
