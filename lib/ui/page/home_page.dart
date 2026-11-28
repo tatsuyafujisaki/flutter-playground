@@ -1,3 +1,4 @@
+import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:flutter_playground/ui/page/google_maps_page.dart';
 import 'package:flutter_playground/ui/page/livekit_room_page.dart';
 import 'package:flutter_playground/ui/page/web_view_page.dart';
@@ -16,15 +17,15 @@ class const HomePage({super.key}) extends StatelessWidget {
         spacing: 16,
         children: [
           _PageButton(
-            label: 'Google Maps',
+            label: context.l10n.googleMapsPageTitle,
             builder: (_) => const GoogleMapsPage(),
           ),
           _PageButton(
-            label: 'LiveKit',
+            label: context.l10n.liveKitPageTitle,
             builder: (_) => const LiveKitRoomPage(),
           ),
           _PageButton(
-            label: 'WebView',
+            label: context.l10n.webViewPageTitle,
             builder: (_) => const WebViewPage(url: 'https://flutter.dev'),
           ),
         ],

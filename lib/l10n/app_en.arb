@@ -10,5 +10,210 @@
   "forceUpdateDialogUpdateButton": "Update",
   "@forceUpdateDialogUpdateButton": {
     "description": "Button label to open the app store from the force update dialog"
+  },
+  "googleMapsPageTitle": "Google Maps",
+  "@googleMapsPageTitle": {
+    "description": "Title of the Google Maps page and label of the button that opens it"
+  },
+  "googleMapsYourLocation": "Your location",
+  "@googleMapsYourLocation": {
+    "description": "Info window title of the marker at the device's location"
+  },
+  "googleMapsReloadTooltip": "Reload nearby chain cafes",
+  "@googleMapsReloadTooltip": {
+    "description": "Tooltip of the button that reloads the location and nearby chain cafes"
+  },
+  "googleMapsNoUrlAvailable": "No URL available for {name}",
+  "@googleMapsNoUrlAvailable": {
+    "description": "Snackbar shown when a cafe has no URL to open",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "googleMapsCouldNotOpenUrl": "Could not open {url}",
+  "@googleMapsCouldNotOpenUrl": {
+    "description": "Snackbar shown when no app can open a cafe's URL",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "googleMapsFailedToOpenCafeUrl": "Failed to open cafe URL: {error}",
+  "@googleMapsFailedToOpenCafeUrl": {
+    "description": "Snackbar shown when opening a cafe's URL throws an error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "googleMapsFailedToLoadCurrentLocation": "Failed to load current location: {error}",
+  "@googleMapsFailedToLoadCurrentLocation": {
+    "description": "Snackbar shown when the device's location can't be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "googleMapsFailedToLoadNearbyChainCafes": "Failed to load nearby chain cafes: {error}",
+  "@googleMapsFailedToLoadNearbyChainCafes": {
+    "description": "Snackbar shown when the chain cafe search fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitPageTitle": "LiveKit",
+  "@liveKitPageTitle": {
+    "description": "Title of the LiveKit page and label of the button that opens it"
+  },
+  "liveKitRoomNameLabel": "Room Name",
+  "@liveKitRoomNameLabel": {
+    "description": "Label of the room name text field"
+  },
+  "liveKitRoomNameHint": "e.g. test",
+  "@liveKitRoomNameHint": {
+    "description": "Hint of the room name text field"
+  },
+  "liveKitJoiningButton": "Joining...",
+  "@liveKitJoiningButton": {
+    "description": "Label of the join button while joining a room"
+  },
+  "liveKitJoinRoomButton": "Join Room",
+  "@liveKitJoinRoomButton": {
+    "description": "Label of the button that joins a room"
+  },
+  "liveKitWaitingForRemoteParticipant": "Waiting for remote participant...",
+  "@liveKitWaitingForRemoteParticipant": {
+    "description": "Text shown while no remote participant is in the room"
+  },
+  "liveKitRoomInfo": "Room: {roomName} (Identity: {identity})",
+  "@liveKitRoomInfo": {
+    "description": "Room name and local participant identity shown while waiting",
+    "placeholders": {
+      "roomName": {
+        "type": "String"
+      },
+      "identity": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitUnmuteMicrophoneTooltip": "Unmute microphone",
+  "@liveKitUnmuteMicrophoneTooltip": {
+    "description": "Tooltip of the microphone button while muted"
+  },
+  "liveKitMuteMicrophoneTooltip": "Mute microphone",
+  "@liveKitMuteMicrophoneTooltip": {
+    "description": "Tooltip of the microphone button while unmuted"
+  },
+  "liveKitTurnCameraOnTooltip": "Turn camera on",
+  "@liveKitTurnCameraOnTooltip": {
+    "description": "Tooltip of the camera button while the camera is off"
+  },
+  "liveKitTurnCameraOffTooltip": "Turn camera off",
+  "@liveKitTurnCameraOffTooltip": {
+    "description": "Tooltip of the camera button while the camera is on"
+  },
+  "liveKitSwitchCameraTooltip": "Switch camera",
+  "@liveKitSwitchCameraTooltip": {
+    "description": "Tooltip of the button that switches between the front and back cameras"
+  },
+  "liveKitLeaveRoomTooltip": "Leave room",
+  "@liveKitLeaveRoomTooltip": {
+    "description": "Tooltip of the button that leaves the room"
+  },
+  "liveKitRoomNameRequired": "Enter a room name.",
+  "@liveKitRoomNameRequired": {
+    "description": "Message shown when joining with an empty room name"
+  },
+  "liveKitPermissionsRequired": "Camera and microphone permissions are required to join a call.",
+  "@liveKitPermissionsRequired": {
+    "description": "Message shown when camera or microphone permission is denied"
+  },
+  "liveKitDisconnected": "Disconnected: {reason}",
+  "@liveKitDisconnected": {
+    "description": "Message shown after an unexpected disconnection from a room",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitCameraUnavailable": "Camera unavailable: {error}",
+  "@liveKitCameraUnavailable": {
+    "description": "Message shown when the camera can't be enabled after joining",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitMicrophoneUnavailable": "Microphone unavailable: {error}",
+  "@liveKitMicrophoneUnavailable": {
+    "description": "Message shown when the microphone can't be enabled after joining",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitFailedToFetchToken": "Failed to fetch token: {error}",
+  "@liveKitFailedToFetchToken": {
+    "description": "Message shown when the LiveKit token can't be fetched",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitFailedToJoinRoom": "Failed to join room: {error}",
+  "@liveKitFailedToJoinRoom": {
+    "description": "Message shown when joining a room fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitFailedToToggleMicrophone": "Failed to toggle microphone: {error}",
+  "@liveKitFailedToToggleMicrophone": {
+    "description": "Message shown when muting or unmuting the microphone fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitFailedToToggleCamera": "Failed to toggle camera: {error}",
+  "@liveKitFailedToToggleCamera": {
+    "description": "Message shown when turning the camera on or off fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "liveKitFailedToSwitchCamera": "Failed to switch camera: {error}",
+  "@liveKitFailedToSwitchCamera": {
+    "description": "Message shown when switching between cameras fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "webViewPageTitle": "WebView",
+  "@webViewPageTitle": {
+    "description": "Label of the button that opens the WebView page"
+  },
+  "webViewBackButton": "Back",
+  "@webViewBackButton": {
+    "description": "Label of the custom back button on the WebView page"
   }
 }

@@ -14,6 +14,48 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'livekit_room_view_model.freezed.dart';
 part 'livekit_room_view_model.g.dart';
 
+/// The kinds of status that a LiveKit room session reports to the user.
+enum LiveKitRoomStatusType {
+  /// The room name is empty.
+  roomNameRequired,
+
+  /// Camera or microphone permission is denied.
+  permissionsRequired,
+
+  /// The room disconnected unexpectedly.
+  disconnected,
+
+  /// The camera couldn't be enabled after joining.
+  cameraUnavailable,
+
+  /// The microphone couldn't be enabled after joining.
+  microphoneUnavailable,
+
+  /// The LiveKit token couldn't be fetched.
+  tokenFetchFailed,
+
+  /// Joining the room failed.
+  joinFailed,
+
+  /// Muting or unmuting the microphone failed.
+  toggleMicrophoneFailed,
+
+  /// Turning the camera on or off failed.
+  toggleCameraFailed,
+
+  /// Switching between cameras failed.
+  switchCameraFailed,
+}
+
+/// A status that the UI localizes and shows to the user.
+@freezed
+sealed class LiveKitRoomStatus with _$LiveKitRoomStatus {
+  /// Creates a [LiveKitRoomStatus] of [type] with an optional untranslated
+  /// [detail], such as an error description.
+  const factory(LiveKitRoomStatusType type, [String? detail]) =
+      _LiveKitRoomStatus;
+}
+
 /// Immutable UI state for a LiveKit room session.
 @freezed
 sealed class LiveKitRoomState with _$LiveKitRoomState {
@@ -28,8 +70,8 @@ sealed class LiveKitRoomState with _$LiveKitRoomState {
     /// The active local camera facing direction.
     @Default(CameraPosition.front) CameraPosition cameraPosition,
 
-    /// An optional status or error message to show in the UI.
-    String? statusMessage,
+    /// An optional status or error to show in the UI.
+    LiveKitRoomStatus? status,
   }) = _LiveKitRoomState;
 
   const new _();
@@ -98,11 +140,11 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
     }
     final roomName = rawRoomName.trim();
     if (roomName.isEmpty) {
-      state = state.copyWith(statusMessage: 'Please enter a room name.');
+      state = state.copyWith(status: const .new(.roomNameRequired));
       return;
     }
 
-    state = state.copyWith(isJoining: true, statusMessage: null);
+    state = state.copyWith(isJoining: true, status: null);
 
     try {
       final hasPermissions = await ref.read(
@@ -114,8 +156,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       if (!hasPermissions) {
         state = state.copyWith(
           isJoining: false,
-          statusMessage:
-              'Camera and microphone permissions are required to join a call.',
+          status: const .new(.permissionsRequired),
         );
         return;
       }
@@ -149,10 +190,10 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
             return;
           }
           state = LiveKitRoomState(
-            statusMessage:
-                event.reason != null && event.reason != .clientInitiated
-                ? 'Disconnected: ${event.reason!.name}'
-                : null,
+            status: switch (event.reason) {
+              null || .clientInitiated => null,
+              final reason => .new(.disconnected, reason.name),
+            },
           );
         });
 
@@ -164,7 +205,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
         return;
       }
 
-      String? publishWarning;
+      LiveKitRoomStatus? publishWarning;
       try {
         await room.localParticipant?.setCameraEnabled(true);
       } on Exception catch (error, stackTrace) {
@@ -173,7 +214,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
           error: error,
           stackTrace: stackTrace,
         );
-        publishWarning = 'Camera unavailable: $error';
+        publishWarning = .new(.cameraUnavailable, '$error');
       }
       if (await _isRoomStale(room)) {
         return;
@@ -187,7 +228,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
           error: error,
           stackTrace: stackTrace,
         );
-        publishWarning ??= 'Microphone unavailable: $error';
+        publishWarning ??= .new(.microphoneUnavailable, '$error');
       }
       if (await _isRoomStale(room)) {
         return;
@@ -197,7 +238,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
         room: room,
         isJoining: false,
         cameraPosition: .front,
-        statusMessage: publishWarning,
+        status: publishWarning,
       );
     } on FirebaseFunctionsException catch (error, stackTrace) {
       developer.log(
@@ -210,9 +251,10 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
         return;
       }
       state = LiveKitRoomState(
-        statusMessage:
-            'Failed to fetch token (${error.code}): '
-            '${error.message ?? 'Unknown error'}',
+        status: .new(.tokenFetchFailed, switch (error.message) {
+          final message? => '${error.code}: $message',
+          null => error.code,
+        }),
       );
     } on Exception catch (error, stackTrace) {
       developer.log(
@@ -224,7 +266,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       if (!ref.mounted) {
         return;
       }
-      state = LiveKitRoomState(statusMessage: 'Failed to join room: $error');
+      state = LiveKitRoomState(status: .new(.joinFailed, '$error'));
     }
   }
 
@@ -259,21 +301,21 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
 
   /// Toggles the local microphone state.
   Future<void> toggleAudio() => _runParticipantAction(
-    'Failed to toggle microphone',
+    .toggleMicrophoneFailed,
     (participant) =>
         participant.setMicrophoneEnabled(!participant.isMicrophoneEnabled()),
   );
 
   /// Toggles the local camera state.
   Future<void> toggleVideo() => _runParticipantAction(
-    'Failed to toggle camera',
+    .toggleCameraFailed,
     (participant) =>
         participant.setCameraEnabled(!participant.isCameraEnabled()),
   );
 
   /// Switches between the front and back cameras for the local video track.
   Future<void> switchCamera() =>
-      _runParticipantAction('Failed to switch camera', (participant) async {
+      _runParticipantAction(.switchCameraFailed, (participant) async {
         final cameraTrack = findCameraTrack(participant);
         if (cameraTrack is! LocalVideoTrack) {
           return;
@@ -286,7 +328,7 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
       });
 
   Future<void> _runParticipantAction(
-    String failureMessage,
+    LiveKitRoomStatusType failureType,
     Future<void> Function(LocalParticipant participant) action,
   ) async {
     final localParticipant = _room?.localParticipant;
@@ -296,11 +338,15 @@ class LiveKitRoomViewModel extends _$LiveKitRoomViewModel {
     try {
       await action(localParticipant);
     } on Exception catch (error, stackTrace) {
-      developer.log(failureMessage, error: error, stackTrace: stackTrace);
+      developer.log(
+        'LiveKit participant action failed: ${failureType.name}',
+        error: error,
+        stackTrace: stackTrace,
+      );
       if (!ref.mounted) {
         return;
       }
-      state = state.copyWith(statusMessage: '$failureMessage: $error');
+      state = state.copyWith(status: .new(failureType, '$error'));
     }
   }
 }

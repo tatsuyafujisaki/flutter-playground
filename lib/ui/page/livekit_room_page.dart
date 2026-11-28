@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_playground/l10n/app_localizations.dart';
+import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:flutter_playground/ui/view_model/livekit_room_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:livekit_client/livekit_client.dart';
@@ -35,13 +37,13 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
     final notifier = ref.read(liveKitRoomViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('LiveKit')),
+      appBar: AppBar(title: Text(context.l10n.liveKitPageTitle)),
       body: SafeArea(
         child: switch (state.room) {
           final room? when state.isJoined => _CallView(
             room: room,
             fallbackRoomName: _roomController.text.trim(),
-            statusMessage: state.statusMessage,
+            status: state.status,
             onToggleAudio: () => unawaited(notifier.toggleAudio()),
             onToggleVideo: () => unawaited(notifier.toggleVideo()),
             onSwitchCamera: () => unawaited(notifier.switchCamera()),
@@ -50,7 +52,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
           _ => _SetupView(
             roomController: _roomController,
             isJoining: state.isJoining,
-            statusMessage: state.statusMessage,
+            status: state.status,
             onJoin: () => unawaited(notifier.joinRoom(_roomController.text)),
           ),
         },
@@ -62,7 +64,7 @@ class _LiveKitRoomPageState extends ConsumerState<LiveKitRoomPage> {
 class const _SetupView({
   required final TextEditingController roomController,
   required final bool isJoining,
-  required final String? statusMessage,
+  required final LiveKitRoomStatus? status,
   required final VoidCallback onJoin,
 }) extends StatelessWidget {
   @override
@@ -75,15 +77,15 @@ class const _SetupView({
         TextField(
           controller: roomController,
           enabled: !isJoining,
-          decoration: const InputDecoration(
-            labelText: 'Room Name',
-            hintText: 'e.g. test',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: context.l10n.liveKitRoomNameLabel,
+            hintText: context.l10n.liveKitRoomNameHint,
+            border: const OutlineInputBorder(),
           ),
         ),
-        if (statusMessage case final message?)
+        if (status case final status?)
           Text(
-            message,
+            _describeStatus(context.l10n, status),
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         FilledButton.icon(
@@ -94,7 +96,11 @@ class const _SetupView({
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.video_call),
-          label: Text(isJoining ? 'Joining...' : 'Join Room'),
+          label: Text(
+            isJoining
+                ? context.l10n.liveKitJoiningButton
+                : context.l10n.liveKitJoinRoomButton,
+          ),
         ),
       ],
     ),
@@ -151,11 +157,11 @@ class const _RemoteVideos({
             children: [
               const Icon(Icons.people_outline, size: 48),
               Text(
-                'Waiting for remote participant...',
+                context.l10n.liveKitWaitingForRemoteParticipant,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
-                'Room: $roomName (Identity: $localIdentity)',
+                context.l10n.liveKitRoomInfo(roomName, localIdentity),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -239,17 +245,21 @@ class const _CallControls({
             children: [
               IconButton.filledTonal(
                 onPressed: onToggleAudio,
-                tooltip: isAudioMuted ? 'Unmute microphone' : 'Mute microphone',
+                tooltip: isAudioMuted
+                    ? context.l10n.liveKitUnmuteMicrophoneTooltip
+                    : context.l10n.liveKitMuteMicrophoneTooltip,
                 icon: Icon(isAudioMuted ? Icons.mic_off : Icons.mic),
               ),
               IconButton.filledTonal(
                 onPressed: onToggleVideo,
-                tooltip: isVideoMuted ? 'Turn camera on' : 'Turn camera off',
+                tooltip: isVideoMuted
+                    ? context.l10n.liveKitTurnCameraOnTooltip
+                    : context.l10n.liveKitTurnCameraOffTooltip,
                 icon: Icon(isVideoMuted ? Icons.videocam_off : Icons.videocam),
               ),
               IconButton.filledTonal(
                 onPressed: isVideoMuted ? null : onSwitchCamera,
-                tooltip: 'Switch camera',
+                tooltip: context.l10n.liveKitSwitchCameraTooltip,
                 icon: const Icon(Icons.cameraswitch),
               ),
               IconButton.filled(
@@ -258,7 +268,7 @@ class const _CallControls({
                   foregroundColor: Theme.of(context).colorScheme.onError,
                 ),
                 onPressed: onLeave,
-                tooltip: 'Leave room',
+                tooltip: context.l10n.liveKitLeaveRoomTooltip,
                 icon: const Icon(Icons.call_end),
               ),
             ],
@@ -272,7 +282,7 @@ class const _CallControls({
 class const _CallView({
   required final Room room,
   required final String fallbackRoomName,
-  required final String? statusMessage,
+  required final LiveKitRoomStatus? status,
   required final VoidCallback onToggleAudio,
   required final VoidCallback onToggleVideo,
   required final VoidCallback onSwitchCamera,
@@ -285,7 +295,7 @@ class const _CallView({
         child: _RemoteVideos(room: room, fallbackRoomName: fallbackRoomName),
       ),
       Positioned(top: 16, right: 16, child: _LocalPreview(room: room)),
-      if (statusMessage case final message?)
+      if (status case final status?)
         Positioned(
           top: 16,
           left: 16,
@@ -296,7 +306,7 @@ class const _CallView({
             child: Padding(
               padding: const .all(8),
               child: Text(
-                message,
+                _describeStatus(context.l10n, status),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onErrorContainer,
                 ),
@@ -316,4 +326,20 @@ class const _CallView({
       ),
     ],
   );
+}
+
+String _describeStatus(AppLocalizations l10n, LiveKitRoomStatus status) {
+  final detail = status.detail ?? '';
+  return switch (status.type) {
+    .roomNameRequired => l10n.liveKitRoomNameRequired,
+    .permissionsRequired => l10n.liveKitPermissionsRequired,
+    .disconnected => l10n.liveKitDisconnected(detail),
+    .cameraUnavailable => l10n.liveKitCameraUnavailable(detail),
+    .microphoneUnavailable => l10n.liveKitMicrophoneUnavailable(detail),
+    .tokenFetchFailed => l10n.liveKitFailedToFetchToken(detail),
+    .joinFailed => l10n.liveKitFailedToJoinRoom(detail),
+    .toggleMicrophoneFailed => l10n.liveKitFailedToToggleMicrophone(detail),
+    .toggleCameraFailed => l10n.liveKitFailedToToggleCamera(detail),
+    .switchCameraFailed => l10n.liveKitFailedToSwitchCamera(detail),
+  };
 }

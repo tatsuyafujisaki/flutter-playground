@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter_playground/data/model/chain_cafe.dart';
 import 'package:flutter_playground/data/utils/debouncer.dart';
+import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:flutter_playground/ui/view_model/google_maps_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -125,15 +126,20 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
           _parseHttpUri(cafe.websiteUri) ?? _parseHttpUri(cafe.googleMapsUri);
       if (uri == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No URL available for ${cafe.name}')),
+          SnackBar(
+            content: Text(context.l10n.googleMapsNoUrlAvailable(cafe.name)),
+          ),
         );
         return;
       }
 
       final launched = await launchUrl(uri, mode: .externalApplication);
       if (!launched && mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Could not open $uri')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.googleMapsCouldNotOpenUrl('$uri')),
+          ),
+        );
       }
     } on Exception catch (error, stackTrace) {
       developer.log(
@@ -143,7 +149,9 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to open cafe URL: $error')),
+          SnackBar(
+            content: Text(context.l10n.googleMapsFailedToOpenCafeUrl('$error')),
+          ),
         );
       }
     } finally {
@@ -166,20 +174,30 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(
-      googleMapsViewModelProvider.select((state) => state.errorMessage),
-      (_, errorMessage) {
-        if (errorMessage != null) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(errorMessage)));
-        }
-      },
-    );
+    final l10n = context.l10n;
+    ref.listen(googleMapsViewModelProvider.select((state) => state.error), (
+      _,
+      error,
+    ) {
+      if (error == null) {
+        return;
+      }
+      final message = switch (error.type) {
+        .currentLocation => l10n.googleMapsFailedToLoadCurrentLocation(
+          error.detail,
+        ),
+        .nearbyChainCafes => l10n.googleMapsFailedToLoadNearbyChainCafes(
+          error.detail,
+        ),
+      };
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    });
     final state = ref.watch(googleMapsViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Google Maps'),
+        title: Text(l10n.googleMapsPageTitle),
         actions: [
           if (state.isLocating || state.isSearching || _isOpeningUrl)
             const Padding(
@@ -192,7 +210,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
           else
             IconButton(
               icon: const Icon(Icons.refresh),
-              tooltip: 'Reload nearby chain cafes',
+              tooltip: l10n.googleMapsReloadTooltip,
               onPressed: _loadNearbyChainCafes,
             ),
         ],
@@ -212,7 +230,7 @@ class _GoogleMapsPageState extends ConsumerState<GoogleMapsPage> {
               Marker(
                 markerId: const .new('current_location'),
                 position: currentLocation,
-                infoWindow: const .new(title: 'Your location'),
+                infoWindow: .new(title: l10n.googleMapsYourLocation),
                 icon: .defaultMarkerWithHue(BitmapDescriptor.hueBlue),
               ),
             ...state.cafes.map(_toCafeMarker),

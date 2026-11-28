@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -79,7 +80,7 @@ class _WebViewPageState extends State<WebViewPage> {
       leading: widget.onBackPressed != null
           ? TextButton(
               onPressed: widget.onBackPressed,
-              child: const FittedBox(child: Text('Back')),
+              child: FittedBox(child: Text(context.l10n.webViewBackButton)),
             )
           : null,
       title: Text(_title),

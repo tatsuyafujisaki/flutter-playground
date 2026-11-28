@@ -19,6 +19,22 @@ part 'google_maps_view_model.g.dart';
 // the `searchNearbyChainCafes` Cloud Function.
 const _minSearchDistanceInMeters = 100;
 
+/// The operations of the Google Maps page that can fail.
+enum GoogleMapsErrorType {
+  /// Loading the device's location failed.
+  currentLocation,
+
+  /// Searching for nearby chain cafes failed.
+  nearbyChainCafes,
+}
+
+/// An error that the UI localizes and shows to the user.
+@freezed
+sealed class GoogleMapsError with _$GoogleMapsError {
+  /// Creates a [GoogleMapsError] of [type] with an untranslated [detail].
+  const factory(GoogleMapsErrorType type, String detail) = _GoogleMapsError;
+}
+
 /// Immutable UI state for the Google Maps page.
 @freezed
 sealed class GoogleMapsState with _$GoogleMapsState {
@@ -36,9 +52,9 @@ sealed class GoogleMapsState with _$GoogleMapsState {
     /// Whether a chain cafe search is in progress.
     @Default(false) bool isSearching,
 
-    /// The error message of the latest failed operation, or `null` if the
-    /// latest operation hasn't failed.
-    String? errorMessage,
+    /// The error of the latest failed operation, or `null` if the latest
+    /// operation hasn't failed.
+    GoogleMapsError? error,
   }) = _GoogleMapsState;
 }
 
@@ -63,7 +79,7 @@ class GoogleMapsViewModel extends _$GoogleMapsViewModel {
     if (state.isLocating) {
       return null;
     }
-    state = state.copyWith(isLocating: true, errorMessage: null);
+    state = state.copyWith(isLocating: true, error: null);
 
     try {
       final position = await ref
@@ -93,8 +109,7 @@ class GoogleMapsViewModel extends _$GoogleMapsViewModel {
       );
       if (ref.mounted) {
         state = state.copyWith(
-          errorMessage:
-              'Failed to load current location: ${_describeError(error)}',
+          error: .new(.currentLocation, _describeError(error)),
         );
       }
       return null;
@@ -134,7 +149,7 @@ class GoogleMapsViewModel extends _$GoogleMapsViewModel {
   }) async {
     final generation = ++_searchGeneration;
     _lastSearchCenter = center;
-    state = state.copyWith(isSearching: true, errorMessage: null);
+    state = state.copyWith(isSearching: true, error: null);
 
     try {
       // The Cloud Function rejects unauthenticated calls.
@@ -165,8 +180,7 @@ class GoogleMapsViewModel extends _$GoogleMapsViewModel {
         // Lets the next camera move retry the search at the same place.
         _lastSearchCenter = null;
         state = state.copyWith(
-          errorMessage:
-              'Failed to load nearby chain cafes: ${_describeError(error)}',
+          error: .new(.nearbyChainCafes, _describeError(error)),
         );
       }
     } finally {
