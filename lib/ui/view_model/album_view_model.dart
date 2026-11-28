@@ -7,13 +7,13 @@ part 'album_view_model.g.dart';
 /// Fetches a single [Album] by [id].
 @riverpod
 Future<Album> album(Ref ref, {required int id}) =>
-    ref.read(albumRepositoryProvider).getAlbum(id: id);
+    ref.watch(albumRepositoryProvider).getAlbum(id: id);
 
 /// A Riverpod async notifier that manages the list of [Album] items.
 @riverpod
 class AlbumViewModel extends _$AlbumViewModel {
   @override
-  Future<List<Album>> build() => ref.read(albumRepositoryProvider).getAlbums();
+  Future<List<Album>> build() => ref.watch(albumRepositoryProvider).getAlbums();
 
   /// Refreshes the list of albums.
   Future<void> fetchAlbums() =>

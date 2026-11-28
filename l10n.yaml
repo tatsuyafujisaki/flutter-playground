@@ -2,4 +2,5 @@
 # Omitted options use their defaults: arb-dir (lib/l10n), template-arb-file
 # (app_en.arb), and output-localization-file (app_localizations.dart).
 format: true
+nullable-getter: false
 untranslated-messages-file: lib/l10n/untranslated.txt
