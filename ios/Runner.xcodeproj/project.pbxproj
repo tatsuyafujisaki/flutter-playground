@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,6 +31,7 @@
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			dstPath = "";
+			dstSubfolder = None;
 			files = (
 			);
 			name = "Embed Frameworks";
@@ -156,8 +157,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = Runner;
 			packageProductDependencies = (
 				78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */,
@@ -195,9 +194,9 @@
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			packageReferences = (
-				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */,
+				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
 			);
-			preferredProjectObjectVersion = 90;
+			preferredProjectObjectVersion = 110;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -227,8 +226,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		05681E322F357ED9003CDE7C /* Setup Firebase */ = {
 			isa = PBXShellScriptBuildPhase;
-			files = (
-			);
 			inputPaths = (
 				"$(PROJECT_DIR)/Runner/Firebase/$(FLAVOR)/GoogleService-Info.plist",
 			);
@@ -237,13 +234,14 @@
 				"$(BUILT_PRODUCTS_DIR)/$(PRODUCT_NAME).app/GoogleService-Info.plist",
 			);
 			shellPath = /bin/sh;
-			shellScript = "\"$PROJECT_DIR/Runner/copy_firebase_config.sh\"\n";
+			shellScript = (
+				"\"$PROJECT_DIR/Runner/copy_firebase_config.sh\"",
+				"",
+			);
 		};
 		0AD30060140C5B0B42E5C20F /* Decode Dart Defines */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			files = (
-			);
 			inputPaths = (
 				"$(SRCROOT)/Flutter/Generated.xcconfig",
 			);
@@ -252,36 +250,51 @@
 				"$(SRCROOT)/Flutter/DartDefines.xcconfig",
 			);
 			shellPath = /bin/sh;
-			shellScript = "\"$PROJECT_DIR/Flutter/decode_dart_defines.sh\"\n";
+			shellScript = (
+				"\"$PROJECT_DIR/Flutter/decode_dart_defines.sh\"",
+				"",
+			);
 		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			files = (
-			);
 			inputPaths = (
 				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
 			);
 			name = "Thin Binary";
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+			shellScript = (
+				"/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin",
+				"",
+			);
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			files = (
-			);
 			name = "Run Script";
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+			shellScript = (
+				"/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build",
+				"",
+			);
 		};
 		D6106204D8BB44D847B7EDA2 /* FlutterFire: "flutterfire upload-crashlytics-symbols" */ = {
 			isa = PBXShellScriptBuildPhase;
-			files = (
-			);
 			name = "FlutterFire: \"flutterfire upload-crashlytics-symbols\"";
 			shellPath = /bin/sh;
-			shellScript = "\n#!/bin/bash\nPATH=\"${PATH}:$FLUTTER_ROOT/bin:${PUB_CACHE}/bin:$HOME/.pub-cache/bin\"\n\n# Cannot use \"BUILD_DIR%/Build/*\" as per Firebase documentation, it points to \"flutter-project/build/ios/*\" path which doesn't have run script\nDERIVED_DATA_PATH=$(echo \"$BUILD_ROOT\" | sed -E 's|(.*DerivedData/[^/]+).*|\\1|')\nPATH_TO_CRASHLYTICS_UPLOAD_SCRIPT=\"${DERIVED_DATA_PATH}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n\n# Command to upload symbols script used to upload symbols to Firebase server\nflutterfire upload-crashlytics-symbols --upload-symbols-script-path=\"$PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT\" --platform=ios --apple-project-path=\"${SRCROOT}\" --env-platform-name=\"${PLATFORM_NAME}\" --env-configuration=\"${CONFIGURATION}\" --env-project-dir=\"${PROJECT_DIR}\" --env-built-products-dir=\"${BUILT_PRODUCTS_DIR}\" --env-dwarf-dsym-folder-path=\"${DWARF_DSYM_FOLDER_PATH}\" --env-dwarf-dsym-file-name=\"${DWARF_DSYM_FILE_NAME}\" --env-infoplist-path=\"${INFOPLIST_PATH}\" --build-configuration=${CONFIGURATION}\n";
+			shellScript = (
+				"",
+				"#!/bin/bash",
+				"PATH=\"${PATH}:$FLUTTER_ROOT/bin:${PUB_CACHE}/bin:$HOME/.pub-cache/bin\"",
+				"",
+				"# Cannot use \"BUILD_DIR%/Build/*\" as per Firebase documentation, it points to \"flutter-project/build/ios/*\" path which doesn't have run script",
+				"DERIVED_DATA_PATH=$(echo \"$BUILD_ROOT\" | sed -E 's|(.*DerivedData/[^/]+).*|\\1|')",
+				"PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT=\"${DERIVED_DATA_PATH}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"",
+				"",
+				"# Command to upload symbols script used to upload symbols to Firebase server",
+				"flutterfire upload-crashlytics-symbols --upload-symbols-script-path=\"$PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT\" --platform=ios --apple-project-path=\"${SRCROOT}\" --env-platform-name=\"${PLATFORM_NAME}\" --env-configuration=\"${CONFIGURATION}\" --env-project-dir=\"${PROJECT_DIR}\" --env-built-products-dir=\"${BUILT_PRODUCTS_DIR}\" --env-dwarf-dsym-folder-path=\"${DWARF_DSYM_FOLDER_PATH}\" --env-dwarf-dsym-file-name=\"${DWARF_DSYM_FILE_NAME}\" --env-infoplist-path=\"${INFOPLIST_PATH}\" --build-configuration=${CONFIGURATION}",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -322,7 +335,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0530E3FA2F357A98008E6268 /* Debug-dev */ = {
+		0530E3FA2F357A98008E6268 /* Debug-dev configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -381,7 +394,7 @@
 			};
 			name = "Debug-dev";
 		};
-		0530E3FB2F357A98008E6268 /* Debug-dev */ = {
+		0530E3FB2F357A98008E6268 /* Debug-dev configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -390,6 +403,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -402,7 +416,7 @@
 			};
 			name = "Debug-dev";
 		};
-		0530E3FC2F357A98008E6268 /* Debug-dev */ = {
+		0530E3FC2F357A98008E6268 /* Debug-dev configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -420,7 +434,7 @@
 			};
 			name = "Debug-dev";
 		};
-		0530E3FD2F357AAA008E6268 /* Debug-prod */ = {
+		0530E3FD2F357AAA008E6268 /* Debug-prod configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -479,7 +493,7 @@
 			};
 			name = "Debug-prod";
 		};
-		0530E3FE2F357AAA008E6268 /* Debug-prod */ = {
+		0530E3FE2F357AAA008E6268 /* Debug-prod configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -488,6 +502,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -500,7 +515,7 @@
 			};
 			name = "Debug-prod";
 		};
-		0530E3FF2F357AAA008E6268 /* Debug-prod */ = {
+		0530E3FF2F357AAA008E6268 /* Debug-prod configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -518,7 +533,7 @@
 			};
 			name = "Debug-prod";
 		};
-		0530E4002F357ACE008E6268 /* Release-prod */ = {
+		0530E4002F357ACE008E6268 /* Release-prod configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -574,7 +589,7 @@
 			};
 			name = "Release-prod";
 		};
-		0530E4012F357ACE008E6268 /* Release-prod */ = {
+		0530E4012F357ACE008E6268 /* Release-prod configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -583,6 +598,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -594,7 +610,7 @@
 			};
 			name = "Release-prod";
 		};
-		0530E4022F357ACE008E6268 /* Release-prod */ = {
+		0530E4022F357ACE008E6268 /* Release-prod configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -610,7 +626,7 @@
 			};
 			name = "Release-prod";
 		};
-		0530E4032F357ACE008E6268 /* Profile-dev */ = {
+		0530E4032F357ACE008E6268 /* Profile-dev configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -666,7 +682,7 @@
 			};
 			name = "Profile-dev";
 		};
-		0530E4042F357ACE008E6268 /* Profile-prod */ = {
+		0530E4042F357ACE008E6268 /* Profile-prod configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -722,7 +738,7 @@
 			};
 			name = "Profile-prod";
 		};
-		0530E4052F357ACE008E6268 /* Profile-dev */ = {
+		0530E4052F357ACE008E6268 /* Profile-dev configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -731,6 +747,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -742,7 +759,7 @@
 			};
 			name = "Profile-dev";
 		};
-		0530E4062F357ACE008E6268 /* Profile-prod */ = {
+		0530E4062F357ACE008E6268 /* Profile-prod configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -751,6 +768,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -762,7 +780,7 @@
 			};
 			name = "Profile-prod";
 		};
-		058CE7BC2F3582E800FFB82F /* Profile-dev */ = {
+		058CE7BC2F3582E800FFB82F /* Profile-dev configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -778,7 +796,7 @@
 			};
 			name = "Profile-dev";
 		};
-		058CE7BD2F3582E800FFB82F /* Profile-prod */ = {
+		058CE7BD2F3582E800FFB82F /* Profile-prod configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2D2F357ED9003CDE7C /* Prod.xcconfig */;
 			buildSettings = {
@@ -794,7 +812,7 @@
 			};
 			name = "Profile-prod";
 		};
-		331C8089294A63A400263BE5 /* Release-dev */ = {
+		331C8089294A63A400263BE5 /* Release-dev configuration for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -810,7 +828,7 @@
 			};
 			name = "Release-dev";
 		};
-		97C147041CF9000F007C117D /* Release-dev */ = {
+		97C147041CF9000F007C117D /* Release-dev configuration for PBXProject "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -866,7 +884,7 @@
 			};
 			name = "Release-dev";
 		};
-		97C147071CF9000F007C117D /* Release-dev */ = {
+		97C147071CF9000F007C117D /* Release-dev configuration for PBXNativeTarget "Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05681E2C2F357ED9003CDE7C /* Dev.xcconfig */;
 			buildSettings = {
@@ -875,6 +893,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = P4FA4M9P57;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -892,43 +911,43 @@
 		331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0530E3FF2F357AAA008E6268 /* Debug-prod */,
-				0530E3FC2F357A98008E6268 /* Debug-dev */,
-				331C8089294A63A400263BE5 /* Release-dev */,
-				0530E4022F357ACE008E6268 /* Release-prod */,
-				058CE7BC2F3582E800FFB82F /* Profile-dev */,
-				058CE7BD2F3582E800FFB82F /* Profile-prod */,
+				0530E3FF2F357AAA008E6268 /* Debug-prod configuration for PBXNativeTarget "RunnerTests" */,
+				0530E3FC2F357A98008E6268 /* Debug-dev configuration for PBXNativeTarget "RunnerTests" */,
+				331C8089294A63A400263BE5 /* Release-dev configuration for PBXNativeTarget "RunnerTests" */,
+				0530E4022F357ACE008E6268 /* Release-prod configuration for PBXNativeTarget "RunnerTests" */,
+				058CE7BC2F3582E800FFB82F /* Profile-dev configuration for PBXNativeTarget "RunnerTests" */,
+				058CE7BD2F3582E800FFB82F /* Profile-prod configuration for PBXNativeTarget "RunnerTests" */,
 			);
 			defaultConfigurationName = "Release-prod";
 		};
 		97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0530E3FD2F357AAA008E6268 /* Debug-prod */,
-				0530E3FA2F357A98008E6268 /* Debug-dev */,
-				97C147041CF9000F007C117D /* Release-dev */,
-				0530E4002F357ACE008E6268 /* Release-prod */,
-				0530E4032F357ACE008E6268 /* Profile-dev */,
-				0530E4042F357ACE008E6268 /* Profile-prod */,
+				0530E3FD2F357AAA008E6268 /* Debug-prod configuration for PBXProject "Runner" */,
+				0530E3FA2F357A98008E6268 /* Debug-dev configuration for PBXProject "Runner" */,
+				97C147041CF9000F007C117D /* Release-dev configuration for PBXProject "Runner" */,
+				0530E4002F357ACE008E6268 /* Release-prod configuration for PBXProject "Runner" */,
+				0530E4032F357ACE008E6268 /* Profile-dev configuration for PBXProject "Runner" */,
+				0530E4042F357ACE008E6268 /* Profile-prod configuration for PBXProject "Runner" */,
 			);
 			defaultConfigurationName = "Release-prod";
 		};
 		97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0530E3FE2F357AAA008E6268 /* Debug-prod */,
-				0530E3FB2F357A98008E6268 /* Debug-dev */,
-				97C147071CF9000F007C117D /* Release-dev */,
-				0530E4012F357ACE008E6268 /* Release-prod */,
-				0530E4052F357ACE008E6268 /* Profile-dev */,
-				0530E4062F357ACE008E6268 /* Profile-prod */,
+				0530E3FE2F357AAA008E6268 /* Debug-prod configuration for PBXNativeTarget "Runner" */,
+				0530E3FB2F357A98008E6268 /* Debug-dev configuration for PBXNativeTarget "Runner" */,
+				97C147071CF9000F007C117D /* Release-dev configuration for PBXNativeTarget "Runner" */,
+				0530E4012F357ACE008E6268 /* Release-prod configuration for PBXNativeTarget "Runner" */,
+				0530E4052F357ACE008E6268 /* Profile-dev configuration for PBXNativeTarget "Runner" */,
+				0530E4062F357ACE008E6268 /* Profile-prod configuration for PBXNativeTarget "Runner" */,
 			);
 			defaultConfigurationName = "Release-prod";
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */ = {
+		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage;
 		};
