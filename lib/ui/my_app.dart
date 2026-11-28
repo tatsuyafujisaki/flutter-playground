@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter_playground/data/provider/firebase_analytics.dart';
+import 'package:flutter_playground/data/provider/firebase_remote_config.dart';
 import 'package:flutter_playground/l10n/app_localizations.dart';
 import 'package:flutter_playground/ui/page/home_page.dart';
 import 'package:flutter_playground/ui/provider/my_app_lifecycle_state.dart';
@@ -22,7 +24,7 @@ class const MyApp({super.key}) extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   late final List<NavigatorObserver> _navigatorObservers = [
-    FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    FirebaseAnalyticsObserver(analytics: ref.read(firebaseAnalyticsProvider)),
   ];
 
   @override
@@ -34,7 +36,12 @@ class _MyAppState extends ConsumerState<MyApp> {
       }
       final navigatorState = _navigatorKey.currentState;
       if (navigatorState != null) {
-        unawaited(showForceUpdateDialogIfNeeded(navigatorState));
+        unawaited(
+          showForceUpdateDialogIfNeeded(
+            navigatorState,
+            ref.read(firebaseRemoteConfigProvider),
+          ),
+        );
       }
       ref.read(authViewModelProvider.notifier).signInAnonymously().ignore();
     });

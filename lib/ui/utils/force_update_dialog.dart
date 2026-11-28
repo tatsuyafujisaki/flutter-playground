@@ -1,14 +1,16 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_playground/data/utils/upgrade_utils.dart';
 import 'package:flutter_playground/ui/extension/build_context_extension.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Checks whether a force update is required and shows a blocking dialog if it
-/// is.
+/// Checks [remoteConfig] for whether a force update is required and shows a
+/// blocking dialog if it is.
 Future<void> showForceUpdateDialogIfNeeded(
   NavigatorState navigatorState,
+  FirebaseRemoteConfig remoteConfig,
 ) async {
-  final storeUri = await getForceUpdateStoreUri();
+  final storeUri = await getForceUpdateStoreUri(remoteConfig);
   if (storeUri == null || !navigatorState.mounted) {
     return;
   }

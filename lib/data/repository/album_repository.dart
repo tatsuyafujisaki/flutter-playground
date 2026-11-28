@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
 import 'package:flutter_playground/data/model/album.dart';
+import 'package:flutter_playground/data/provider/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'album_repository.g.dart';
@@ -10,11 +11,8 @@ const _baseUrl = 'https://jsonplaceholder.typicode.com';
 
 /// Provides the singleton [AlbumRepository] instance.
 @Riverpod(keepAlive: true)
-AlbumRepository albumRepository(Ref ref) {
-  final dio = Dio(BaseOptions(baseUrl: _baseUrl));
-  ref.onDispose(dio.close);
-  return AlbumRepository(dio);
-}
+AlbumRepository albumRepository(Ref ref) =>
+    AlbumRepository(ref.watch(dioProvider));
 
 /// A repository for performing CRUD operations on [Album] resources.
 class const AlbumRepository(final Dio _dio) {
@@ -25,7 +23,7 @@ class const AlbumRepository(final Dio _dio) {
   Future<List<Album>> getAlbums() async {
     final data = await _fetch(
       'Failed to get albums.',
-      () => _dio.get<List<dynamic>>('/albums'),
+      () => _dio.get<List<dynamic>>('$_baseUrl/albums'),
     );
     return data
         .map((map) => Album.fromJson(map as Map<String, dynamic>))
@@ -36,7 +34,7 @@ class const AlbumRepository(final Dio _dio) {
   Future<Album> getAlbum({required int id}) async => Album.fromJson(
     await _fetch(
       'Failed to get an album.',
-      () => _dio.get<Map<String, dynamic>>('/albums/$id'),
+      () => _dio.get<Map<String, dynamic>>('$_baseUrl/albums/$id'),
     ),
   );
 
@@ -45,7 +43,7 @@ class const AlbumRepository(final Dio _dio) {
       Album.fromJson(
         await _fetch(
           'Failed to post an album.',
-          () => _dio.post<Map<String, dynamic>>('/albums', data: body),
+          () => _dio.post<Map<String, dynamic>>('$_baseUrl/albums', data: body),
         ),
       );
 
@@ -56,14 +54,14 @@ class const AlbumRepository(final Dio _dio) {
   }) async => Album.fromJson(
     await _fetch(
       'Failed to update an album.',
-      () => _dio.put<Map<String, dynamic>>('/albums/$id', data: body),
+      () => _dio.put<Map<String, dynamic>>('$_baseUrl/albums/$id', data: body),
     ),
   );
 
   /// https://docs.flutter.dev/cookbook/networking/delete-data#2-delete-data-on-the-server
   Future<void> deleteAlbum({required int id}) => _send(
     'Failed to delete an album.',
-    () => _dio.delete<void>('/albums/$id'),
+    () => _dio.delete<void>('$_baseUrl/albums/$id'),
   );
 
   /// Sends a request with [send], logging the response and throwing an

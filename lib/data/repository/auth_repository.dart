@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_playground/data/provider/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
 
 /// Provides the singleton [AuthRepository] instance.
 @Riverpod(keepAlive: true)
-AuthRepository authRepository(Ref ref) => AuthRepository(FirebaseAuth.instance);
+AuthRepository authRepository(Ref ref) =>
+    AuthRepository(ref.watch(firebaseAuthProvider));
 
 /// A repository that wraps [FirebaseAuth] operations.
 class const AuthRepository(final FirebaseAuth _auth) {

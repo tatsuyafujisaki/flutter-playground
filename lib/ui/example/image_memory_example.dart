@@ -3,20 +3,22 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_playground/data/provider/dio.dart';
 import 'package:flutter_playground/data/utils/download_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Previews an [Image.memory] widget with offline sample bytes and an optional
 /// remote download action.
 @Preview(group: 'Widgets', name: 'Image.memory')
-Widget preview() => const _MyStatefulWidget();
+Widget preview() => const ProviderScope(child: _MyStatefulWidget());
 
-class const _MyStatefulWidget() extends StatefulWidget {
+class const _MyStatefulWidget() extends ConsumerStatefulWidget {
   @override
-  State<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  ConsumerState<_MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
-class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
+class _MyStatefulWidgetState extends ConsumerState<_MyStatefulWidget> {
   static const _remoteImageUrl = 'https://media1.tenor.com/m/NVP2kRD7CHsAAAAC';
 
   // 2x2 PNG checkerboard sample so the preview renders offline without network.
@@ -38,7 +40,10 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
       _errorMessage = null;
     });
     try {
-      final bytes = await downloadBinaryFile(_remoteImageUrl);
+      final bytes = await downloadBinaryFile(
+        ref.read(dioProvider),
+        _remoteImageUrl,
+      );
       if (!mounted) {
         return;
       }

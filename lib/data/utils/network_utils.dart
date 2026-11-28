@@ -18,30 +18,20 @@ Future<bool> get isOnline async {
   }
 }
 
-/// Checks whether [url] responds with a 2xx HTTP status code.
-Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
+/// Checks with [dio] whether [url] responds with a 2xx HTTP status code.
+Future<bool> isUrlAccessible(Dio dio, String url) async {
   final uri = Uri.tryParse(url);
   if (uri == null) {
     return false;
   }
 
-  const timeout = Duration(seconds: 10);
-  final client =
-      dio ??
-      Dio(
-        BaseOptions(
-          connectTimeout: timeout,
-          receiveTimeout: timeout,
-          sendTimeout: timeout,
-        ),
-      );
   final options = Options(validateStatus: (_) => true);
   try {
-    final response = await client.headUri<void>(uri, options: options);
+    final response = await dio.headUri<void>(uri, options: options);
     return switch (response.statusCode) {
       final statusCode when _isSuccessful(statusCode) => true,
       405 => _isSuccessful(
-        (await client.getUri<void>(uri, options: options)).statusCode,
+        (await dio.getUri<void>(uri, options: options)).statusCode,
       ),
       _ => false,
     };
@@ -52,10 +42,6 @@ Future<bool> isUrlAccessible(String url, {Dio? dio}) async {
       stackTrace: stackTrace,
     );
     return false;
-  } finally {
-    if (dio == null) {
-      client.close();
-    }
   }
 }
 

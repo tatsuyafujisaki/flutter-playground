@@ -5,11 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 
-/// Checks Firebase Remote Config and returns the platform store [Uri] if a
-/// force update is required, or `null` otherwise.
-Future<Uri?> getForceUpdateStoreUri() async {
+/// Checks [remoteConfig] and returns the platform store [Uri] if a force
+/// update is required, or `null` otherwise.
+Future<Uri?> getForceUpdateStoreUri(FirebaseRemoteConfig remoteConfig) async {
   try {
-    final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
